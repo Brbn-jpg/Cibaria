@@ -112,11 +112,6 @@ article {
   color: #000 !important;
 }
 
-.full:hover {
-  background: linear-gradient(0deg, #1e1e1f, #040404);
-  color: #fff !important;
-}
-
 .hero-button {
   border: none;
   font-size: 1.8rem;
