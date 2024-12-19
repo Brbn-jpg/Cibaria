@@ -1,0 +1,42 @@
+.featured-in-section {
+  background: #000;
+  height: 24rem;
+  text-align: center;
+  padding: 2.4rem;
+}
+
+.featured-in {
+  font-size: 1.8rem;
+  font-weight: 200;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  margin-bottom: 8rem;
+}
+
+.icons-div {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+.icons {
+  white-space: nowrap;
+  animation: slide 10s infinite linear;
+}
+
+.icons img {
+  margin-left: 2.4rem;
+  height: 3.2rem;
+  filter: invert(0.5);
+  opacity: 50%;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
