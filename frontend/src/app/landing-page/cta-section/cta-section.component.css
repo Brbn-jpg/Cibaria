@@ -58,6 +58,10 @@
   font-weight: 300;
 }
 
+.cta-inputs input:focus {
+  border: 1px solid rgb(231, 188, 89);
+}
+
 .cta-inputs input,
 .cta-inputs select {
   margin-bottom: 2.4rem;
