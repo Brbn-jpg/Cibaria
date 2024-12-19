@@ -1,6 +1,8 @@
 -- CREATE DATABASE cibaria_db;
 DROP TABLE IF EXISTS rating;
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS ingredient;
+DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS recipe;
 USE cibaria_db;
 

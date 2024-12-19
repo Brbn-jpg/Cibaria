@@ -1,5 +1,6 @@
 package com.kk.cibaria.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -20,13 +21,13 @@ public class Rating {
   private int ratingId;
 
   @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = true)
   @JsonIgnore
   private User user;
 
   @ManyToOne
-  @JoinColumn(name = "recipe_id", nullable = false)
-  @JsonIgnore
+  @JoinColumn(name = "recipe_id", nullable = true)
+  @JsonBackReference
   private Recipe recipe;
 
   @Column(name = "value")

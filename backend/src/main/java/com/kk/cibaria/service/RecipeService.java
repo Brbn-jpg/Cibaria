@@ -9,4 +9,6 @@ public interface RecipeService {
 
   Recipe getById(int id);
 
+  Recipe save(Recipe recipe);
+
 }

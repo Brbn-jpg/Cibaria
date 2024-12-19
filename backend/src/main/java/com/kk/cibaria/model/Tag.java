@@ -1,5 +1,6 @@
 package com.kk.cibaria.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -23,8 +24,8 @@ public class Tag {
   private String tagName;
 
   @ManyToOne
-  @JoinColumn(name = "recipe_id", nullable = false)
-  @JsonIgnore
+  @JoinColumn(name = "recipe_id", nullable = true)
+  @JsonBackReference
   private Recipe recipe;
 
   public Tag() {
