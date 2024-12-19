@@ -1,18 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeroSectionComponent } from './hero-section/hero-section.component';
-import { SliderComponent } from './slider/slider.component';
-import { FeatureSectionComponent } from './feature-section/feature-section.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    HeroSectionComponent,
-    SliderComponent,
-    FeatureSectionComponent,
-  ],
+  imports: [RouterOutlet, LandingPageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
