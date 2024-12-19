@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "Rating")
@@ -22,12 +23,12 @@ public class Rating {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = true)
-  @JsonIgnore
+  @JsonBackReference(value = "user-rating")
   private User user;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id", nullable = true)
-  @JsonBackReference
+  @JsonBackReference(value = "recipe-rating")
   private Recipe recipe;
 
   @Column(name = "value")

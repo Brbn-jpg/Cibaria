@@ -11,4 +11,6 @@ public interface RecipeService {
 
   Recipe save(Recipe recipe);
 
+  Recipe update(int id, Recipe recipe);
+
 }

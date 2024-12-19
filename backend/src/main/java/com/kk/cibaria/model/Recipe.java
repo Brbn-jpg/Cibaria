@@ -52,7 +52,7 @@ public class Recipe {
 
   @Column(name = "rating")
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference
+  @JsonManagedReference(value = "recipe-rating")
   private List<Rating> ratings;
 
   public Recipe() {
