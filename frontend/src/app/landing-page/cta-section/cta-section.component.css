@@ -59,7 +59,7 @@
 }
 
 .cta-inputs input:focus {
-  border: 1px solid rgb(231, 188, 89);
+  outline: 2px solid rgb(231, 188, 89);
 }
 
 .cta-inputs input,
