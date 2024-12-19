@@ -23,11 +23,11 @@
 
 .icons {
   white-space: nowrap;
-  animation: slide 10s infinite linear;
+  animation: slide 7s infinite linear;
 }
 
 .icons img {
-  margin-left: 2.4rem;
+  margin-left: 4.8rem;
   height: 3.2rem;
   filter: invert(0.5);
   opacity: 50%;
