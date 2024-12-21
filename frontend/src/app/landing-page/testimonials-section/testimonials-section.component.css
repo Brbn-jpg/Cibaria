@@ -5,6 +5,9 @@
     rgba(23, 21, 21, 1) 0%,
     rgba(0, 0, 0, 1) 100%
   );
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
 }
 
 .testimonials-header-div {
@@ -68,25 +71,24 @@
   margin-top: 1.6rem;
 }
 
-.grid-5-cols {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1.6rem;
-  margin: 4.8rem 4.8rem 0 4.8rem;
+.gallery {
+  display: flex;
+  gap: 4vmin;
+  margin: 4.8rem auto;
   padding-bottom: 4.8rem;
-}
-
-.grid-5-cols figure {
-  overflow: hidden;
+  user-select: none;
+  position: relative;
+  left: 0;
+  transform: translateX(0);
+  margin-left: 4.8rem;
+  margin-right: 4.8rem;
 }
 
 .testimonial-gallery-img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  transition: all 0.3s;
-}
-
-.testimonial-gallery-img:hover {
-  transform: scale(1.05);
+  width: 30vmin;
+  height: 46vmin;
+  object-fit: cover;
+  object-position: 100% center;
+  visibility: visible;
+  opacity: 1;
 }

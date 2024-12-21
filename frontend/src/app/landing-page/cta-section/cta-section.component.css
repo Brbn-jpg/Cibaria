@@ -116,3 +116,22 @@ option:hover {
     0px 0px 0px 4px rgba(184, 182, 182, 0.2), 0px 0px 180px 0px #bebcbc;
   transform: translateY(-0.5px);
 }
+
+.hidden {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translate(-100%);
+  transition: all 1s;
+}
+
+.show {
+  filter: blur(0);
+  transform: translate(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion) {
+  .hidden {
+    transition: none;
+  }
+}
