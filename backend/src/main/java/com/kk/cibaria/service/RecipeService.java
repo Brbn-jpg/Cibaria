@@ -13,4 +13,6 @@ public interface RecipeService {
 
   Recipe update(int id, Recipe recipe);
 
+  void delete(int id);
+
 }

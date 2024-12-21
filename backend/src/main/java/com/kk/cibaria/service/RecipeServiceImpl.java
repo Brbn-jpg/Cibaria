@@ -65,13 +65,23 @@ public class RecipeServiceImpl implements RecipeService {
     recipeFound.getRatings().clear();
     for (Rating rating : recipe.getRatings()) {
       User user = userRepository.findById(rating.getUser().getId()).orElse(null);
-      System.out.println("User: " + user);
       rating.setRecipe(recipeFound);
       rating.setUser(user);
       recipeFound.getRatings().add(rating);
     }
 
     return recipeRepository.save(recipeFound);
+  }
+
+  @Override
+  public void delete(int id) {
+    Recipe recipe = recipeRepository.findById(id).orElse(null);
+
+    if (recipe == null) {
+      return;
+    }
+
+    recipeRepository.delete(recipe);
   }
 
 }

@@ -2,6 +2,7 @@ package com.kk.cibaria.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +42,10 @@ public class RecipeController {
   @PutMapping(value = "/recipes/{id}", consumes = { "application/json" })
   public Recipe update(@PathVariable int id, @RequestBody Recipe recipe) {
     return recipeService.update(id, recipe);
+  }
+
+  @DeleteMapping("/recipes/{id}")
+  public void delete(@PathVariable int id) {
+    recipeService.delete(id);
   }
 }
