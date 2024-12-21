@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kk.cibaria.exception.RecipeNotFoundException;
 import com.kk.cibaria.model.Ingredient;
 import com.kk.cibaria.model.Rating;
 import com.kk.cibaria.model.Recipe;
@@ -30,7 +31,8 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public Recipe getById(int id) {
-    return recipeRepository.findById(id).orElse(null);
+    return recipeRepository.findById(id).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
   }
 
   @Override
@@ -41,7 +43,8 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public Recipe update(int id, Recipe recipe) {
-    Recipe recipeFound = recipeRepository.findById(id).orElse(null);
+    Recipe recipeFound = recipeRepository.findById(id).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
     recipeFound.setId(id);
     recipeFound.setRecipeName(recipe.getRecipeName());
     recipeFound.setCreatedAt(recipe.getCreatedAt());
@@ -75,7 +78,8 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public void delete(int id) {
-    Recipe recipe = recipeRepository.findById(id).orElse(null);
+    Recipe recipe = recipeRepository.findById(id).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
 
     if (recipe == null) {
       return;
