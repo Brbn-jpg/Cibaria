@@ -4,6 +4,7 @@ import { SliderComponent } from './slider/slider.component';
 import { FeatureSectionComponent } from './feature-section/feature-section.component';
 import { TestimonialsSectionComponent } from './testimonials-section/testimonials-section.component';
 import { CtaSectionComponent } from './cta-section/cta-section.component';
+import { FooterSectionComponent } from '../footer-section/footer-section.component';
 
 @Component({
   selector: 'app-landing-page',
@@ -14,6 +15,7 @@ import { CtaSectionComponent } from './cta-section/cta-section.component';
     FeatureSectionComponent,
     TestimonialsSectionComponent,
     CtaSectionComponent,
+    FooterSectionComponent,
   ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
