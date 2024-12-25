@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kk.cibaria.model.Recipe;
 import com.kk.cibaria.service.RecipeService;
 
 @RestController
-@RequestMapping("/api")
 public class RecipeController {
 
   private RecipeService recipeService;
