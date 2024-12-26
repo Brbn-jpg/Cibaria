@@ -91,8 +91,8 @@ p {
 }
 
 .steps {
-  list-style: none;
   margin-bottom: 3.2rem;
+  margin-left: 1.6rem;
 }
 
 a:link,
@@ -105,4 +105,10 @@ a:visited,
 a:hover {
   color: #eee;
   cursor: pointer;
+}
+
+span {
+  font-size: 3.2rem;
+  font-weight: 200;
+  margin-bottom: 1.2rem;
 }

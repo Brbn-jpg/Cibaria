@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 
@@ -9,4 +9,8 @@ import { FooterSectionComponent } from '../footer-section/footer-section.compone
   templateUrl: './about-us.component.html',
   styleUrl: './about-us.component.css',
 })
-export class AboutUsComponent {}
+export class AboutUsComponent implements AfterViewInit {
+  ngAfterViewInit() {
+    window.scrollTo(0, 0);
+  }
+}

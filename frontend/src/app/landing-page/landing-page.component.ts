@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { HeroSectionComponent } from './hero-section/hero-section.component';
 import { SliderComponent } from './slider/slider.component';
 import { FeatureSectionComponent } from './feature-section/feature-section.component';
@@ -20,4 +20,8 @@ import { FooterSectionComponent } from '../footer-section/footer-section.compone
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
 })
-export class LandingPageComponent {}
+export class LandingPageComponent implements AfterViewInit {
+  ngAfterViewInit() {
+    window.scrollTo(0, 0);
+  }
+}
