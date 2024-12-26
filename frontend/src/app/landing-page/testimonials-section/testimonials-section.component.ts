@@ -61,7 +61,7 @@ export class TestimonialsSectionComponent implements AfterViewInit {
       )) {
         image.animate(
           {
-            objectPosition: `${100 + nextPercentage}% center`,
+            objectPosition: `${100 + nextPercentage / 2}% center`,
           },
           { duration: 1200, fill: 'forwards' }
         );
