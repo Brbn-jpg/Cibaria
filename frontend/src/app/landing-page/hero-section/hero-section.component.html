@@ -1,13 +1,17 @@
 <main class="hero-section">
   <nav>
-    <a href="#"
+    <a href="" [routerLink]="['/']"
       ><img src="images/Cibaria.png" alt="Cibaria logo" class="logo"
     /></a>
     <ul class="nav-links">
-      <li><a class="nav-link" href="">About us</a></li>
-      <li><a class="nav-link" href="">Recipes</a></li>
-      <li><a class="nav-link" href="">Contact</a></li>
-      <li><a class="nav-link" href="">Login</a></li>
+      <li>
+        <a class="nav-link" href="" [routerLink]="['/about-us']">About us</a>
+      </li>
+      <li><a class="nav-link" href="" routerLink="/recipes">Recipes</a></li>
+      <li>
+        <a class="nav-link" href="" [routerLink]="['contact']">Contact</a>
+      </li>
+      <li><a class="nav-link" href="" [routerLink]="['/login']">Login</a></li>
     </ul>
   </nav>
   <article>
@@ -43,7 +47,7 @@
           </div>
         </div>
       </div>
-      <img src="images/hero-img.jpg" alt="" class="hero-right-img" />
+      <img src="images/hero-img.png" alt="" class="hero-right-img" />
     </div>
   </article>
 </main>
