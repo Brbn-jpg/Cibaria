@@ -1,0 +1,151 @@
+.login-register {
+  background: rgb(23, 21, 21);
+  background: linear-gradient(
+    180deg,
+    rgba(23, 21, 21, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  height: 100vh;
+  width: 100vw;
+  color: #fff;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.4rem 4.8rem 2.4rem 4.8rem;
+}
+
+.nav-links {
+  list-style: none;
+}
+.logo {
+  width: 9.6rem;
+}
+
+.nav-link:link,
+.nav-link:visited {
+  transition: all 0.2s ease;
+  display: block;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  border-radius: 1rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link:active {
+  display: block;
+  color: #000;
+  border-radius: 1rem;
+  background-color: #fff;
+  transform: scale(1.02);
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 0 24rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.login,
+.register {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  padding: 1.6rem;
+  margin-bottom: 3.2rem;
+}
+input::placeholder {
+  font-weight: 200;
+  letter-spacing: 1.1px;
+}
+
+.remember-me {
+  font-size: 1.6rem;
+}
+
+.button {
+  width: 100%;
+  padding: 1.6rem 3.2rem;
+
+  border: none;
+  font-size: 1.8rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+}
+
+.already-section {
+  margin-top: 4.8rem;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.already-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.already,
+.action {
+  font-size: 1.6rem;
+  font-weight: 300;
+  padding: 1.6rem 2.4rem;
+}
+
+.btn-already {
+  padding: 0.8rem 1.6rem;
+  border: none;
+  font-size: 1.8rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+}
+
+.btn-already:hover,
+.button:hover {
+  border: none;
+  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.102),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0.2), 0px 0px 180px 0px #ccbebe;
+  transform: translateY(-2px);
+}
+
+.hidden {
+  opacity: 0;
+  transition: all 450ms ease-in-out;
+}
