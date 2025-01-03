@@ -1,11 +1,12 @@
 .footer-section {
   padding-top: 4.8rem;
+  padding-bottom: 2.4rem;
   background-color: #000;
-  height: 30vh;
+  height: 100%;
   color: #aaaaaa;
 }
 
-footer {
+.footer {
   margin: 0 4.8rem;
 }
 
