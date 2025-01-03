@@ -42,7 +42,7 @@ export function testimonials() {
       image.animate(
         {
           objectPosition: `${
-            isNaN(nextPercentage) ? 100 : 100 + nextPercentage / 2
+            isNaN(nextPercentage) ? 100 : 100 + nextPercentage / 3
           }% center`,
         },
         { duration: 1200, fill: "forwards" }
