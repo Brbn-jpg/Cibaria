@@ -9,7 +9,7 @@ import com.kk.cibaria.model.Ingredient;
 import com.kk.cibaria.model.Rating;
 import com.kk.cibaria.model.Recipe;
 import com.kk.cibaria.model.Tag;
-import com.kk.cibaria.model.User;
+import com.kk.cibaria.model.UserEntity;
 import com.kk.cibaria.repository.RecipeRepository;
 import com.kk.cibaria.repository.UserRepository;
 
@@ -67,7 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
     recipeFound.getRatings().clear();
     for (Rating rating : recipe.getRatings()) {
-      User user = userRepository.findById(rating.getUser().getId()).orElse(null);
+      UserEntity user = userRepository.findById(rating.getUser().getId()).orElse(null);
       rating.setRecipe(recipeFound);
       rating.setUser(user);
       recipeFound.getRatings().add(rating);

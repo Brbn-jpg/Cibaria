@@ -22,7 +22,7 @@ public class Rating {
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = true)
   @JsonBackReference(value = "user-rating")
-  private User user;
+  private UserEntity user;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id", nullable = true)
@@ -35,7 +35,7 @@ public class Rating {
   public Rating() {
   }
 
-  public Rating(User user, Recipe recipe, int value) {
+  public Rating(UserEntity user, Recipe recipe, int value) {
     this.user = user;
     this.recipe = recipe;
     this.value = value;
@@ -49,11 +49,11 @@ public class Rating {
     this.ratingId = ratingId;
   }
 
-  public User getUser() {
+  public UserEntity getUser() {
     return user;
   }
 
-  public void setUser(User user) {
+  public void setUser(UserEntity user) {
     this.user = user;
   }
 

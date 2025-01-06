@@ -2,16 +2,16 @@ package com.kk.cibaria.service;
 
 import java.util.List;
 
-import com.kk.cibaria.model.User;
+import com.kk.cibaria.model.UserEntity;
 
 public interface UserService {
-  public List<User> getAll();
+  public List<UserEntity> getAll();
 
-  public User getById(int id);
+  public UserEntity getById(int id);
 
-  public User save(User user);
+  public UserEntity save(UserEntity user);
 
-  public User update(int id, User user);
+  public UserEntity update(int id, UserEntity user);
 
   public void delete(int id);
 
