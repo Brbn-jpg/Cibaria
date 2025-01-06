@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class UserEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +30,25 @@ public class User {
   @Column(name = "email")
   private String email;
 
+  @Column(name = "role")
+  private String role;
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference(value = "user-rating")
   private List<Rating> rating;
 
-  public User() {
+  public UserEntity() {
   }
 
-  public User(String username, String password, String email, List<Rating> rating) {
+  public UserEntity(String username, String password, String email, List<Rating> rating) {
     this.username = username;
     this.password = password;
     this.email = email;

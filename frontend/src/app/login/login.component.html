@@ -1,0 +1,44 @@
+<section class="login-register">
+  <nav>
+    <a href="" [routerLink]="['/']"
+      ><img src="images/Cibaria.png" alt="Cibaria logo" class="logo"
+    /></a>
+    <ul class="nav-links">
+      <li><a class="nav-link" href="" [routerLink]="['']">Home</a></li>
+    </ul>
+  </nav>
+  <main>
+    <div class="login">
+      <form class="inputs">
+        <input type="text" placeholder="Username" />
+        <input type="password" placeholder="Password" />
+        <div>
+          <span class="remember-me">Remember me </span
+          ><input id="checkbox" type="checkbox" />
+        </div>
+        <button type="submit" class="button">Login</button>
+      </form>
+    </div>
+    <div class="register hidden">
+      <form class="inputs">
+        <input type="text" placeholder="Username" />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <input type="password" placeholder="Confirm Password" />
+        <button type="submit" class="button">Register</button>
+      </form>
+    </div>
+    <div class="already-section already-login">
+      <h3 class="already">Don't have an account?</h3>
+      <button class="btn-already btn-already-login" (click)="showRegister()">
+        Register
+      </button>
+    </div>
+    <div class="already-section already-register hidden">
+      <h3 class="already">Already have an account?</h3>
+      <button class="btn-already btn-already-register" (click)="showLogin()">
+        Login
+      </button>
+    </div>
+  </main>
+</section>
