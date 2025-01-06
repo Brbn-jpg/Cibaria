@@ -3,6 +3,7 @@
   height: 24rem;
   text-align: center;
   padding: 2.4rem;
+  overflow: hidden;
 }
 
 .featured-in {

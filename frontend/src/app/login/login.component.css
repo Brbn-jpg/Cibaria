@@ -97,7 +97,7 @@ input::placeholder {
   color: #fff;
   text-decoration: none;
   cursor: pointer;
-  transition: all 450ms ease-in-out;
+  transition: login 450ms all;
 }
 
 .already-section {
@@ -147,5 +147,5 @@ input::placeholder {
 
 .hidden {
   opacity: 0;
-  transition: all 450ms ease-in-out;
+  transition: all 450ms ease-in;
 }

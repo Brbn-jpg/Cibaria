@@ -5,7 +5,6 @@
     rgba(23, 21, 21, 1) 0%,
     rgba(0, 0, 0, 1) 100%
   );
-  width: 100vw;
   overflow: hidden;
   position: relative;
 }
