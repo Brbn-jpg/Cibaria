@@ -1,0 +1,182 @@
+<main>
+  <nav>
+    <a href="" [routerLink]="['/']"
+      ><img src="images/Cibaria.png" alt="Cibaria logo" class="logo"
+    /></a>
+    <ul class="nav-links">
+      <li>
+        <a class="nav-link" href="" [routerLink]="['']">Home</a>
+      </li>
+      <li>
+        <a class="nav-link" href="" [routerLink]="['/about-us']">About Us</a>
+      </li>
+      <li>
+        <a class="nav-link" href="" [routerLink]="['/contact']">Contact</a>
+      </li>
+      <li><a class="nav-link" href="" [routerLink]="['/login']">Login</a></li>
+    </ul>
+  </nav>
+  <article>
+    <div class="filters">
+      <div class="difficulty filter-wrapper">
+        <label for="difficulty">Difficulty</label>
+        <select name="difficulty" id="" class="filter">
+          <option selected>Choose difficulty</option>
+          <option value="1">Easy</option>
+          <option value="2">Medium</option>
+          <option value="3">Hard</option>
+        </select>
+      </div>
+      <div class="prepare-time filter-wrapper">
+        <label for="prepare-time">Prepare time</label>
+        <select name="prepare-time" id="" class="filter">
+          <option selected>Choose prepare time</option>
+          <option value="1">0-30 minutes</option>
+          <option value="2">30-60 minutes</option>
+          <option value="3">60+ minutes</option>
+        </select>
+      </div>
+      <div class="servings filter-wrapper">
+        <label for="servings">Servings</label>
+        <select name="servings" id="" class="filter">
+          <option selected>Choose servings</option>
+          <option value="1">1-2 servings</option>
+          <option value="2">3-4 servings</option>
+          <option value="3">5+ servings</option>
+        </select>
+      </div>
+      <div class="category filter-wrapper">
+        <label for="category">Category</label>
+        <select name="category" id="" class="filter">
+          <option selected>Choose category</option>
+          <option value="1">Breakfast</option>
+          <option value="2">Lunch</option>
+          <option value="3">Dinner</option>
+          <option value="4">Dessert</option>
+        </select>
+      </div>
+    </div>
+    <hr />
+
+    <div class="recipes grid-4-cols">
+      <figure class="recipe">
+        <div class="image-wrapper">
+          <img class="recipe-image" src="images/gallery/gallery1.webp" alt="" />
+        </div>
+        <h2 class="recipe-name">Shakshuka</h2>
+        <div class="recipe-desc">
+          <div class="recipe-rating recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/star-outline.svg"
+              alt="small star icon"
+            /><span>4.9</span>
+          </div>
+          <div class="recipe-difficulty recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/bar-chart-outline.svg"
+              alt="chart icon"
+            /><span>easy</span>
+          </div>
+          <div class="recipe-servings recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/restaurant-outline.svg"
+              alt="fork and knife icon"
+            /><span>2 servings</span>
+          </div>
+          <div class="recipe-category recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/time-outline.svg"
+              alt="food icon"
+            /><span>15 minutes</span>
+          </div>
+        </div>
+      </figure>
+      <figure class="recipe">
+        <div class="image-wrapper">
+          <img class="recipe-image" src="images/gallery/gallery1.webp" alt="" />
+        </div>
+        <h2 class="recipe-name">Shakshuka</h2>
+        <div class="recipe-desc">
+          <div class="recipe-rating recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/star-outline.svg"
+              alt="small star icon"
+            /><span>4.9</span>
+          </div>
+          <div class="recipe-difficulty recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/bar-chart-outline.svg"
+              alt="chart icon"
+            /><span>easy</span>
+          </div>
+          <div class="recipe-servings recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/restaurant-outline.svg"
+              alt="fork and knife icon"
+            /><span>2 servings</span>
+          </div>
+          <div class="recipe-category recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/time-outline.svg"
+              alt="food icon"
+            /><span>15 minutes</span>
+          </div>
+        </div>
+      </figure>
+      <figure class="recipe">
+        <div class="image-wrapper">
+          <img class="recipe-image" src="images/gallery/gallery1.webp" alt="" />
+        </div>
+        <h2 class="recipe-name">Shakshuka</h2>
+        <div class="recipe-desc">
+          <div class="recipe-rating recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/star-outline.svg"
+              alt="small star icon"
+            /><span>4.9</span>
+          </div>
+          <div class="recipe-difficulty recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/bar-chart-outline.svg"
+              alt="chart icon"
+            /><span>easy</span>
+          </div>
+          <div class="recipe-servings recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/restaurant-outline.svg"
+              alt="fork and knife icon"
+            /><span>2 servings</span>
+          </div>
+          <div class="recipe-category recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/time-outline.svg"
+              alt="food icon"
+            /><span>15 minutes</span>
+          </div>
+        </div>
+      </figure>
+    </div>
+  </article>
+</main>
+
+<app-footer-section></app-footer-section>
+<script
+  type="module"
+  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+></script>
+<script
+  nomodule
+  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+></script>

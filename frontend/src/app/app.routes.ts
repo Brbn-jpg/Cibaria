@@ -5,6 +5,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
+import { RecipesComponent } from './recipes/recipes.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'recipes', component: RecipesComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

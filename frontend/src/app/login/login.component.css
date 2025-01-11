@@ -6,7 +6,6 @@
     rgba(0, 0, 0, 1) 100%
   );
   height: 100vh;
-  width: 100vw;
   color: #fff;
 }
 
@@ -46,7 +45,9 @@ nav {
 
 main {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 65fr 35fr;
+  border: 1px solid #868e96;
+  border-radius: 1rem;
   margin: 0 24rem;
 }
 
@@ -61,18 +62,30 @@ main {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+  border-right: 1px solid #868e96;
+  grid-column: 1;
+  padding: 2.4rem;
 }
+
+.catch-phrase {
+  font-size: 2.4rem;
+  font-weight: 200;
+  letter-spacing: 1.03px;
+}
+
 .inputs {
+  padding: 2.4rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
 }
 
 input {
+  border-radius: 1rem;
   padding: 1.6rem;
   margin-bottom: 3.2rem;
 }
+
 input::placeholder {
   font-weight: 200;
   letter-spacing: 1.1px;
@@ -83,9 +96,7 @@ input::placeholder {
 }
 
 .button {
-  width: 100%;
   padding: 1.6rem 3.2rem;
-
   border: none;
   font-size: 1.8rem;
   border-radius: 1rem;
@@ -97,13 +108,7 @@ input::placeholder {
   color: #fff;
   text-decoration: none;
   cursor: pointer;
-  transition: login 450ms all;
-}
-
-.already-section {
-  margin-top: 4.8rem;
-  display: flex;
-  justify-content: space-evenly;
+  transition: all 450ms ease-in-out;
 }
 
 .already-section {
@@ -111,6 +116,9 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  grid-column: 2;
+
+  padding: 2.4rem;
 }
 
 .already,
@@ -121,7 +129,7 @@ input::placeholder {
 }
 
 .btn-already {
-  padding: 0.8rem 1.6rem;
+  padding: 1.6rem 3.2rem;
   border: none;
   font-size: 1.8rem;
   border-radius: 1rem;
@@ -145,7 +153,6 @@ input::placeholder {
   transform: translateY(-2px);
 }
 
-.hidden {
-  opacity: 0;
-  transition: all 450ms ease-in;
+.ng-touched.ng-invalid {
+  border: 2px solid red;
 }

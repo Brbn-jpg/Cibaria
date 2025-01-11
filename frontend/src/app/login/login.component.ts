@@ -1,26 +1,31 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
+import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { RouterLink } from '@angular/router';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule, FooterSectionComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
+  animations: [
+    trigger('showSection', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('0.3s ease-in-out', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class LoginComponent {
-  showRegister() {
-    document.querySelector('.login')?.classList.add('hidden');
-    document.querySelector('.already-login')?.classList.add('hidden');
-    document.querySelector('.already-login')?.classList.add('hidden');
-    document.querySelector('.register')?.classList.remove('hidden');
-    document.querySelector('.already-register')?.classList.remove('hidden');
+  login = true;
+  changeForm(): void {
+    this.login = !this.login;
   }
 
-  showLogin() {
-    document.querySelector('.register')?.classList.add('hidden');
-    document.querySelector('.already-register')?.classList.add('hidden');
-    document.querySelector('.login')?.classList.remove('hidden');
-    document.querySelector('.already-login')?.classList.remove('hidden');
-  }
+  username = new FormControl('', [Validators.required]);
+  email = new FormControl('', [Validators.required, Validators.email]);
+  password = new FormControl('', [Validators.required]);
 }
