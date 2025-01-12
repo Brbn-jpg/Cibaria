@@ -1,7 +1,9 @@
 package com.kk.cibaria.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.model.Recipe;
 
 public interface RecipeService {
@@ -9,7 +11,7 @@ public interface RecipeService {
 
   Recipe getById(int id);
 
-  Recipe save(Recipe recipe);
+  Recipe save(RecipeAddDto recipe) throws IOException;
 
   Recipe update(int id, Recipe recipe);
 

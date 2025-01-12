@@ -1,4 +1,4 @@
-package com.kk.cibaria.webtoken;
+package com.kk.cibaria.security.jwt;
 
 import java.time.Instant;
 import java.util.Base64;

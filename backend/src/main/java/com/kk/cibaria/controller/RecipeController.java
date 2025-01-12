@@ -1,7 +1,11 @@
 package com.kk.cibaria.controller;
 
+import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 
+import com.kk.cibaria.dto.RecipeAddDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +20,7 @@ import com.kk.cibaria.service.RecipeService;
 @RestController
 public class RecipeController {
 
-  private RecipeService recipeService;
+  private final RecipeService recipeService;
 
   public RecipeController(RecipeService recipeService) {
     this.recipeService = recipeService;
@@ -33,7 +37,7 @@ public class RecipeController {
   }
 
   @PostMapping(value = "/recipes", consumes = { "application/json" })
-  public Recipe save(@RequestBody Recipe recipe) {
+  public Recipe save(@RequestBody RecipeAddDto recipe) throws IOException {
     return recipeService.save(recipe);
   }
 
