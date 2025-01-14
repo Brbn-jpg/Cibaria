@@ -1,4 +1,4 @@
-package com.kk.cibaria.service;
+package com.kk.cibaria.security;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ import com.kk.cibaria.repository.UserRepository;
 @Service
 public class UserDetailService implements UserDetailsService {
 
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
   public UserDetailService(UserRepository userRepository) {
     this.userRepository = userRepository;
