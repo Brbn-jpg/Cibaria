@@ -43,7 +43,7 @@ export class RecipesComponent implements OnInit {
       size: this.pageSize,
     };
 
-    const url = `${this.url}/page/${params.page}/size/${params.size}`;
+    const url = `${this.url}?${params.page}&${params.size}`;
 
     this.http.get<recipesRequest[]>(url, { params }).subscribe({
       next: (response) => {
