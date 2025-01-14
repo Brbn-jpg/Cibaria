@@ -68,25 +68,6 @@ public class RecipeServiceImpl implements RecipeService {
 
     newRecipe.setTag(newTags);
 
-    if(recipe.getFile()!=null)
-    {
-      try{
-        String base64Data = recipe.getFile();
-        if(base64Data.contains(","))
-        {
-          base64Data=base64Data.split(",")[1];
-        }
-        byte[] imageBytes = Base64.getDecoder().decode(base64Data);
-
-        FileEntity image = new FileEntity();
-        image.setFile(imageBytes);
-        image.setRecipe(newRecipe);
-        newRecipe.setFile(image);
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-
-    }
 
     return recipeRepository.save(newRecipe);
   }
