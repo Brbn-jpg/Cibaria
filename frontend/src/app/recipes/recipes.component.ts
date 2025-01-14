@@ -27,13 +27,46 @@ export class RecipesComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
   http = inject(HttpClient);
   recipesArray: recipesRequest[] = [];
+  totalItems: recipesRequest[] = [];
+  currentPage: number = 1;
+  pageSize: number = 4;
+  totalPages: number = 0;
+
+  ngOnInit() {
+    this.loadRecipes();
+    this.recipes();
+  }
+
+  loadRecipes() {
+    const params: { page: number; size: number } = {
+      page: this.currentPage,
+      size: this.pageSize,
+    };
+
+    const url = `${this.url}/page/${params.page}/size/${params.size}`;
+
+    this.http.get<recipesRequest[]>(url, { params }).subscribe({
+      next: (response) => {
+        this.recipesArray = response;
+        console.log(response);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadRecipes();
+  }
 
   recipes() {
     this.http.get<recipesRequest[]>(this.url).subscribe({
       next: (response) => {
         console.log(response);
-        // response.forEach((recipe) => this.fillFigure(recipe));
-        this.recipesArray = response;
+        this.totalItems = response;
+        this.totalPages = Math.round(this.totalItems.length / this.pageSize);
       },
       error: (err) => {
         console.error(err);
@@ -158,8 +191,4 @@ export class RecipesComponent implements OnInit {
   //   document.querySelector('.recipes.grid-4-cols')?.appendChild(figure);
   //   console.log(figure);
   // }
-
-  ngOnInit(): void {
-    this.recipes();
-  }
 }

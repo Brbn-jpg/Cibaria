@@ -98,6 +98,23 @@
       </figure>
       }
     </div>
+    <div class="pagination">
+      <button
+        class="btn"
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+      >
+        Previous
+      </button>
+      <span class="pages">page {{ currentPage }} of {{ totalPages }}</span>
+      <button
+        class="btn"
+        [disabled]="recipesArray.length < pageSize"
+        (click)="onPageChange(currentPage + 1)"
+      >
+        Next
+      </button>
+    </div>
   </article>
 </main>
 

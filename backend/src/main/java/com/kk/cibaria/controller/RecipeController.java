@@ -34,6 +34,7 @@ public class RecipeController {
     return recipeService.getById(id);
   }
 
+
   @PostMapping(value = "/recipes", consumes = { "application/json" })
   public Recipe save(@RequestBody Recipe recipe) {
     return recipeService.save(recipe);
