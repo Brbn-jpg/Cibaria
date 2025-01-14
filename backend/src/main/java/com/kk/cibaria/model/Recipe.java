@@ -53,9 +53,5 @@ public class Recipe {
   @JsonManagedReference(value = "recipe-rating")
   private List<Rating> ratings;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(referencedColumnName = "id",name = "file_id")
-  @JsonManagedReference
-  private FileEntity file;
 
 }
