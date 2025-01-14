@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,9 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-  private static final String SECRET = "00D7D1B0189D1A3B72573743AD62854F8034E9321D4E8ED5457840E63E4A7BCC0AEE6B3720C6DA46C40BA0D41E46206FF9FDE805A1C18403539B19BAFD45AEFE";
-  private static final long EXPIRATIONTIME = TimeUnit.MINUTES.toMillis(30);
+  @Value("${SECRET_KEY}")
+  private static String SECRET;
+  private static final long EXPIRATIONTIME = TimeUnit.HOURS.toMillis(72);
 
   public String generateToken(UserDetails userDetails) {
     Map<String, String> claims = new HashMap<>();

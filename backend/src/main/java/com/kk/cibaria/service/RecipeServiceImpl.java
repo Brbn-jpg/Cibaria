@@ -1,15 +1,15 @@
 package com.kk.cibaria.service;
 
-import java.awt.*;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.model.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.RecipeNotFoundException;
@@ -125,6 +125,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     return recipeRepository.save(recipeFound);
   }
+
+  @Override
+  public Page<Recipe> getRecipeByPage(int page, int size) {
+    Pageable pageable = PageRequest.of(page-1,size);
+    return recipeRepository.findAll(pageable);
+  }
+
 
   @Override
   public void delete(int id) {

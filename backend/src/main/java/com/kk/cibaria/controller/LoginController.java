@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kk.cibaria.exception.UserNotFoundException;
-import com.kk.cibaria.service.UserDetailService;
+import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.dto.LoginFormDto;
 

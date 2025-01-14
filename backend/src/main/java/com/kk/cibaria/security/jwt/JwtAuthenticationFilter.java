@@ -2,14 +2,13 @@ package com.kk.cibaria.security.jwt;
 
 import java.io.IOException;
 
+import com.kk.cibaria.security.UserDetailService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.kk.cibaria.service.UserDetailService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
