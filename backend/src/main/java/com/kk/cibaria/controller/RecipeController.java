@@ -1,5 +1,8 @@
 package com.kk.cibaria.controller;
 
+import java.io.IOException;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.kk.cibaria.dto.RecipeAddDto;
+import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 import com.kk.cibaria.model.Recipe;
 import com.kk.cibaria.service.RecipeService;
@@ -17,16 +24,19 @@ import com.kk.cibaria.service.RecipeService;
 @RestController
 public class RecipeController {
 
-  private RecipeService recipeService;
+  private final RecipeService recipeService;
 
   public RecipeController(RecipeService recipeService) {
     this.recipeService = recipeService;
   }
 
-  @CrossOrigin(origins = "http://localhost:4200")
   @GetMapping("/recipes")
-  public List<Recipe> getAll() {
-    return recipeService.getAll();
+  public Page<Recipe> getRecipesByPage(
+          @RequestParam(defaultValue = "1", required = false) @Min(1) int page,
+          @RequestParam(defaultValue = "10", required = false) @Min(1) int size
+  )
+  {
+    return recipeService.getRecipeByPage(page,size);
   }
 
   @GetMapping("/recipes/{id}")
@@ -36,7 +46,7 @@ public class RecipeController {
 
 
   @PostMapping(value = "/recipes", consumes = { "application/json" })
-  public Recipe save(@RequestBody Recipe recipe) {
+  public Recipe save(@RequestBody RecipeAddDto recipe) throws IOException {
     return recipeService.save(recipe);
   }
 

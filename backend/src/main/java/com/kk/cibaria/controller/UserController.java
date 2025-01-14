@@ -10,35 +10,35 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kk.cibaria.model.User;
+import com.kk.cibaria.model.UserEntity;
 import com.kk.cibaria.service.UserService;
 
 @RestController
 public class UserController {
 
-  private UserService userService;
+  private final UserService userService;
 
   public UserController(UserService userService) {
     this.userService = userService;
   }
 
   @GetMapping("/users")
-  public List<User> getAll() {
+  public List<UserEntity> getAll() {
     return userService.getAll();
   }
 
   @GetMapping("/users/{id}")
-  public User getById(@PathVariable int id) {
+  public UserEntity getById(@PathVariable int id) {
     return userService.getById(id);
   }
 
   @PostMapping("/users")
-  public User save(@RequestBody User user) {
+  public UserEntity save(@RequestBody UserEntity user) {
     return userService.save(user);
   }
 
   @PutMapping("/users/{id}")
-  public User update(@PathVariable int id, @RequestBody User user) {
+  public UserEntity update(@PathVariable int id, @RequestBody UserEntity user) {
     return userService.update(id, user);
   }
 

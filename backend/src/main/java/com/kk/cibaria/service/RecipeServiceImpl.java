@@ -1,23 +1,26 @@
 package com.kk.cibaria.service;
 
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
+import com.kk.cibaria.dto.RecipeAddDto;
+import com.kk.cibaria.model.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.RecipeNotFoundException;
-import com.kk.cibaria.model.Ingredient;
-import com.kk.cibaria.model.Rating;
-import com.kk.cibaria.model.Recipe;
-import com.kk.cibaria.model.Tag;
-import com.kk.cibaria.model.User;
 import com.kk.cibaria.repository.RecipeRepository;
 import com.kk.cibaria.repository.UserRepository;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-  private RecipeRepository recipeRepository;
-  private UserRepository userRepository;
+  private final RecipeRepository recipeRepository;
+  private final UserRepository userRepository;
 
   public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository) {
     this.recipeRepository = recipeRepository;
@@ -36,9 +39,56 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Recipe save(Recipe recipe) {
-    Recipe recipedb = recipeRepository.save(recipe);
-    return recipedb;
+  public Recipe save(RecipeAddDto recipe) throws IOException {
+    Recipe newRecipe = new Recipe();
+    newRecipe.setRecipeName(recipe.getRecipeName());
+    newRecipe.setCreatedAt(new Date());
+    newRecipe.setDifficulty(recipe.getDifficulty());
+    List<Ingredient> newIngredients = recipe.getIngredients().stream().map(i -> {
+      Ingredient ingredient = new Ingredient();
+      ingredient.setRecipe(newRecipe);
+      ingredient.setIngredientName(i.getIngredientName());
+      ingredient.setUnit(i.getUnit());
+      ingredient.setQuantity(i.getQuantity());
+      return ingredient;
+    }).toList();
+    newRecipe.setIngredients(newIngredients);
+
+
+
+    newRecipe.setPrepareTime(recipe.getPrepareTime());
+    newRecipe.setServings(recipe.getServings());
+    newRecipe.setCategory(recipe.getCategory());
+    List<Tag> newTags = recipe.getTag().stream().map(t->{
+      Tag tag = new Tag();
+      tag.setRecipe(newRecipe);
+      tag.setTagName(t .getTagName());
+      return tag;
+    }).toList();
+
+    newRecipe.setTag(newTags);
+
+    if(recipe.getFile()!=null)
+    {
+      try{
+        String base64Data = recipe.getFile();
+        if(base64Data.contains(","))
+        {
+          base64Data=base64Data.split(",")[1];
+        }
+        byte[] imageBytes = Base64.getDecoder().decode(base64Data);
+
+        FileEntity image = new FileEntity();
+        image.setFile(imageBytes);
+        image.setRecipe(newRecipe);
+        newRecipe.setFile(image);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+
+    }
+
+    return recipeRepository.save(newRecipe);
   }
 
   @Override
@@ -67,7 +117,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
     recipeFound.getRatings().clear();
     for (Rating rating : recipe.getRatings()) {
-      User user = userRepository.findById(rating.getUser().getId()).orElse(null);
+      UserEntity user = userRepository.findById(rating.getUser().getId()).orElse(null);
       rating.setRecipe(recipeFound);
       rating.setUser(user);
       recipeFound.getRatings().add(rating);
@@ -75,6 +125,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     return recipeRepository.save(recipeFound);
   }
+
+  @Override
+  public Page<Recipe> getRecipeByPage(int page, int size) {
+    Pageable pageable = PageRequest.of(page-1,size);
+    return recipeRepository.findAll(pageable);
+  }
+
 
   @Override
   public void delete(int id) {

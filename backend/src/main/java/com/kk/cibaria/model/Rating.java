@@ -10,9 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Rating")
+@Data
+@NoArgsConstructor
 public class Rating {
   @Column(name = "rating_id")
   @Id
@@ -22,7 +26,7 @@ public class Rating {
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = true)
   @JsonBackReference(value = "user-rating")
-  private User user;
+  private UserEntity user;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id", nullable = true)
@@ -31,46 +35,4 @@ public class Rating {
 
   @Column(name = "value")
   private int value;
-
-  public Rating() {
-  }
-
-  public Rating(User user, Recipe recipe, int value) {
-    this.user = user;
-    this.recipe = recipe;
-    this.value = value;
-  }
-
-  public int getRatingId() {
-    return ratingId;
-  }
-
-  public void setRatingId(int ratingId) {
-    this.ratingId = ratingId;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
-
-  public Recipe getRecipe() {
-    return recipe;
-  }
-
-  public void setRecipe(Recipe recipe) {
-    this.recipe = recipe;
-  }
-
-  public int getValue() {
-    return value;
-  }
-
-  public void setValue(int value) {
-    this.value = value;
-  }
-
 }

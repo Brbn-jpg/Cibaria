@@ -10,9 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Tag")
+@Data
+@NoArgsConstructor
 public class Tag {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,37 +30,4 @@ public class Tag {
   @JoinColumn(name = "recipe_id", nullable = true)
   @JsonBackReference
   private Recipe recipe;
-
-  public Tag() {
-  }
-
-  public Tag(String tagName, Recipe recipe) {
-    this.tagName = tagName;
-    this.recipe = recipe;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public String getTagName() {
-    return tagName;
-  }
-
-  public void setTagName(String tagName) {
-    this.tagName = tagName;
-  }
-
-  public Recipe getRecipe() {
-    return recipe;
-  }
-
-  public void setRecipe(Recipe recipe) {
-    this.recipe = recipe;
-  }
-
 }
