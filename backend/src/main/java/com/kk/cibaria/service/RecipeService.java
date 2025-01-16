@@ -16,7 +16,10 @@ public interface RecipeService {
 
   Recipe update(int id, Recipe recipe);
 
-  Page<Recipe> getRecipeByPage(int page, int size);
+  List<Recipe> getRecipeByPage(int page, int size, List<String> category,Integer difficulty,Integer servings,
+                               Integer prepareTime);
+
+
 
   void delete(int id);
 

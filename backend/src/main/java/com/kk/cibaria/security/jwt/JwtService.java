@@ -21,7 +21,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
   @Value("${SECRET_KEY}")
-  private static String SECRET;
+  private String secretKey;
   private static final long EXPIRATIONTIME = TimeUnit.HOURS.toMillis(72);
 
   public String generateToken(UserDetails userDetails) {
@@ -37,7 +37,7 @@ public class JwtService {
   }
 
   public SecretKey generateKey() {
-    byte[] key = Base64.getDecoder().decode(SECRET);
+    byte[] key = Base64.getDecoder().decode(secretKey);
     return Keys.hmacShaKeyFor(key);
   }
 

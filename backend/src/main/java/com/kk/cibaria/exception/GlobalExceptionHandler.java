@@ -32,4 +32,15 @@ public class GlobalExceptionHandler {
 
     return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
   }
+
+  @ExceptionHandler(PageDoesNotExistException.class)
+  public ResponseEntity<ErrorObject> handlePageDoesNotExists(PageDoesNotExistException ex)
+  {
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setMessage(ex.getMessage());
+    errorObject.setTimestamp(new Date());
+    errorObject.setStatusCode(HttpStatus.BAD_GATEWAY.value());
+
+    return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.BAD_REQUEST);
+  }
 }
