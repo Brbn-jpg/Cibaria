@@ -4,11 +4,17 @@ import { RouterLink } from '@angular/router';
 
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 
+export interface category {
+  categoryId: number;
+  categoryName: string;
+}
+
 export interface recipesRequest {
   recipeName: string;
   difficulty: number;
   prepareTime: number;
   servings: number;
+  category: string;
   ratings: rating[];
 }
 
@@ -26,6 +32,7 @@ export interface rating {
 export class RecipesComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
   http = inject(HttpClient);
+  categoriesArray: category[] = [];
   recipesArray: recipesRequest[] = [];
   totalItems: recipesRequest[] = [];
   currentPage: number = 1;
@@ -34,7 +41,6 @@ export class RecipesComponent implements OnInit {
 
   ngOnInit() {
     this.loadRecipes();
-    this.recipes();
   }
 
   loadRecipes() {
@@ -43,35 +49,31 @@ export class RecipesComponent implements OnInit {
       size: this.pageSize,
     };
 
-    const url = `${this.url}?page=1&size=10`;
-
-    this.http.get<recipesRequest[]>(url, { params }).subscribe({
-      next: (response) => {
-        this.recipesArray = response;
-        console.log(response);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+    this.http
+      .get<{
+        content: recipesRequest[];
+        totalPages: number;
+      }>(this.url, { params })
+      .subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response.content)) {
+            this.recipesArray = response.content;
+            this.totalPages = response.totalPages;
+            console.log('Loaded recipes:', this.recipesArray);
+          } else {
+            console.error(response);
+            this.recipesArray = [];
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
   }
 
   onPageChange(page: number) {
     this.currentPage = page;
     this.loadRecipes();
-  }
-
-  recipes() {
-    this.http.get<recipesRequest[]>(this.url).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.totalItems = response;
-        this.totalPages = Math.round(this.totalItems.length / this.pageSize);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
   }
 
   getAverageRating(ratings: rating[]) {
@@ -94,6 +96,7 @@ export class RecipesComponent implements OnInit {
     }
   }
 
+  // xddddd
   // fillFigure(data: recipesRequest) {
   //   console.log(data);
   //   const figure = document.createElement('figure');

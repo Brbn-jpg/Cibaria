@@ -8,8 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class CibariaApplication {
-
-	public static void main(String[] args) {
+ 	public static void main(String[] args) {
 		SpringApplication.run(CibariaApplication.class, args);
 	}
 

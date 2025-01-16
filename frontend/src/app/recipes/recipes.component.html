@@ -49,10 +49,9 @@
         <label for="category">Category</label>
         <select name="category" id="" class="filter">
           <option selected>Choose category</option>
-          <option value="1">Breakfast</option>
-          <option value="2">Lunch</option>
-          <option value="3">Dinner</option>
-          <option value="4">Dessert</option>
+          @for (recipe of categoriesArray; track $index){
+          <!-- <option>{{ filterCategory(recipe.category) }}</option> -->
+          }
         </select>
       </div>
     </div>
@@ -109,7 +108,7 @@
       <span class="pages">page {{ currentPage }} of {{ totalPages }}</span>
       <button
         class="btn"
-        [disabled]="recipesArray.length < pageSize"
+        [disabled]="currentPage === totalPages"
         (click)="onPageChange(currentPage + 1)"
       >
         Next
