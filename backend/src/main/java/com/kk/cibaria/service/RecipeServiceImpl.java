@@ -1,15 +1,13 @@
 package com.kk.cibaria.service;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
+import com.kk.cibaria.helper.Pagination;
+import com.kk.cibaria.helper.RecipeFilter;
 import com.kk.cibaria.model.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.RecipeNotFoundException;
@@ -25,6 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
   public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
+
   }
 
   @Override
@@ -108,11 +107,14 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Page<Recipe> getRecipeByPage(int page, int size) {
-    Pageable pageable = PageRequest.of(page-1,size);
-    return recipeRepository.findAll(pageable);
+  public List<Recipe> getRecipeByPage(int page, int size, List<String> category,
+                                      Integer difficulty, Integer servings, Integer prepareTime) {
+    Pagination pagination = new Pagination();
+    RecipeFilter filter = new RecipeFilter();
+    List<Recipe> recipes = recipeRepository.findAll();
+    List<Recipe> filteredRecipes = filter.filterByParams(category,difficulty,servings,prepareTime,recipes);
+    return pagination.paginate(page,size,filteredRecipes);
   }
-
 
   @Override
   public void delete(int id) {
