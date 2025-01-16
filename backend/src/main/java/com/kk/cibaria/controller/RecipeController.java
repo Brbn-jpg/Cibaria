@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
+import com.kk.cibaria.dto.RecipeRequestDto;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class RecipeController {
 //  }
 
   @GetMapping("/recipes")
-  public List<Recipe> getRecipesByPage(
+  public RecipeRequestDto getRecipesByPage(
           @RequestParam(defaultValue = "1", required = false) @Min(1) int page,
           @RequestParam(defaultValue = "10", required = false) @Min(1) int size,
           @RequestParam(required = false) List<String> category,

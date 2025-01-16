@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
+import com.kk.cibaria.dto.RecipeRequestDto;
 import com.kk.cibaria.model.Recipe;
 import org.springframework.data.domain.Page;
 
@@ -16,8 +17,8 @@ public interface RecipeService {
 
   Recipe update(int id, Recipe recipe);
 
-  List<Recipe> getRecipeByPage(int page, int size, List<String> category,Integer difficulty,Integer servings,
-                               Integer prepareTime);
+  RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, Integer servings,
+                                   Integer prepareTime);
 
 
 
