@@ -31,12 +31,17 @@ public class RecipeController {
   }
 
   @GetMapping("/recipes")
-  public Page<Recipe> getRecipesByPage(
+  public List<Recipe> getRecipesByPage(
           @RequestParam(defaultValue = "1", required = false) @Min(1) int page,
-          @RequestParam(defaultValue = "10", required = false) @Min(1) int size
+          @RequestParam(defaultValue = "10", required = false) @Min(1) int size,
+          @RequestParam(required = false) List<String> category,
+          @RequestParam(required = false) Integer difficulty,
+          @RequestParam(required = false) Integer servings,
+          @RequestParam(required = false) Integer prepareTime
   )
   {
-    return recipeService.getRecipeByPage(page,size);
+
+    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime);
   }
 
   @GetMapping("/recipes/{id}")
