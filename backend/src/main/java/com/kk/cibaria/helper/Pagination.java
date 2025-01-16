@@ -28,4 +28,8 @@ public class Pagination {
         int itemsFrom = (page - 1) * size;
         return itemsFrom < recipes.size() && page > 0;
     }
+
+    public int getTotalPages(int size, List<Recipe> recipes) {
+        return (int) Math.ceil((double) recipes.size() /size);
+    }
 }
