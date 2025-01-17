@@ -109,7 +109,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public RecipeRequestDto getRecipeByPage(int page, int size, List<String> category,
-                                          Integer difficulty, Integer servings, Integer prepareTime) {
+                                          Integer difficulty, Integer servings, String prepareTime) {
     Pagination pagination = new Pagination();
     RecipeFilter filter = new RecipeFilter();
     List<Recipe> recipes = recipeRepository.findAll();
