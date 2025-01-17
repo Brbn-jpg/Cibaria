@@ -21,7 +21,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class LoginComponent implements AfterViewInit {
   ngAfterViewInit() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   }
   login = true;
   changeForm(): void {

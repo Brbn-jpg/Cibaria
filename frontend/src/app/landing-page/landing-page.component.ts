@@ -22,6 +22,6 @@ import { FooterSectionComponent } from '../footer-section/footer-section.compone
 })
 export class LandingPageComponent implements AfterViewInit {
   ngAfterViewInit() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
   }
 }

@@ -45,7 +45,7 @@ export class RecipesComponent implements OnInit {
   totalPages: number = 0;
 
   ngOnInit() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
     this.loadCategories();
     this.loadRecipes();
   }

@@ -11,6 +11,6 @@ import { RouterLink, RouterModule } from '@angular/router';
 })
 export class TermsOfServiceComponent implements AfterViewInit {
   ngAfterViewInit() {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0 });
   }
 }
