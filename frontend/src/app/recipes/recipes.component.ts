@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 
 export interface category {
-  categoryId: number;
   categoryName: string;
 }
 
@@ -36,15 +35,23 @@ export class RecipesComponent implements OnInit {
   recipesArray: recipesRequest[] = [];
   totalItems: recipesRequest[] = [];
   currentPage: number = 1;
-  pageSize: number = 4;
+  pageSize: number = 12;
+  difficulty?: number;
+  prepTime?: number;
+  servings?: number;
+  category?: string;
   totalPages: number = 0;
 
   ngOnInit() {
+    this.loadCategories();
     this.loadRecipes();
   }
 
   loadRecipes() {
-    const params: { page: number; size: number } = {
+    const params: {
+      page: number;
+      size: number;
+    } = {
       page: this.currentPage,
       size: this.pageSize,
     };
@@ -69,6 +76,73 @@ export class RecipesComponent implements OnInit {
           console.error(err);
         },
       });
+  }
+
+  applyFilters() {
+    const params: any = {
+      page: this.currentPage,
+      size: this.pageSize,
+    };
+
+    if (this.difficulty) params.difficulty = this.difficulty;
+    if (this.prepTime) params.prepareTime = this.prepTime;
+    if (this.servings) params.servings = this.servings;
+    if (this.category) params.category = this.category;
+
+    this.http
+      .get<{
+        content: recipesRequest[];
+        totalPages: number;
+      }>(this.url, { params })
+      .subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response.content)) {
+            this.recipesArray = response.content;
+            this.totalPages = response.totalPages;
+            console.log('Filtered recipes:', this.recipesArray);
+          } else {
+            console.error(response);
+            this.recipesArray = [];
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+  }
+
+  loadCategories() {
+    this.http.get<category[]>('http://localhost:8080/api/recipe').subscribe({
+      next: (response) => {
+        this.categoriesArray = response;
+        console.log('Categories:', this.categoriesArray);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+  onFilterChange(filterName: string, event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+
+    switch (filterName) {
+      case 'difficulty':
+        this.difficulty = Number(value);
+        break;
+      case 'prepTime':
+        this.prepTime = Number(value);
+        break;
+      case 'servings':
+        this.servings = Number(value);
+        break;
+      case 'category':
+        this.category = value;
+        break;
+    }
+
+    this.currentPage = 1;
+    this.applyFilters();
   }
 
   onPageChange(page: number) {

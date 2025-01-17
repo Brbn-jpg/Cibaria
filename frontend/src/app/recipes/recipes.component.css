@@ -90,6 +90,38 @@ select {
   letter-spacing: 1.02px;
 }
 
+.inputs {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 2.4rem;
+}
+
+.prepTime {
+  padding: 1rem 3.2rem;
+  width: 12rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 1rem;
+  color: #fff;
+  box-shadow: 0px 1px 3px rgba(255, 255, 255, 0.7);
+}
+
+.prepTime::placeholder {
+  color: #fff;
+}
+
+.prepTime::-webkit-outer-spin-button,
+.prepTime::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.prepTime[type="number"] {
+  -moz-appearance: textfield;
+}
+
 /* Recipes */
 
 article {

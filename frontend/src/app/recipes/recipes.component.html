@@ -20,8 +20,13 @@
     <div class="filters">
       <div class="difficulty filter-wrapper">
         <label for="difficulty">Difficulty</label>
-        <select name="difficulty" id="" class="filter">
-          <option selected>Choose difficulty</option>
+        <select
+          name="difficulty"
+          id="difficulty"
+          class="filter"
+          (change)="onFilterChange('difficulty', $event)"
+        >
+          <option selected value="0">Choose difficulty</option>
           <option value="1">Easy</option>
           <option value="2">Medium</option>
           <option value="3">Hard</option>
@@ -29,28 +34,47 @@
       </div>
       <div class="prepare-time filter-wrapper">
         <label for="prepare-time">Prepare time</label>
-        <select name="prepare-time" id="" class="filter">
-          <option selected>Choose prepare time</option>
-          <option value="1">0-30 minutes</option>
-          <option value="2">30-60 minutes</option>
-          <option value="3">60+ minutes</option>
-        </select>
+        <div class="inputs">
+          <input
+            type="number"
+            class="prepTime"
+            (change)="onFilterChange('prepTime', $event)"
+            placeholder="from"
+          />
+          <span> &mdash; </span>
+          <input
+            type="number"
+            class="prepTime"
+            (change)="onFilterChange('prepTime', $event)"
+            placeholder="to"
+          />
+        </div>
       </div>
       <div class="servings filter-wrapper">
         <label for="servings">Servings</label>
-        <select name="servings" id="" class="filter">
-          <option selected>Choose servings</option>
+        <select
+          name="servings"
+          id="servings"
+          class="filter"
+          (change)="onFilterChange('servings', $event)"
+        >
+          <option selected value="0">Choose servings</option>
           <option value="1">1-2 servings</option>
-          <option value="2">3-4 servings</option>
+          <option value="2">2-4 servings</option>
           <option value="3">5+ servings</option>
         </select>
       </div>
       <div class="category filter-wrapper">
         <label for="category">Category</label>
-        <select name="category" id="" class="filter">
-          <option selected>Choose category</option>
-          @for (recipe of categoriesArray; track $index){
-          <!-- <option>{{ filterCategory(recipe.category) }}</option> -->
+        <select
+          name="category"
+          id="category"
+          class="filter"
+          (change)="onFilterChange('category', $event)"
+        >
+          <option selected value="">Choose category</option>
+          @for (recipe of recipesArray; track $index){
+          <option>{{ recipe.category }}</option>
           }
         </select>
       </div>
@@ -92,6 +116,10 @@
               src="images/icons/time-outline.svg"
               alt="food icon"
             /><span>{{ recipe.prepareTime }} minutes</span>
+          </div>
+          <div class="recipe-time recipe-desc-inner">
+            <img class="icon" src="images/icons/bowl-food.svg" alt="" />
+            <span>{{ recipe.category }}</span>
           </div>
         </div>
       </figure>
