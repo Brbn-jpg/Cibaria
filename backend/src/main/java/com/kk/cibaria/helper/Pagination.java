@@ -2,8 +2,6 @@ package com.kk.cibaria.helper;
 
 import com.kk.cibaria.exception.PageDoesNotExistException;
 import com.kk.cibaria.model.Recipe;
-import com.kk.cibaria.repository.RecipeRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@ import java.util.List;
 public class RecipeFilter {
 
     public List<Recipe> filterByParams(List<String> category, Integer difficulty,
-                                       Integer servings, Integer prepareTime,
+                                       Integer servings, String prepareTime,
                                        List<Recipe> recipes)
     {
         List<Recipe> filteredRecipes = recipes;
@@ -31,8 +31,12 @@ public class RecipeFilter {
 
         if(prepareTime!=null)
         {
+
+            int from = Integer.parseInt(prepareTime.split("-")[0]);
+            int to = Integer.parseInt(prepareTime.split("-")[1]);
+
             filteredRecipes = filteredRecipes.stream()
-                    .filter(recipe -> recipe.getPrepareTime()==prepareTime).toList();
+                    .filter(recipe -> recipe.getPrepareTime()>=from && recipe.getPrepareTime()<=to).toList();
         }
 
         return filteredRecipes;
