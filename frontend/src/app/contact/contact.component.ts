@@ -11,6 +11,6 @@ import { RouterLink } from '@angular/router';
 })
 export class ContactComponent implements AfterViewInit {
   ngAfterViewInit() {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

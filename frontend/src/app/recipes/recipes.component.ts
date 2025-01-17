@@ -37,12 +37,15 @@ export class RecipesComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 12;
   difficulty?: number;
+  prepTimeFrom?: number;
+  prepTimeTo?: number;
   prepTime?: number;
   servings?: number;
   category?: string;
   totalPages: number = 0;
 
   ngOnInit() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.loadCategories();
     this.loadRecipes();
   }
@@ -84,8 +87,13 @@ export class RecipesComponent implements OnInit {
       size: this.pageSize,
     };
 
+    const prepTimeTo = this.prepTimeTo ?? 99999;
+    const prepTimeFrom = this.prepTimeFrom ?? 0;
+
     if (this.difficulty) params.difficulty = this.difficulty;
-    if (this.prepTime) params.prepareTime = this.prepTime;
+    if (prepTimeFrom || prepTimeTo) {
+      params.prepareTime = `${prepTimeFrom || 0}-${prepTimeTo || ''}`;
+    }
     if (this.servings) params.servings = this.servings;
     if (this.category) params.category = this.category;
 
@@ -112,33 +120,48 @@ export class RecipesComponent implements OnInit {
   }
 
   loadCategories() {
-    this.http.get<category[]>('http://localhost:8080/api/recipe').subscribe({
-      next: (response) => {
-        this.categoriesArray = response;
-        console.log('Categories:', this.categoriesArray);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
+    this.http
+      .get<{ content: any[] }>('http://localhost:8080/api/recipes')
+      .subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response.content)) {
+            this.categoriesArray = Array.from(
+              new Set(response.content.map((recipe) => recipe.category))
+            ).sort();
+            console.log('Categories no duplicates:', this.categoriesArray);
+          } else {
+            console.error('Unexpected response format', response);
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
   }
 
   onFilterChange(filterName: string, event: Event) {
     const value = (event.target as HTMLSelectElement).value;
 
-    switch (filterName) {
-      case 'difficulty':
-        this.difficulty = Number(value);
-        break;
-      case 'prepTime':
-        this.prepTime = Number(value);
-        break;
-      case 'servings':
-        this.servings = Number(value);
-        break;
-      case 'category':
-        this.category = value;
-        break;
+    if (filterName === 'prepTime') {
+      const inputClass = (event.target as HTMLInputElement).classList;
+
+      if (inputClass.contains('from')) {
+        this.prepTimeFrom = value ? Number(value) : undefined;
+      } else if (inputClass.contains('to')) {
+        this.prepTimeTo = value ? Number(value) : undefined;
+      }
+    } else {
+      switch (filterName) {
+        case 'difficulty':
+          this.difficulty = Number(value);
+          break;
+        case 'servings':
+          this.servings = Number(value);
+          break;
+        case 'category':
+          this.category = value;
+          break;
+      }
     }
 
     this.currentPage = 1;

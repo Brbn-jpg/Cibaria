@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,7 +19,10 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
     ]),
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
+  ngAfterViewInit() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
   login = true;
   changeForm(): void {
     this.login = !this.login;

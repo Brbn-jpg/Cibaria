@@ -37,14 +37,14 @@
         <div class="inputs">
           <input
             type="number"
-            class="prepTime"
+            class="prepTime from"
             (change)="onFilterChange('prepTime', $event)"
             placeholder="from"
           />
           <span> &mdash; </span>
           <input
             type="number"
-            class="prepTime"
+            class="prepTime to"
             (change)="onFilterChange('prepTime', $event)"
             placeholder="to"
           />
@@ -73,8 +73,8 @@
           (change)="onFilterChange('category', $event)"
         >
           <option selected value="">Choose category</option>
-          @for (recipe of recipesArray; track $index){
-          <option>{{ recipe.category }}</option>
+          @for (category of categoriesArray; track $index){
+          <option>{{ category }}</option>
           }
         </select>
       </div>
