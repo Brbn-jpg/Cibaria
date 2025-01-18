@@ -17,7 +17,7 @@ public interface RecipeService {
 
   Recipe update(int id, Recipe recipe);
 
-  RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, Integer servings,
+  RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, String servings,
                                    String prepareTime);
 
 

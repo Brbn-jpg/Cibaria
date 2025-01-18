@@ -34,7 +34,7 @@ public class RecipeController {
           @RequestParam(defaultValue = "10", required = false) @Min(1) int size,
           @RequestParam(required = false) List<String> category,
           @RequestParam(required = false) Integer difficulty,
-          @RequestParam(required = false) Integer servings,
+          @RequestParam(required = false) String servings,
           @RequestParam(required = false) String prepareTime
   )
   {
