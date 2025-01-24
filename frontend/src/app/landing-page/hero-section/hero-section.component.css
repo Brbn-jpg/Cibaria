@@ -15,44 +15,6 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-/* nav styling */
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2.4rem 4.8rem 2.4rem 4.8rem;
-}
-
-.logo {
-  width: 9.6rem;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 4.8rem;
-}
-
-.nav-link:link,
-.nav-link:visited {
-  transition: all 0.2s ease;
-  display: block;
-  padding: 1.2rem;
-  font-size: 1.6rem;
-  border-radius: 1rem;
-  color: #fff;
-  text-decoration: none;
-}
-
-.nav-link:hover,
-.nav-link:active {
-  display: block;
-  color: #000;
-  border-radius: 1rem;
-  background-color: #fff;
-  transform: scale(1.02);
-}
-
 /* article styling */
 article {
   margin: 0 auto;

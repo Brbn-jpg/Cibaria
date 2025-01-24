@@ -6,6 +6,7 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { RecipesComponent } from './recipes/recipes.component';
+import { RecipeDetailedComponent } from './recipe-detailed/recipe-detailed.component';
 
 export const routes: Routes = [
   {
@@ -43,5 +44,7 @@ export const routes: Routes = [
     component: RecipesComponent,
     data: { title: 'Cibaria | Recipes' },
   },
+  { path: 'recipes/:id', component: RecipeDetailedComponent },
+
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

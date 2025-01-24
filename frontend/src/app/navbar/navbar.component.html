@@ -1,0 +1,76 @@
+<nav>
+  <a href="" [routerLink]="['/']">
+    <img src="images/Cibaria.png" alt="Cibaria logo" class="logo" />
+  </a>
+  <ul class="nav-links">
+    @if(!isLoggedIn) {
+    <li class="language">
+      <button (click)="changeLanguage('en')">
+        <img
+          class="flag"
+          src="images/flags/us.svg"
+          alt="Change language to english"
+        />
+      </button>
+      <button (click)="changeLanguage('pl')">
+        <img
+          class="flag"
+          src="images/flags/pl.svg"
+          alt="Zmien jezyk na polski"
+        />
+      </button>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/']">{{
+        "NAV.HOME" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/about-us']">{{
+        "NAV.ABOUT" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/recipes']">{{
+        "NAV.RECIPES" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/contact']">{{
+        "NAV.CONTACT" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/login']">{{
+        "NAV.LOGIN" | translate
+      }}</a>
+    </li>
+    } @else {
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/']">{{
+        "NAV.HOME" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/about-us']">{{
+        "NAV.ABOUT" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/recipes']">{{
+        "NAV.RECIPES" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/contact']">{{
+        "NAV.CONTACT" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/']">{{
+        "NAV.LOGOUT" | translate
+      }}</a>
+    </li>
+    }
+  </ul>
+</nav>

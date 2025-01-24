@@ -1,0 +1,64 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "ABOUT": "About us",
+    "RECIPES": "Recipes",
+    "CONTACT": "Contact",
+    "LOGIN": "Login"
+  },
+  "MAINPAGE": {
+    "TITLE": "Turning ideas into unforgettable culinary experiences",
+    "SUBTITLE": " Transform your culinary visions into delectable creations with effortless finesse and a touch of sophistication. Let every idea come to life as a memorable dish, served with grace and enjoyed one bite at a time. ",
+    "BTNSTART": "Start now",
+    "BTNINFO": "More info",
+    "EXPERIENCE": {
+      "FOOD_FIELD": "in food field",
+      "RECIPES": "recipes",
+      "CLIENTS": "happy clients"
+    },
+    "10Y": "10y"
+  },
+  "SLIDER": {
+    "FEATURED": "As featured in"
+  },
+  "FEATURE": {
+    "TITLE1": "Flavors for every occasion!",
+    "SUBTITLE1": " Discover recipes that will delight your loved ones, no matter the occasion. From quick weeknight meals to special celebrations, bring creativity and joy to your kitchen with dishes that everyone will love. ",
+    "TITLE2": "Your time, your plan.",
+    "SUBTITLE2": " Take full control of your cooking schedule and adapt it to your daily life. Whether you prefer to plan meals weeks in advance or decide on the fly, you can organize your cooking effortlessly and always stay on top of your culinary goals. ",
+    "TITLE3": "Control the taste and quality.",
+    "SUBTITLE3": " By preparing meals yourself, you have full control over the ingredients and flavors that go into every dish. Enjoy the peace of mind that comes with knowing exactly what you're eating – fresh, healthy, and perfectly tailored to your taste. "
+  },
+  "TESTIMONIALS": {
+    "NAME": "Testimonials",
+    "TITLE": " See what others said about their journey to delicious & stress-free cooking! ",
+    "ANNA": "     This app has completely transformed the way I plan my meals. It's so easy to use, and now I always know what to cook! ",
+    "JULIA": "     I love how this app helps me stay organized. The recipes are amazing, and I save so much time during the week! ",
+    "MICHAEL": "     Cooking used to feel like a chore, but now it's fun and effortless. The planning feature is a game-changer for me. ",
+    "TOM": "     Finally, an app that makes cooking stress-free! I feel more confident in the kitchen and love experimenting with new recipes "
+  },
+  "CTA": {
+    "TITLE": "Let's keep in touch",
+    "SUBTITLE": " Sign up for our newsletter now and be the first to know about exciting new recipes! Get exclusive early access 3 days before anyone else and start planning your meals ahead of time with fresh inspiration delivered straight to your inbox. ",
+    "CTABTN": "Get in touch",
+    "NAME": "Enter your name",
+    "EMAIL": "Enter your e-mail",
+    "WHERE": "Where did you hear from us?"
+  },
+  "FOOTER": {
+    "TITLE": "Discover, save, and rate recipes – everything you need to make cooking a joy every day!",
+    "COPY": "Cibaria ©2024 All rights reserved.",
+    "EXTRALINKS": {
+      "TITLE": "Extra links",
+      "LINK1": "Home",
+      "LINK2": "About us",
+      "LINK3": "Recipes",
+      "LINK4": "Contact"
+    },
+    "LEGAL": {
+      "TITLE": "Legal requirements",
+      "PRIVACY": "Privacy Policy",
+      "TERMS": "Terms of Service"
+    }
+  }
+}

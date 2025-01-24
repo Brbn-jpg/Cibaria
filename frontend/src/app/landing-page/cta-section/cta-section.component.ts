@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-cta-section',
   standalone: true,
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './cta-section.component.html',
   styleUrl: './cta-section.component.css',
 })
@@ -23,5 +26,12 @@ export class CtaSectionComponent implements OnInit {
     hiddenElements.forEach((element: HTMLElement) => {
       observer.observe(element);
     });
+  }
+  constructor(private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
+  }
+
+  changeLanguage(language: string): void {
+    this.translate.use(language);
   }
 }

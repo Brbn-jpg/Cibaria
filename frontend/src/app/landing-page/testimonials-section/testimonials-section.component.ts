@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 declare function Testimonials(): void;
 
 @Component({
   selector: 'app-testimonials-section',
   standalone: true,
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './testimonials-section.component.html',
   styleUrls: ['./testimonials-section.component.css'],
 })
@@ -68,5 +69,12 @@ export class TestimonialsSectionComponent implements OnInit {
     window.ontouchend = () => handleOnUp();
     window.onmousemove = (e) => handleOnMove(e);
     window.ontouchmove = (e) => handleOnMove(e);
+  }
+  constructor(private translate: TranslateService) {
+    this.translate.setDefaultLang('en');
+  }
+
+  changeLanguage(language: string): void {
+    this.translate.use(language);
   }
 }

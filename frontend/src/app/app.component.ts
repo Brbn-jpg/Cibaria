@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { filter, map } from 'rxjs';
 import {
   Router,
@@ -12,12 +14,21 @@ import {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule],
+  imports: [RouterOutlet, RouterModule, TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  constructor(private router: Router, private titleService: Title) {}
+  constructor(
+    private router: Router,
+    private titleService: Title,
+    private translate: TranslateService
+  ) {
+    this.translate.addLangs(['pl', 'en']);
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+  }
+
   ngOnInit() {
     this.router.events
       .pipe(

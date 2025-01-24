@@ -1,0 +1,64 @@
+{
+  "NAV": {
+    "HOME": "Strona główna",
+    "ABOUT": "O nas",
+    "RECIPES": "Przepisy",
+    "CONTACT": "Kontakt",
+    "LOGIN": "Zaloguj się"
+  },
+  "MAINPAGE": {
+    "TITLE": "Przekształcanie pomysłów w niezapomniane kulinarne doświadczenia",
+    "SUBTITLE": " Przekształć swoje kulinarne wizje w wykwintne dzieła z łatwością i odrobiną finezji. Niech każdy pomysł ożyje jako niezapomniane danie, podane z gracją i smakowane kęs po kęsie. ",
+    "BTNSTART": "Zacznij teraz",
+    "BTNINFO": "Więcej informacji",
+    "EXPERIENCE": {
+      "FOOD_FIELD": "w branży kulinarnej",
+      "RECIPES": "przepisów",
+      "CLIENTS": "zadowoleni klienci"
+    },
+    "10Y": "10 lat"
+  },
+  "SLIDER": {
+    "FEATURED": "Wyróżnione w"
+  },
+  "FEATURE": {
+    "TITLE1": "Smaki na każdą okazję!",
+    "SUBTITLE1": " Odkryj przepisy, które zachwycą Twoich bliskich, niezależnie od okazji. Od szybkich dań na co dzień po wyjątkowe uroczystości, wprowadź kreatywność i radość do swojej kuchni dzięki potrawom, które wszyscy pokochają. ",
+    "TITLE2": "Twój czas, Twój plan.",
+    "SUBTITLE2": " Przejmij pełną kontrolę nad swoim harmonogramem gotowania i dostosuj go do swojego codziennego życia. Niezależnie od tego, czy wolisz planować posiłki z wyprzedzeniem, czy podejmować decyzje na bieżąco, możesz zorganizować swoje gotowanie bez wysiłku i zawsze mieć kulinarne cele pod kontrolą. ",
+    "TITLE3": "Kontroluj smak i jakość.",
+    "SUBTITLE3": " Przygotowując posiłki samodzielnie, masz pełną kontrolę nad składnikami i smakami każdej potrawy. Ciesz się spokojem ducha, wiedząc dokładnie, co jesz – świeże, zdrowe i idealnie dopasowane do Twojego gustu. "
+  },
+  "TESTIMONIALS": {
+    "NAME": "Opinie",
+    "TITLE": " Zobacz, co inni mówią o swojej drodze do pysznego i bezstresowego gotowania! ",
+    "ANNA": " Ta aplikacja całkowicie zmieniła sposób, w jaki planuję posiłki. Jest tak łatwa w użyciu, a teraz zawsze wiem, co ugotować! ",
+    "JULIA": " Uwielbiam, jak ta aplikacja pomaga mi być zorganizowaną. Przepisy są niesamowite, a ja oszczędzam tyle czasu w ciągu tygodnia! ",
+    "MICHAEL": " Gotowanie kiedyś wydawało się obowiązkiem, ale teraz to przyjemność i łatwość. Funkcja planowania to dla mnie rewolucja. ",
+    "TOM": " Wreszcie aplikacja, która sprawia, że gotowanie jest bezstresowe! Czuję się pewniej w kuchni i uwielbiam eksperymentować z nowymi przepisami. "
+  },
+  "CTA": {
+    "TITLE": "Pozostańmy w kontakcie",
+    "SUBTITLE": " Zapisz się do naszego newslettera już teraz i bądź pierwszym, który dowie się o ekscytujących nowych przepisach! Otrzymaj ekskluzywny dostęp 3 dni wcześniej i planuj posiłki z inspiracją dostarczaną prosto do Twojej skrzynki. ",
+    "CTABTN": "Skontaktuj się",
+    "NAME": "Wpisz swoje imię",
+    "EMAIL": "Wpisz swój e-mail",
+    "WHERE": "Gdzie o nas usłyszałeś?"
+  },
+  "FOOTER": {
+    "TITLE": "Odkrywaj, zapisuj i oceniaj przepisy – wszystko, czego potrzebujesz, aby codzienne gotowanie było przyjemnością!",
+    "COPY": "Cibaria ©2024 Wszelkie prawa zastrzeżone.",
+    "EXTRALINKS": {
+      "TITLE": "Dodatkowe linki",
+      "LINK1": "Strona główna",
+      "LINK2": "O nas",
+      "LINK3": "Przepisy",
+      "LINK4": "Kontakt"
+    },
+    "LEGAL": {
+      "TITLE": "Wymagania prawne",
+      "PRIVACY": "Polityka prywatności",
+      "TERMS": "Regulamin"
+    }
+  }
+}

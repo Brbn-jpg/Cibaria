@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 export interface category {
   categoryName: string;
 }
 
 export interface recipesRequest {
+  id: number;
   recipeName: string;
   difficulty: number;
   prepareTime: number;
@@ -24,7 +26,7 @@ export interface rating {
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [RouterLink, FooterSectionComponent],
+  imports: [RouterLink, FooterSectionComponent, NavbarComponent],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })
@@ -69,7 +71,6 @@ export class RecipesComponent implements OnInit {
           if (response && Array.isArray(response.content)) {
             this.recipesArray = response.content;
             this.totalPages = response.totalPages;
-            console.log('Loaded recipes:', this.recipesArray);
           } else {
             console.error(response);
             this.recipesArray = [];
@@ -107,7 +108,6 @@ export class RecipesComponent implements OnInit {
           if (response && Array.isArray(response.content)) {
             this.recipesArray = response.content;
             this.totalPages = response.totalPages;
-            console.log('Filtered recipes:', this.recipesArray);
           } else {
             console.error(response);
             this.recipesArray = [];
@@ -128,7 +128,6 @@ export class RecipesComponent implements OnInit {
             this.categoriesArray = Array.from(
               new Set(response.content.map((recipe) => recipe.category))
             ).sort();
-            console.log('Categories no duplicates:', this.categoriesArray);
           } else {
             console.error('Unexpected response format', response);
           }

@@ -1,22 +1,21 @@
 <section class="login-register">
-  <nav>
-    <a href="" [routerLink]="['/']"
-      ><img src="images/Cibaria.png" alt="Cibaria logo" class="logo"
-    /></a>
-    <ul class="nav-links">
-      <li><a class="nav-link" href="" [routerLink]="['']">Home</a></li>
-    </ul>
-  </nav>
+  <app-navbar></app-navbar>
   <main>
     @if(login){
     <div @showSection class="login">
       <h2 class="catch-phrase">Log in to explore the world of Cibaria!</h2>
-      <form class="inputs">
-        <input type="text" placeholder="Username" [formControl]="username" />
+      <form class="inputs" (submit)="onLogin()">
+        <input
+          type="text"
+          placeholder="Username"
+          [formControl]="username"
+          [ngModel]="formUsername"
+        />
         <input
           type="password"
           placeholder="Password"
           [formControl]="password"
+          [ngModel]="formPassword"
         />
         <div>
           <span class="remember-me">Remember me </span
