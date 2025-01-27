@@ -1,6 +1,7 @@
 package com.kk.cibaria.controller;
 
 import com.kk.cibaria.dto.RegisterDto;
+import com.kk.cibaria.dto.TokenResponseDto;
 import com.kk.cibaria.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String RegisterUser(@RequestBody RegisterDto dto) {
+    public TokenResponseDto RegisterUser(@RequestBody RegisterDto dto) {
         return userService.save(dto);
     }
 }

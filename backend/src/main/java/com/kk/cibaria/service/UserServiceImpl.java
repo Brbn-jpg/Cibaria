@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.kk.cibaria.dto.RegisterDto;
+import com.kk.cibaria.dto.TokenResponseDto;
 import com.kk.cibaria.exception.UserEmailAlreadyExistException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String save(RegisterDto dto) {
+  public TokenResponseDto save(RegisterDto dto) {
     Optional<UserEntity> isUser = userRepository.findByEmail(dto.getEmail());
     if(isUser.isPresent()){
       throw new UserEmailAlreadyExistException("User with given email: " + dto.getEmail() + " already exist in database");
@@ -54,7 +54,9 @@ public class UserServiceImpl implements UserService {
     newUser.setUsername(dto.getUsername());
 
     UserEntity userDb = userRepository.save(newUser);
-    return jwtService.generateToken(userDetailService.loadUserByUsername(userDb.getEmail()));
+    TokenResponseDto token = new TokenResponseDto();
+    token.setToken(jwtService.generateToken(userDetailService.loadUserByUsername(userDb.getEmail())));
+    return token;
   }
 
   @Override

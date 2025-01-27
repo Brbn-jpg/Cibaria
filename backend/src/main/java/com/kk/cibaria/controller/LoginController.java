@@ -1,6 +1,8 @@
 package com.kk.cibaria.controller;
 
+import com.kk.cibaria.dto.TokenResponseDto;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,16 +29,14 @@ public class LoginController {
   }
 
   @PostMapping("/authenticate")
-  public String authenticate(@RequestBody LoginFormDto loginFormDto) {
-
-    Authentication authentication = authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(loginFormDto.username(), loginFormDto.password()));
-
-    if (authentication.isAuthenticated()) {
-      return jwtService.generateToken(userDetailService.loadUserByUsername(loginFormDto.username()));
-    } else {
+  public TokenResponseDto authenticate(@RequestBody LoginFormDto loginFormDto) {
+    try{
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormDto.username(), loginFormDto.password()));
+      TokenResponseDto token = new TokenResponseDto();
+      token.setToken(jwtService.generateToken(userDetailService.loadUserByUsername(loginFormDto.username())));
+      return token;
+    }catch (BadCredentialsException ex) {
       throw new UserNotFoundException("Invalid credentials");
     }
   }
-
 }
