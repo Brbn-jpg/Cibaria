@@ -21,18 +21,18 @@ public class UserDetailService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<UserEntity> user = userRepository.findByUsername(username);
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    Optional<UserEntity> user = userRepository.findByEmail(email);
     if (user.isPresent()) {
       var userObj = user.get();
       return User.builder()
-          .username(userObj.getUsername())
+          .username(userObj.getEmail())
           .password(userObj.getPassword())
           .roles(getRoles(userObj))
           .build();
 
     } else {
-      throw new UsernameNotFoundException(username);
+      throw new UsernameNotFoundException(email);
     }
 
   }

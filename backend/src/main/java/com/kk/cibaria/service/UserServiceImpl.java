@@ -1,7 +1,13 @@
 package com.kk.cibaria.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.kk.cibaria.dto.RegisterDto;
+import com.kk.cibaria.exception.UserEmailAlreadyExistException;
+import com.kk.cibaria.security.UserDetailService;
+import com.kk.cibaria.security.jwt.JwtService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +21,14 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final JwtService jwtService;
+  private final UserDetailService userDetailService;
 
-  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, UserDetailService userDetailService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+      this.jwtService = jwtService;
+      this.userDetailService = userDetailService;
   }
 
   @Override
@@ -33,10 +43,18 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserEntity save(UserEntity user) {
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    UserEntity userdb = userRepository.save(user);
-    return userdb;
+  public String save(RegisterDto dto) {
+    Optional<UserEntity> isUser = userRepository.findByEmail(dto.getEmail());
+    if(isUser.isPresent()){
+      throw new UserEmailAlreadyExistException("User with given email: " + dto.getEmail() + " already exist in database");
+    }
+    UserEntity newUser = new UserEntity();
+    newUser.setEmail(dto.getEmail());
+    newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+    newUser.setUsername(dto.getUsername());
+
+    UserEntity userDb = userRepository.save(newUser);
+    return jwtService.generateToken(userDetailService.loadUserByUsername(userDb.getEmail()));
   }
 
   @Override

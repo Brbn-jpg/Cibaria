@@ -17,7 +17,6 @@ public class GlobalExceptionHandler {
 
     errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
     errorObject.setMessage(ex.getMessage());
-    errorObject.setTimestamp(new Date());
 
     return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
   }
@@ -28,7 +27,6 @@ public class GlobalExceptionHandler {
 
     errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
     errorObject.setMessage(ex.getMessage());
-    errorObject.setTimestamp(new Date());
 
     return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.NOT_FOUND);
   }
@@ -38,9 +36,17 @@ public class GlobalExceptionHandler {
   {
     ErrorObject errorObject = new ErrorObject();
     errorObject.setMessage(ex.getMessage());
-    errorObject.setTimestamp(new Date());
     errorObject.setStatusCode(HttpStatus.BAD_GATEWAY.value());
 
     return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(UserEmailAlreadyExistException.class)
+  public ResponseEntity<ErrorObject> handleUserEmailAlreadyExist(UserEmailAlreadyExistException ex)
+  {
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setStatusCode(HttpStatus.CONFLICT.value());
+    errorObject.setMessage(ex.getMessage());
+    return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.CONFLICT);
   }
 }

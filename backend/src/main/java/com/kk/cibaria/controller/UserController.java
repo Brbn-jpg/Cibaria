@@ -2,6 +2,7 @@ package com.kk.cibaria.controller;
 
 import java.util.List;
 
+import com.kk.cibaria.dto.RegisterDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +31,6 @@ public class UserController {
   @GetMapping("/users/{id}")
   public UserEntity getById(@PathVariable int id) {
     return userService.getById(id);
-  }
-
-  @PostMapping("/users")
-  public UserEntity save(@RequestBody UserEntity user) {
-    return userService.save(user);
   }
 
   @PutMapping("/users/{id}")

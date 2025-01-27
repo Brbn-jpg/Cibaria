@@ -35,7 +35,7 @@ public class UserEntity {
   private String email;
 
   @Column(name = "role")
-  private String role;
+  private String role = "USER";
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference(value = "user-rating")
