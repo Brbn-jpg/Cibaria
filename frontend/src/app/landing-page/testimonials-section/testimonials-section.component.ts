@@ -13,7 +13,6 @@ declare function Testimonials(): void;
 export class TestimonialsSectionComponent implements OnInit {
   ngOnInit(): void {
     const track = document.querySelector('.gallery') as HTMLElement;
-    console.log(track);
     const handleOnDown = (e: MouseEvent | TouchEvent) => {
       if (e instanceof MouseEvent) {
         track.dataset['mouseDownAt'] = e.clientX.toString();

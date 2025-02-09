@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -11,7 +11,7 @@ const mainUrl = 'http://localhost:4200/';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   params = {
     home: mainUrl + '/',
     about: mainUrl + '/about-us',
@@ -19,28 +19,43 @@ export class NavbarComponent {
     login: mainUrl + '/login',
   };
 
+  ngOnInit(): void {
+    this.getToken();
+  }
+
   isLoggedIn = false;
 
+  getToken(): void {
+    if (localStorage.getItem('token')) {
+      this.isLoggedIn = true;
+    }
+  }
+
+  currentLanguage: string = 'en';
+
   constructor(private translate: TranslateService) {
-    this.translate.setDefaultLang('en');
+    this.translate.setDefaultLang(this.currentLanguage);
   }
 
-  changeLanguage(language: string): void {
-    this.translate.use(language);
+  changeLanguage(): void {
+    this.currentLanguage = this.currentLanguage === 'en' ? 'pl' : 'en';
+    this.translate.use(this.currentLanguage);
   }
 
-  // switch(param: string) {
-  //   switch (param) {
-  //     case 'home':
-  //       break;
-  //     case 'about':
-  //       break;
-  //     case 'contact':
-  //       break;
-  //     case 'login':
-  //       break;
-  //     default:
-  //       return mainUrl;
-  //   }
-  // }
+  logOut(): void {
+    localStorage.removeItem('token');
+    this.isLoggedIn = false;
+  }
+
+  getFlagImage(): string {
+    return this.currentLanguage === 'en'
+      ? 'images/flags/pl.svg'
+      : 'images/flags/us.svg';
+  }
+
+  getAltText(): string {
+    return this.currentLanguage === 'en'
+      ? 'Zmien język na polski'
+      : 'Change language to English';
+  }
 }

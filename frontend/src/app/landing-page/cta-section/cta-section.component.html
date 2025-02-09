@@ -12,17 +12,21 @@
     />
   </div>
   <div class="cta-inputs">
-    <label for="name">{{ "Name" | translate }}</label>
+    <label for="name">{{ "CTA.NAME" | translate }}</label>
     <input id="name" type="text" placeholder="{{ 'CTA.NAME' | translate }}" />
-    <label for="email">{{ "Email" | translate }}</label>
+    <label for="email">{{ "CTA.EMAIL" | translate }}</label>
     <input id="email" type="text" placeholder="{{ 'CTA.EMAIL' | translate }}" />
     <label for="source">{{ "CTA.WHERE" | translate }}</label>
     <select id="source">
-      <option value="Socialmedia">{{ "Socialmedia" | translate }}</option>
-      <option value="Ads">{{ "Ads" | translate }}</option>
-      <option value="Friends">{{ "Friends and family" | translate }}</option>
-      <option value="Podcast">{{ "Podcast" | translate }}</option>
-      <option value="Other">{{ "Other" | translate }}</option>
+      <option value="Socialmedia">
+        {{ "CTA.OPTIONS.SOCIALMEDIA" | translate }}
+      </option>
+      <option value="Ads">{{ "CTA.OPTIONS.ADS" | translate }}</option>
+      <option value="Friends">
+        {{ "CTA.OPTIONS.FRIENDS_FAMILY" | translate }}
+      </option>
+      <option value="Podcast">{{ "CTA.OPTIONS.PODCAST" | translate }}</option>
+      <option value="Other">{{ "CTA.OPTIONS.OTHER" | translate }}</option>
     </select>
     <button class="cta-btn">{{ "CTA.CTABTN" | translate }}</button>
   </div>

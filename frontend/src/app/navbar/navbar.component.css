@@ -51,3 +51,7 @@ button {
   width: 3.6rem;
   height: 2.4rem;
 }
+
+.active {
+  display: 0;
+}

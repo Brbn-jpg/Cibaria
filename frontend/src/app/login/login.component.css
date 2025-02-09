@@ -122,3 +122,10 @@ input::placeholder {
 .ng-touched.ng-invalid {
   border: 2px solid red;
 }
+
+.wrong-pass {
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 3.2rem;
+}

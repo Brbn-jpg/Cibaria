@@ -5,19 +5,8 @@
   <ul class="nav-links">
     @if(!isLoggedIn) {
     <li class="language">
-      <button (click)="changeLanguage('en')">
-        <img
-          class="flag"
-          src="images/flags/us.svg"
-          alt="Change language to english"
-        />
-      </button>
-      <button (click)="changeLanguage('pl')">
-        <img
-          class="flag"
-          src="images/flags/pl.svg"
-          alt="Zmien jezyk na polski"
-        />
+      <button (click)="changeLanguage()">
+        <img class="flag" [src]="getFlagImage()" [alt]="getAltText()" />
       </button>
     </li>
     <li>
@@ -67,7 +56,12 @@
       }}</a>
     </li>
     <li>
-      <a class="nav-link" href="" [routerLink]="['/']">{{
+      <a class="nav-link" href="" [routerLink]="['/profile']">{{
+        "NAV.PROFILE" | translate
+      }}</a>
+    </li>
+    <li>
+      <a class="nav-link" href="" [routerLink]="['/']" (click)="logOut()">{{
         "NAV.LOGOUT" | translate
       }}</a>
     </li>
