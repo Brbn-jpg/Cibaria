@@ -1,4 +1,4 @@
-package com.kk.cibaria.Recipe;
+package com.kk.cibaria.recipe;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

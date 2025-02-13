@@ -1,4 +1,4 @@
-package com.kk.cibaria.Recipe;
+package com.kk.cibaria.recipe;
 
 import java.io.IOException;
 import java.util.List;

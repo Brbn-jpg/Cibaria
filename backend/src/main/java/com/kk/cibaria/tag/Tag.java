@@ -1,7 +1,8 @@
-package com.kk.cibaria.Recipe;
+package com.kk.cibaria.tag;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.kk.cibaria.recipe.Recipe;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,24 +15,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "Ingredient")
+@Table(name = "Tag")
 @Data
 @NoArgsConstructor
-public class Ingredient {
-
+public class Tag {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
   private int id;
-  @Column(name = "ingredient_name")
-  private String ingredientName;
-  @Column(name = "quantity")
-  private int quantity;
-  @Column(name = "unit")
-  private String unit;
+
+  @Column(name = "tag_name")
+  private String tagName;
 
   @ManyToOne
-  @JoinColumn(name = "recipe_id", nullable = true)
+  @JoinColumn(name = "recipe_id")
   @JsonBackReference
   private Recipe recipe;
 }

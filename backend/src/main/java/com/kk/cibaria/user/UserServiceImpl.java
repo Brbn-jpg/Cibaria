@@ -3,8 +3,11 @@ package com.kk.cibaria.user;
 import java.util.List;
 import java.util.Optional;
 
+import com.kk.cibaria.recipe.Recipe;
 import com.kk.cibaria.dto.auth.RegisterDto;
 import com.kk.cibaria.dto.auth.TokenResponseDto;
+import com.kk.cibaria.dto.myProfile.MyProfileDto;
+import com.kk.cibaria.dto.myProfile.MyProfileRecipeDto;
 import com.kk.cibaria.exception.UserEmailAlreadyExistException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
@@ -12,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.UserNotFoundException;
-import com.kk.cibaria.Recipe.Rating;
+import com.kk.cibaria.rating.Rating;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -83,6 +86,41 @@ public class UserServiceImpl implements UserService {
         () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
 
     userRepository.delete(user);
+  }
+
+  @Override
+  public MyProfileDto getMyProfile(String token) {
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User not found"));
+
+    MyProfileDto myProfileDto = new MyProfileDto();
+    myProfileDto.setUsername(user.getUsername());
+
+    List<Recipe> favouriteRecipes = user.getFavouriteRecipes();
+    if(!favouriteRecipes.isEmpty()){
+      List<MyProfileRecipeDto> recipeDtos = favouriteRecipes.stream().map(recipe -> {
+        MyProfileRecipeDto dto = new MyProfileRecipeDto();
+        dto.setRecipeName(recipe.getRecipeName());
+        dto.setCategory(recipe.getCategory());
+        dto.setServings(recipe.getServings());
+        dto.setDifficulty(recipe.getDifficulty());
+        dto.setPrepareTime(recipe.getPrepareTime());
+
+        int ratings = recipe.getRatings().size();
+        if(ratings>0){
+          int ratingSum = recipe.getRatings().stream().mapToInt(Rating::getValue).sum();
+          Long averageRating = (long) (ratingSum/ratings);
+          dto.setAvgRating(averageRating);
+        }else{
+          dto.setAvgRating(0L);
+        }
+        return dto;
+      }).toList();
+      myProfileDto.setFavourites(recipeDtos);
+    }else{
+      myProfileDto.setFavourites(null);
+    }
+    return myProfileDto;
   }
 
 }

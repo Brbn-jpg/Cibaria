@@ -30,9 +30,10 @@ public class LoginController {
   @PostMapping("/authenticate")
   public TokenResponseDto authenticate(@RequestBody LoginFormDto loginFormDto) {
     try{
-      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormDto.username(), loginFormDto.password()));
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormDto.email(),
+              loginFormDto.password()));
       TokenResponseDto token = new TokenResponseDto();
-      token.setToken(jwtService.generateToken(userDetailService.loadUserByUsername(loginFormDto.username())));
+      token.setToken(jwtService.generateToken(userDetailService.loadUserByUsername(loginFormDto.email())));
       return token;
     }catch (BadCredentialsException ex) {
       throw new UserNotFoundException("Invalid credentials");

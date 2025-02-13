@@ -9,8 +9,12 @@ import java.util.concurrent.TimeUnit;
 
 import javax.crypto.SecretKey;
 
+import com.kk.cibaria.security.UserDetailService;
+import com.kk.cibaria.user.UserEntity;
+import com.kk.cibaria.user.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -24,9 +28,21 @@ public class JwtService {
   private String secretKey;
   private static final long EXPIRATIONTIME = TimeUnit.HOURS.toMillis(72);
 
-  public String generateToken(UserDetails userDetails) {
+  private final UserRepository userRepository;
+
+  public JwtService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public String generateToken(UserDetails userDetails) {
+    UserEntity user =
+            userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("User " +
+            "not " +
+            "found"));
     Map<String, String> claims = new HashMap<>();
     claims.put("provider", "kkBackendTeam");
+    claims.put("id", String.valueOf(user.getId()));
+
     return Jwts.builder()
         .claims(claims)
         .subject(userDetails.getUsername())
@@ -44,6 +60,11 @@ public class JwtService {
   public String extractUsername(String jwt) {
     Claims claims = getClaims(jwt);
     return claims.getSubject();
+  }
+
+  public int extractId(String jwt){
+    Claims claims = getClaims(jwt);
+    return Integer.parseInt(claims.get("id").toString());
   }
 
   private Claims getClaims(String jwt) {

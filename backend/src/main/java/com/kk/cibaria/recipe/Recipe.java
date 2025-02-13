@@ -1,4 +1,4 @@
-package com.kk.cibaria.Recipe;
+package com.kk.cibaria.recipe;
 
 
 import java.util.Date;
@@ -6,6 +6,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.rating.Rating;
+import com.kk.cibaria.tag.Tag;
+import com.kk.cibaria.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +34,7 @@ public class Recipe {
   private int difficulty;
 
   @Column(name = "ingredients")
-  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "recipe")
   @JsonManagedReference
   private List<Ingredient> ingredients;
 
@@ -44,14 +48,15 @@ public class Recipe {
   private String category;
 
   @Column(name = "tag")
-  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "recipe")
   @JsonManagedReference
   private List<Tag> tag;
 
   @Column(name = "rating")
-  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference(value = "recipe-rating")
+  @OneToMany(mappedBy = "recipe")
+  @JsonManagedReference()
   private List<Rating> ratings;
 
-
+  @ManyToMany(mappedBy = "favouriteRecipes")
+  List<UserEntity> favouriteByUsers;
 }

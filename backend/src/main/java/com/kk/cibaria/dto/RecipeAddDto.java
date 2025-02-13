@@ -1,7 +1,7 @@
 package com.kk.cibaria.dto;
 
-import com.kk.cibaria.Recipe.Ingredient;
-import com.kk.cibaria.Recipe.Tag;
+import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.tag.Tag;
 import lombok.Data;
 
 import java.util.List;

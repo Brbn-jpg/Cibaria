@@ -2,14 +2,11 @@ package com.kk.cibaria.user;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.kk.cibaria.dto.myProfile.MyProfileDto;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
   private final UserService userService;
@@ -18,19 +15,24 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping("/users")
+  @GetMapping
   public List<UserEntity> getAll() {
     return userService.getAll();
   }
 
-  @GetMapping("/users/{id}")
+  @GetMapping("/{id}")
   public UserEntity getById(@PathVariable int id) {
     return userService.getById(id);
   }
 
-  @PutMapping("/users/{id}")
+  @PutMapping("/{id}")
   public UserEntity update(@PathVariable int id, @RequestBody UserEntity user) {
     return userService.update(id, user);
+  }
+
+  @GetMapping("/aboutme")
+  public MyProfileDto getMyProfile(@RequestHeader("Authorization") String token){
+    return userService.getMyProfile(token);
   }
 
   @DeleteMapping("/users/{id}")

@@ -1,4 +1,4 @@
-package com.kk.cibaria.Recipe;
+package com.kk.cibaria.recipe;
 
 import java.io.IOException;
 import java.util.Date;
@@ -8,6 +8,9 @@ import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
 import com.kk.cibaria.helper.Pagination;
 import com.kk.cibaria.helper.RecipeFilter;
+import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.rating.Rating;
+import com.kk.cibaria.tag.Tag;
 import com.kk.cibaria.user.UserEntity;
 import org.springframework.stereotype.Service;
 

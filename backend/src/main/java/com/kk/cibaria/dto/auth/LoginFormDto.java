@@ -1,5 +1,5 @@
 package com.kk.cibaria.dto.auth;
 
-public record LoginFormDto(String username, String password) {
+public record LoginFormDto(String email, String password) {
 
 }

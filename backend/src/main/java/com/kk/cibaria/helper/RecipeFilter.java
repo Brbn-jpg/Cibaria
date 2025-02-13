@@ -1,6 +1,6 @@
 package com.kk.cibaria.helper;
 
-import com.kk.cibaria.Recipe.Recipe;
+import com.kk.cibaria.recipe.Recipe;
 
 import java.util.List;
 
