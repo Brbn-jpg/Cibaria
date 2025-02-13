@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kk.cibaria.model.UserEntity;
-import com.kk.cibaria.repository.UserRepository;
+import com.kk.cibaria.user.UserEntity;
+import com.kk.cibaria.user.UserRepository;
 
 @Service
 public class UserDetailService implements UserDetailsService {

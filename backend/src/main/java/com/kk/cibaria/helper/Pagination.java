@@ -1,7 +1,7 @@
 package com.kk.cibaria.helper;
 
 import com.kk.cibaria.exception.PageDoesNotExistException;
-import com.kk.cibaria.model.Recipe;
+import com.kk.cibaria.Recipe.Recipe;
 
 import java.util.List;
 

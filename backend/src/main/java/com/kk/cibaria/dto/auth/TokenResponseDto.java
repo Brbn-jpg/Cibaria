@@ -1,4 +1,4 @@
-package com.kk.cibaria.dto;
+package com.kk.cibaria.dto.auth;
 
 import lombok.Data;
 

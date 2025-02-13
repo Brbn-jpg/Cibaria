@@ -1,12 +1,10 @@
-package com.kk.cibaria.service;
+package com.kk.cibaria.Recipe;
 
 import java.io.IOException;
 import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
-import com.kk.cibaria.model.Recipe;
-import org.springframework.data.domain.Page;
 
 public interface RecipeService {
   List<Recipe> getAll();

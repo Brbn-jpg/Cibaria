@@ -1,10 +1,9 @@
 package com.kk.cibaria.dto;
 
-import com.kk.cibaria.model.Ingredient;
-import com.kk.cibaria.model.Tag;
+import com.kk.cibaria.Recipe.Ingredient;
+import com.kk.cibaria.Recipe.Tag;
 import lombok.Data;
 
-import java.util.Base64;
 import java.util.List;
 
 @Data

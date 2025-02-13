@@ -1,9 +1,7 @@
-package com.kk.cibaria.repository;
+package com.kk.cibaria.Recipe;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.kk.cibaria.model.Recipe;
 
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {

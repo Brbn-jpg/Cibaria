@@ -1,9 +1,10 @@
-package com.kk.cibaria.model;
+package com.kk.cibaria.user;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.kk.cibaria.Recipe.Rating;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

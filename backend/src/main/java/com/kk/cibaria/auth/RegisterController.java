@@ -1,8 +1,8 @@
-package com.kk.cibaria.controller;
+package com.kk.cibaria.auth;
 
-import com.kk.cibaria.dto.RegisterDto;
-import com.kk.cibaria.dto.TokenResponseDto;
-import com.kk.cibaria.service.UserService;
+import com.kk.cibaria.dto.auth.RegisterDto;
+import com.kk.cibaria.dto.auth.TokenResponseDto;
+import com.kk.cibaria.user.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

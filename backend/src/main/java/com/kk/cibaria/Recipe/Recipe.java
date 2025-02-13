@@ -1,4 +1,4 @@
-package com.kk.cibaria.model;
+package com.kk.cibaria.Recipe;
 
 
 import java.util.Date;

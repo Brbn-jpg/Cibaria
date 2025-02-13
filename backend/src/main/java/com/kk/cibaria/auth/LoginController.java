@@ -1,10 +1,9 @@
-package com.kk.cibaria.controller;
+package com.kk.cibaria.auth;
 
-import com.kk.cibaria.dto.TokenResponseDto;
+import com.kk.cibaria.dto.auth.TokenResponseDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kk.cibaria.exception.UserNotFoundException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
-import com.kk.cibaria.dto.LoginFormDto;
+import com.kk.cibaria.dto.auth.LoginFormDto;
 
 @RestController
 public class LoginController {

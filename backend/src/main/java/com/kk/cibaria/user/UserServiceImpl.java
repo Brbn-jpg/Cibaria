@@ -1,10 +1,10 @@
-package com.kk.cibaria.service;
+package com.kk.cibaria.user;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.kk.cibaria.dto.RegisterDto;
-import com.kk.cibaria.dto.TokenResponseDto;
+import com.kk.cibaria.dto.auth.RegisterDto;
+import com.kk.cibaria.dto.auth.TokenResponseDto;
 import com.kk.cibaria.exception.UserEmailAlreadyExistException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
@@ -12,9 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.UserNotFoundException;
-import com.kk.cibaria.model.Rating;
-import com.kk.cibaria.model.UserEntity;
-import com.kk.cibaria.repository.UserRepository;
+import com.kk.cibaria.Recipe.Rating;
 
 @Service
 public class UserServiceImpl implements UserService {
