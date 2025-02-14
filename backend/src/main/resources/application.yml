@@ -1,0 +1,21 @@
+# Conversion to YAML from Properties formar report
+# Warnings:
+# - The yaml file had comments which are lost in the refactoring!
+spring:
+  application:
+    name: cibaria
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cibaria_db
+    username: cibaria
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+  servlet:
+    multipart:
+      max-file-size: 5MB
+server:
+  servlet:
+    context-path: /api

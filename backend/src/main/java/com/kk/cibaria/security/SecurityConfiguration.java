@@ -37,8 +37,9 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(req -> {
-      req.requestMatchers(HttpMethod.POST, "/users", "/authenticate", "/register").permitAll();
-      req.requestMatchers(HttpMethod.GET, "/recipes/**").permitAll();
+      req.requestMatchers("/authenticate", "/register").permitAll();
+      req.requestMatchers( "/recipes/**").permitAll();
+      req.requestMatchers("/users/**").authenticated();
       req.requestMatchers(HttpMethod.POST, "/recipes").hasRole("ADMIN");
       req.requestMatchers(HttpMethod.DELETE, "/recipes").hasRole("ADMIN");
       req.anyRequest().authenticated();
