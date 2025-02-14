@@ -32,8 +32,8 @@ public class UserEntity {
   @Column(name = "role")
   private String role = "USER";
 
-  @OneToMany(mappedBy = "user")
-  @JsonManagedReference()
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @JsonManagedReference("user")
   private List<Rating> rating;
 
   @ManyToMany

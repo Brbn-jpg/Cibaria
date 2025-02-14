@@ -40,8 +40,6 @@ public class SecurityConfiguration {
       req.requestMatchers("/authenticate", "/register").permitAll();
       req.requestMatchers( "/recipes/**").permitAll();
       req.requestMatchers("/users/**").authenticated();
-      req.requestMatchers(HttpMethod.POST, "/recipes").hasRole("ADMIN");
-      req.requestMatchers(HttpMethod.DELETE, "/recipes").hasRole("ADMIN");
       req.anyRequest().authenticated();
     });
 

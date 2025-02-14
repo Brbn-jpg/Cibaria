@@ -55,9 +55,6 @@ public class RecipeServiceImpl implements RecipeService {
       return ingredient;
     }).toList();
     newRecipe.setIngredients(newIngredients);
-
-
-
     newRecipe.setPrepareTime(recipe.getPrepareTime());
     newRecipe.setServings(recipe.getServings());
     newRecipe.setCategory(recipe.getCategory());
@@ -67,10 +64,7 @@ public class RecipeServiceImpl implements RecipeService {
       tag.setTagName(t .getTagName());
       return tag;
     }).toList();
-
     newRecipe.setTag(newTags);
-
-
     return recipeRepository.save(newRecipe);
   }
 

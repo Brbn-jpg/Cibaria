@@ -20,21 +20,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Rating {
-  @Column(name = "rating_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int ratingId;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
-  @JsonBackReference()
+  @JsonBackReference("user")
   private UserEntity user;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id")
-  @JsonBackReference()
+  @JsonBackReference("rating")
   private Recipe recipe;
 
-  @Column(name = "value")
   private int value;
 }

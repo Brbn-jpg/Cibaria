@@ -22,17 +22,13 @@ public class Ingredient {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private int id;
-  @Column(name = "ingredient_name")
   private String ingredientName;
-  @Column(name = "quantity")
   private int quantity;
-  @Column(name = "unit")
   private String unit;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id")
-  @JsonBackReference
+  @JsonBackReference("ingredient")
   private Recipe recipe;
 }

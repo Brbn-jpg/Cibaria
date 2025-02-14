@@ -15,5 +15,4 @@ public class RecipeAddDto {
     private int servings;
     private String category;
     private List<Tag> tag;
-    private String file;
 }

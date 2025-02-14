@@ -57,6 +57,13 @@ public class DataInitializer implements CommandLineRunner {
             user.setFavouriteRecipes(Arrays.asList(recipe));
             userRepository.save(user);
 
+            UserEntity admin = new UserEntity();
+            admin.setUsername("Admin");
+            admin.setEmail("admin@test.com");
+            admin.setPassword(passwordEncoder.encode("test"));
+            admin.setRole("ADMIN");
+            userRepository.save(admin);
+
             Ingredient ingredient1 = new Ingredient();
             ingredient1.setIngredientName("eggs");
             ingredient1.setQuantity(3);

@@ -21,14 +21,12 @@ import lombok.NoArgsConstructor;
 public class Tag {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
   private int id;
 
-  @Column(name = "tag_name")
   private String tagName;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id")
-  @JsonBackReference
+  @JsonBackReference("tag")
   private Recipe recipe;
 }
