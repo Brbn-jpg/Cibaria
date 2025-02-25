@@ -5,7 +5,7 @@ spring:
   application:
     name: cibaria
   datasource:
-    url: jdbc:postgresql://localhost:5432/cibaria_db
+    url: ${DB_URL}
     username: cibaria
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
