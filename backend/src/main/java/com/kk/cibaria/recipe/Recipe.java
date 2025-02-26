@@ -28,9 +28,6 @@ public class Recipe {
   @Column(name = "recipe_name")
   private String recipeName;
 
-  @Column(name = "created_at")
-  private Date createdAt;
-
   @Column(name = "difficulty")
   private int difficulty;
 

@@ -41,7 +41,6 @@ public class DataInitializer implements CommandLineRunner {
         if(recipeRepository.findAll().isEmpty() && userRepository.findAll().isEmpty()){
             Recipe recipe = new Recipe();
             recipe.setRecipeName("Omlet z warzywami");
-            recipe.setCreatedAt(new Date());
             recipe.setDifficulty(2);
             recipe.setPrepareTime(15);
             recipe.setServings(2);

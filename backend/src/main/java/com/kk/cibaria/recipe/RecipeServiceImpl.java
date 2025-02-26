@@ -44,7 +44,6 @@ public class RecipeServiceImpl implements RecipeService {
   public Recipe save(RecipeAddDto recipe) throws IOException {
     Recipe newRecipe = new Recipe();
     newRecipe.setRecipeName(recipe.getRecipeName());
-    newRecipe.setCreatedAt(new Date());
     newRecipe.setDifficulty(recipe.getDifficulty());
     List<Ingredient> newIngredients = recipe.getIngredients().stream().map(i -> {
       Ingredient ingredient = new Ingredient();
@@ -74,7 +73,6 @@ public class RecipeServiceImpl implements RecipeService {
         () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
     recipeFound.setId(id);
     recipeFound.setRecipeName(recipe.getRecipeName());
-    recipeFound.setCreatedAt(recipe.getCreatedAt());
     recipeFound.setDifficulty(recipe.getDifficulty());
 
     recipeFound.getIngredients().clear();

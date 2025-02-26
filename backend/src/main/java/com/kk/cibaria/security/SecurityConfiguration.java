@@ -38,7 +38,7 @@ public class SecurityConfiguration {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(req -> {
       req.requestMatchers("/authenticate", "/register").permitAll();
-      req.requestMatchers( "/recipes/**").permitAll();
+      req.requestMatchers( "/recipes/**","/image/**").permitAll();
       req.requestMatchers("/users/**").authenticated();
       req.anyRequest().authenticated();
     });
