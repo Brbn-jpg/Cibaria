@@ -120,7 +120,7 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public UserEntity addRecipeToFavourites(String token, int recipeId) {
+  public void addRecipeToFavourites(String token, int recipeId) {
     int id = jwtService.extractId(token.substring(7));
     UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));
     Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
@@ -133,11 +133,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     favRecipes.add(recipe);
-    return userRepository.save(user);
+    userRepository.save(user);
   }
 
   @Override
-  public UserEntity deleteRiceFromFavourites(String token, int recipeId) {
+  public void deleteRiceFromFavourites(String token, int recipeId) {
     int id = jwtService.extractId(token.substring(7));
     UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));
     Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
@@ -150,7 +150,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     favRecipes.remove(recipe);
-    return userRepository.save(user);
+    userRepository.save(user);
   }
 
   @Override

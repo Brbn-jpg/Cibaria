@@ -56,14 +56,14 @@ public class RecipeController {
 
 
   @PostMapping("/favourites/add")
-  public UserEntity addRecipeToFavourites(@RequestHeader("Authorization") String token,
+  public void addRecipeToFavourites(@RequestHeader("Authorization") String token,
                                           @RequestBody FavouriteRequest request){
-    return recipeService.addRecipeToFavourites(token,request.getRecipeId());
+    recipeService.addRecipeToFavourites(token,request.getRecipeId());
   }
 
   @PostMapping("/favourites/delete")
-  public UserEntity deleteRecipeFromFavourites(@RequestHeader("Authorization") String token,
+  public void deleteRecipeFromFavourites(@RequestHeader("Authorization") String token,
                                           @RequestBody FavouriteRequest request){
-    return recipeService.deleteRiceFromFavourites(token,request.getRecipeId());
+    recipeService.deleteRiceFromFavourites(token,request.getRecipeId());
   }
 }

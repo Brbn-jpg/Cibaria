@@ -19,9 +19,9 @@ public interface RecipeService {
   RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, String servings,
                                    String prepareTime);
 
-  UserEntity addRecipeToFavourites(String token, int recipeId);
+  void addRecipeToFavourites(String token, int recipeId);
 
-  UserEntity deleteRiceFromFavourites(String token, int recipeId);
+  void deleteRiceFromFavourites(String token, int recipeId);
 
   void delete(int id);
 
