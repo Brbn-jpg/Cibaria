@@ -6,10 +6,13 @@ import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
+import com.kk.cibaria.exception.RecipeErrorException;
+import com.kk.cibaria.exception.UserNotFoundException;
 import com.kk.cibaria.helper.Pagination;
 import com.kk.cibaria.helper.RecipeFilter;
 import com.kk.cibaria.ingredient.Ingredient;
 import com.kk.cibaria.rating.Rating;
+import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.tag.Tag;
 import com.kk.cibaria.user.UserEntity;
 import org.springframework.stereotype.Service;
@@ -22,11 +25,12 @@ public class RecipeServiceImpl implements RecipeService {
 
   private final RecipeRepository recipeRepository;
   private final UserRepository userRepository;
+  private final JwtService jwtService;
 
-  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository) {
+  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
-
+      this.jwtService = jwtService;
   }
 
   @Override
@@ -113,6 +117,40 @@ public class RecipeServiceImpl implements RecipeService {
     recipeRequestDto.setContent(paginatedRecipes);
     recipeRequestDto.setTotalPages(pagination.getTotalPages(size,filteredRecipes));
     return recipeRequestDto;
+  }
+
+  @Override
+  public void addRecipeToFavourites(String token, int recipeId) {
+    int id = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));
+    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
+            "found"));
+
+    List<Recipe> favRecipes = user.getFavouriteRecipes();
+
+    if(favRecipes.contains(recipe)){
+      throw new RecipeErrorException("Recipe is already added to favourites!");
+    }
+
+    favRecipes.add(recipe);
+    userRepository.save(user);
+  }
+
+  @Override
+  public void deleteRiceFromFavourites(String token, int recipeId) {
+    int id = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));
+    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
+            "found"));
+
+    List<Recipe> favRecipes = user.getFavouriteRecipes();
+
+    if(!favRecipes.contains(recipe)){
+      throw new RecipeErrorException("Recipe is not located in your favourites!");
+    }
+
+    favRecipes.remove(recipe);
+    userRepository.save(user);
   }
 
   @Override

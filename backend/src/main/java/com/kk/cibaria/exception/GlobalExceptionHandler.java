@@ -47,4 +47,13 @@ public class GlobalExceptionHandler {
     errorObject.setMessage(ex.getMessage());
     return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.CONFLICT);
   }
+
+  @ExceptionHandler(RecipeErrorException.class)
+  public ResponseEntity<ErrorObject> handleRecipeErrorException(RecipeErrorException ex){
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setMessage(ex.getMessage());
+    errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+
+    return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
+  }
 }
