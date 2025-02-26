@@ -3,8 +3,10 @@ package com.kk.cibaria.recipe;
 import java.io.IOException;
 import java.util.List;
 
+import com.kk.cibaria.dto.FavouriteRequest;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
+import com.kk.cibaria.user.UserEntity;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +19,6 @@ public class RecipeController {
   public RecipeController(RecipeService recipeService) {
     this.recipeService = recipeService;
   }
-
-//  @GetMapping("/recipes")
-//  public List<Recipe> getAll() {
-//    return recipeService.getAll();
-//  }
 
   @GetMapping
   public RecipeRequestDto getRecipesByPage(
@@ -55,5 +52,18 @@ public class RecipeController {
   @DeleteMapping("/{id}")
   public void delete(@PathVariable int id) {
     recipeService.delete(id);
+  }
+
+
+  @PostMapping("/favourites/add")
+  public UserEntity addRecipeToFavourites(@RequestHeader("Authorization") String token,
+                                          @RequestBody FavouriteRequest request){
+    return recipeService.addRecipeToFavourites(token,request.getRecipeId());
+  }
+
+  @PostMapping("/favourites/delete")
+  public UserEntity deleteRecipeFromFavourites(@RequestHeader("Authorization") String token,
+                                          @RequestBody FavouriteRequest request){
+    return recipeService.deleteRiceFromFavourites(token,request.getRecipeId());
   }
 }
