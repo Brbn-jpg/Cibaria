@@ -56,4 +56,15 @@ public class GlobalExceptionHandler {
 
     return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
   }
+
+  @ExceptionHandler(ImageErrorException.class)
+  public ResponseEntity<ErrorObject> handleImageErrorException(ImageErrorException ex){
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setMessage(ex.getMessage());
+    errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+
+    return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
+  }
+
+
 }

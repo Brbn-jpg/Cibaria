@@ -1,15 +1,19 @@
 package com.kk.cibaria.recipe;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
+import com.kk.cibaria.exception.ImageErrorException;
 import com.kk.cibaria.exception.RecipeErrorException;
 import com.kk.cibaria.exception.UserNotFoundException;
 import com.kk.cibaria.helper.Pagination;
 import com.kk.cibaria.helper.RecipeFilter;
+import com.kk.cibaria.image.Image;
+import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.ingredient.Ingredient;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.security.jwt.JwtService;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.RecipeNotFoundException;
 import com.kk.cibaria.user.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -26,11 +31,13 @@ public class RecipeServiceImpl implements RecipeService {
   private final RecipeRepository recipeRepository;
   private final UserRepository userRepository;
   private final JwtService jwtService;
+  private final ImageService imageService;
 
-  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService) {
+  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
       this.jwtService = jwtService;
+      this.imageService = imageService;
   }
 
   @Override
@@ -45,7 +52,28 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Recipe save(RecipeAddDto recipe) throws IOException {
+  public Recipe saveRecipeWithoutPhoto(RecipeAddDto recipe) throws IOException {
+
+    Recipe newRecipe = createRecipe(recipe);
+    return recipeRepository.save(newRecipe);
+  }
+
+  @Override
+  public Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images) {
+      Recipe newRecipe = createRecipe(recipe);
+      List<Image> imagesSaved = new ArrayList<>();
+      images.forEach(image->{
+        try {
+          imagesSaved.add(imageService.createPhoto(image));
+        } catch (IOException e) {
+          throw new ImageErrorException(e.getMessage());
+        }
+      });
+      newRecipe.setImages(imagesSaved);
+      return recipeRepository.save(newRecipe);
+  }
+
+  private Recipe createRecipe(RecipeAddDto recipe){
     Recipe newRecipe = new Recipe();
     newRecipe.setRecipeName(recipe.getRecipeName());
     newRecipe.setDifficulty(recipe.getDifficulty());
@@ -68,7 +96,8 @@ public class RecipeServiceImpl implements RecipeService {
       return tag;
     }).toList();
     newRecipe.setTag(newTags);
-    return recipeRepository.save(newRecipe);
+
+    return newRecipe;
   }
 
   @Override

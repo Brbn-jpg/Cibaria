@@ -6,18 +6,24 @@ import java.util.List;
 import com.kk.cibaria.dto.FavouriteRequest;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
+import com.kk.cibaria.image.Image;
+import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.user.UserEntity;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
 
   private final RecipeService recipeService;
+  private final ImageService imageService;
 
-  public RecipeController(RecipeService recipeService) {
+  public RecipeController(RecipeService recipeService, ImageService imageService) {
     this.recipeService = recipeService;
+      this.imageService = imageService;
   }
 
   @GetMapping
@@ -39,9 +45,14 @@ public class RecipeController {
     return recipeService.getById(id);
   }
 
-  @PostMapping
-  public Recipe save(@RequestBody RecipeAddDto recipe) throws IOException {
-    return recipeService.save(recipe);
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public Recipe save(@RequestPart("recipe") RecipeAddDto recipe,
+                     @RequestPart(value = "images",required = false) List<MultipartFile> images) throws IOException {
+    if(images!=null){
+     return recipeService.saveRecipeWithPhotos(recipe,images);
+    }else{
+      return recipeService.saveRecipeWithoutPhoto(recipe);
+    }
   }
 
   @PutMapping("/{id}")
