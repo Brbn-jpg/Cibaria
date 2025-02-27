@@ -6,13 +6,16 @@ import java.util.List;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
 import com.kk.cibaria.user.UserEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface RecipeService {
   List<Recipe> getAll();
 
   Recipe getById(int id);
 
-  Recipe save(RecipeAddDto recipe) throws IOException;
+  Recipe saveRecipeWithoutPhoto(RecipeAddDto recipe) throws IOException;
+
+  Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images);
 
   Recipe update(int id, Recipe recipe);
 

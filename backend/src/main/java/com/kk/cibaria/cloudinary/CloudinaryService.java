@@ -1,10 +1,12 @@
 package com.kk.cibaria.cloudinary;
 
 import com.cloudinary.Cloudinary;
+import com.kk.cibaria.exception.ImageErrorException;
 import com.kk.cibaria.image.Image;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class CloudinaryService {
             image.setImageUrl(result.get("url").toString());
             return image;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ImageErrorException(e.getMessage());
         }
     }
 
@@ -34,7 +36,7 @@ public class CloudinaryService {
         try{
             cloudinary.uploader().destroy(publicId, new HashMap<>());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ImageErrorException(e.getMessage());
         }
     }
 }
