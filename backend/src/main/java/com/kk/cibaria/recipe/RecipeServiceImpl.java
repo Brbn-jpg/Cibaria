@@ -69,6 +69,9 @@ public class RecipeServiceImpl implements RecipeService {
           throw new ImageErrorException(e.getMessage());
         }
       });
+      imagesSaved.forEach(image->{
+        image.setRecipe(newRecipe);
+      });
       newRecipe.setImages(imagesSaved);
       return recipeRepository.save(newRecipe);
   }
