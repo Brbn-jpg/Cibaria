@@ -1,0 +1,239 @@
+main {
+  background: rgb(23, 21, 21);
+  background: linear-gradient(
+    180deg,
+    rgba(23, 21, 21, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  color: #fff;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* background pic */
+.background {
+  height: 25vh;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 4.8rem;
+}
+
+.background-image {
+  position: absolute;
+  width: 100%;
+  top: -150%;
+}
+
+/* Profile info */
+
+.profile-info {
+  margin: 12rem 4.8rem;
+}
+
+.username {
+  font-size: 3.6rem;
+  font-weight: 400;
+  margin-bottom: 2.4rem;
+}
+
+.user-text {
+  font-size: 1.6rem;
+  letter-spacing: 1.02px;
+}
+
+/* Profile picture */
+
+.profile-picture {
+  position: absolute;
+  left: 4.8rem;
+  top: 25%;
+  height: 25%;
+  border: 3px solid #000;
+  border-radius: 50%;
+  z-index: 22;
+}
+
+/* Filters */
+
+.filter-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+label {
+  font-size: 3.2rem;
+  margin-bottom: 2.4rem;
+  font-weight: 200;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2.4rem;
+  margin-bottom: 4.8rem;
+}
+
+.filter {
+  padding: 1.2rem 2.4rem;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 1rem;
+}
+
+option {
+  background-color: #000;
+  border: none;
+}
+
+select {
+  border: none;
+  font-size: 1.6rem;
+  letter-spacing: 1.02px;
+}
+
+.inputs {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 2.4rem;
+}
+
+.prepTime {
+  padding: 1rem 3.2rem;
+  width: 12rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 1rem;
+  color: #fff;
+  box-shadow: 0px 1px 3px rgba(255, 255, 255, 0.7);
+}
+
+.prepTime::placeholder {
+  color: #fff;
+}
+
+.prepTime::-webkit-outer-spin-button,
+.prepTime::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+h3 {
+  font-size: 3.6rem;
+  font-weight: 200;
+  letter-spacing: 1.02px;
+  margin: 0 4.8rem 4.8rem;
+}
+
+/* Recipe */
+
+.recipes {
+  margin: 2.4rem 4.8rem;
+}
+
+.grid-4-cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4.8rem;
+}
+
+.recipe {
+  border-radius: 1rem;
+  /* overflow: hidden; */
+  box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.recipe-desc {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.4rem;
+  margin-left: 2.4rem;
+}
+
+.recipe-desc-inner {
+  margin-bottom: 2.4rem;
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+}
+
+.recipe-desc-inner span {
+  font-size: 1.6rem;
+}
+
+.recipe-image {
+  max-width: 100%;
+  transition: all 0.3s ease-in-out;
+}
+
+.recipe-image:hover {
+  cursor: pointer;
+  scale: 1.02;
+}
+
+.image-wrapper {
+  overflow: hidden;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.recipe-name {
+  margin-top: 2.4rem;
+  margin-left: 2.4rem;
+  margin-bottom: 2.4rem;
+  font-size: 3.2rem;
+  font-weight: 200;
+}
+
+.icon {
+  outline: #fff;
+  height: 3rem;
+  width: 3rem;
+}
+
+.pagination {
+  margin: 4.8rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9.2rem;
+}
+
+.btn {
+  padding: 2.4rem 0;
+  width: 12rem;
+  border: none;
+  font-size: 1.8rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+}
+
+.btn:hover {
+  order: none;
+  box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.102),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0.2), 0px 0px 180px 0px #ccbebe;
+  transform: translateY(-2px);
+}
+
+.pages {
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: 1.04px;
+}
+
+.recipe-link {
+  text-decoration: none;
+  color: #fff;
+}

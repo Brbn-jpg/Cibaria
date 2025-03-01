@@ -21,18 +21,25 @@ nav {
   display: block;
   padding: 1.2rem;
   font-size: 1.6rem;
-  border-radius: 1rem;
   color: #fff;
   text-decoration: none;
+  position: relative;
 }
 
-.nav-link:hover,
-.nav-link:active {
-  display: block;
-  color: #000;
-  border-radius: 1rem;
+.nav-link::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  left: 0;
+  bottom: 0;
+  width: 0;
   background-color: #fff;
-  transform: scale(1.02);
+  transition: width 0.2s;
+}
+
+.nav-link:active,
+.nav-link:hover::after {
+  width: 100%;
 }
 
 .language {

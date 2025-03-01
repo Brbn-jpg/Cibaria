@@ -66,6 +66,7 @@
           [formControl]="password"
           [(ngModel)]="formPassword"
         />
+
         <input
           type="password"
           [placeholder]="
@@ -76,7 +77,7 @@
           [(ngModel)]="formRetypePassword"
         />
         @if (!isEqual){
-        <span class="wrong-pass">passwords do not match</span>
+        <span class="wrong-pass">Passwords do not match</span>
         }
 
         <button type="button" class="button" (click)="onRegister()">

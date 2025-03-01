@@ -7,6 +7,7 @@ import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeDetailedComponent } from './recipe-detailed/recipe-detailed.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,7 @@ export const routes: Routes = [
     data: { title: 'Cibaria | Recipes' },
   },
   { path: 'recipes/:id', component: RecipeDetailedComponent },
+  { path: 'profile', component: ProfileComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

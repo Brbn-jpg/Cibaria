@@ -35,6 +35,11 @@
       }}</a>
     </li>
     } @else {
+    <li class="language">
+      <button (click)="changeLanguage()">
+        <img class="flag" [src]="getFlagImage()" [alt]="getAltText()" />
+      </button>
+    </li>
     <li>
       <a class="nav-link" href="" [routerLink]="['/']">{{
         "NAV.HOME" | translate

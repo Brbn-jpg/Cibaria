@@ -97,4 +97,9 @@ export class RecipeDetailedComponent implements OnInit {
       }
     });
   }
+
+  addToFav() {
+    const favButton = document.querySelector('path') as SVGPathElement;
+    favButton.classList.toggle('active');
+  }
 }
