@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../language.service';
 
 const mainUrl = 'http://localhost:4200/';
 
@@ -31,15 +32,22 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-  currentLanguage: string = 'en';
+  language: string = 'en';
 
-  constructor(private translate: TranslateService) {
-    this.translate.setDefaultLang(this.currentLanguage);
+  constructor(
+    private translate: TranslateService,
+    private languageService: LanguageService
+  ) {
+    this.languageService.language$.subscribe((language) => {
+      this.language = language;
+    });
+    this.translate.setDefaultLang(this.language);
   }
 
   changeLanguage(): void {
-    this.currentLanguage = this.currentLanguage === 'en' ? 'pl' : 'en';
-    this.translate.use(this.currentLanguage);
+    const newLanguage = this.language === 'en' ? 'pl' : 'en';
+    this.languageService.setLanguage(newLanguage);
+    this.translate.use(newLanguage);
   }
 
   logOut(): void {
@@ -48,13 +56,13 @@ export class NavbarComponent implements OnInit {
   }
 
   getFlagImage(): string {
-    return this.currentLanguage === 'en'
+    return this.language === 'en'
       ? 'images/flags/pl.svg'
       : 'images/flags/us.svg';
   }
 
   getAltText(): string {
-    return this.currentLanguage === 'en'
+    return this.language === 'en'
       ? 'Zmien język na polski'
       : 'Change language to English';
   }
