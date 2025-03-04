@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
-    @Query("SELECT u FROM Recipe u WHERE u.recipeName LIKE %:query%")
+    @Query("SELECT u FROM Recipe u WHERE u.recipeName ILIKE %:query%")
     List<Recipe> findByRecipeNameQuery(@Param("query") String query);
 }
