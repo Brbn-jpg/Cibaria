@@ -197,4 +197,9 @@ public class RecipeServiceImpl implements RecipeService {
     recipeRepository.delete(recipe);
   }
 
+  @Override
+  public List<Recipe> searchRecipes(String query) {
+   return recipeRepository.findByRecipeNameQuery(query);
+  }
+
 }

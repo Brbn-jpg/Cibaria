@@ -77,4 +77,9 @@ public class RecipeController {
                                           @RequestBody FavouriteRequest request){
     recipeService.deleteRiceFromFavourites(token,request.getRecipeId());
   }
+
+  @GetMapping("/searchRecipes")
+  public List<Recipe> searchRecipes(@RequestParam String query){
+    return recipeService.searchRecipes(query);
+  }
 }

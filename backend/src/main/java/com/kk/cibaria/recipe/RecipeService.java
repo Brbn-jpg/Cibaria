@@ -28,4 +28,5 @@ public interface RecipeService {
 
   void delete(int id);
 
+  List<Recipe> searchRecipes(String query);
 }
