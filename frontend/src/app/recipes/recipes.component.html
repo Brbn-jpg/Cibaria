@@ -2,6 +2,16 @@
   <app-navbar></app-navbar>
   <article>
     <div class="filters">
+      <div class="search filter-wrapper">
+        <label for="search">Search</label>
+        <input
+          type="text"
+          id="search"
+          class="search-input"
+          (input)="onSearchChange($event)"
+          placeholder="Search for recipes"
+        />
+      </div>
       <div class="difficulty filter-wrapper">
         <label for="difficulty">Difficulty</label>
         <select
@@ -36,17 +46,23 @@
       </div>
       <div class="servings filter-wrapper">
         <label for="servings">Servings</label>
-        <select
-          name="servings"
-          id="servings"
-          class="filter"
-          (change)="onFilterChange('servings', $event)"
-        >
-          <option selected value="0">Choose servings</option>
-          <option value="1">1-2 servings</option>
-          <option value="2">2-4 servings</option>
-          <option value="3">5+ servings</option>
-        </select>
+        <div class="inputs">
+          <input
+            id="servings-from"
+            type="number"
+            (input)="onFilterChange('servings', $event)"
+            class="servings-input from"
+            placeholder="from"
+          />
+          <span> &mdash; </span>
+          <input
+            id="servings-to"
+            type="number"
+            (input)="onFilterChange('servings', $event)"
+            class="servings-input to"
+            placeholder="to"
+          />
+        </div>
       </div>
       <div class="category filter-wrapper">
         <label for="category">Category</label>
@@ -113,6 +129,8 @@
           </div>
         </figure></a
       >
+      } @if (recipesArray.length === 0) {
+      <p class="no-recipes">No recipes found</p>
       }
     </div>
     <div class="pagination">

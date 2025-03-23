@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeDetailedComponent } from './recipe-detailed/recipe-detailed.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AddRecipePanelComponent } from './add-recipe-panel/add-recipe-panel.component';
 
 export const routes: Routes = [
   {
@@ -46,6 +47,11 @@ export const routes: Routes = [
     data: { title: 'Cibaria | Recipes' },
   },
   { path: 'recipes/:id', component: RecipeDetailedComponent },
+  {
+    path: 'add-recipe',
+    component: AddRecipePanelComponent,
+    data: { title: 'Cibaria | Add Recipe' },
+  },
   { path: 'profile', component: ProfileComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full' },

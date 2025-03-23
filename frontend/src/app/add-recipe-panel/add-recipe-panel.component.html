@@ -1,0 +1,155 @@
+<main class="add-recipe-panel">
+  <app-navbar></app-navbar>
+  <section>
+    <h1>Add a new recipe</h1>
+    <form>
+      <div class="input-group">
+        <label for="title">Recipe title</label>
+        <input
+          type="text"
+          name="title"
+          class="title"
+          required
+          placeholder="Shakshuka"
+        />
+      </div>
+      <div class="input-group">
+        <label for="description">Description</label>
+        <input
+          type="text"
+          name="description"
+          class="description"
+          required
+          maxlength="100"
+          placeholder="A delicious breakfast recipe from turkish cuisine"
+        />
+      </div>
+      <div class="input-group">
+        <label for="category" class="category">Category</label>
+        <input
+          type="text"
+          name="category"
+          class="category"
+          required
+          placeholder="Breakfast"
+        />
+      </div>
+      <div class="input-group">
+        <label for="servings" class="servings">Servings</label>
+        <input
+          type="number"
+          class="servings"
+          name="servings"
+          required
+          placeholder="2"
+          min="1"
+        />
+      </div>
+      <div class="input-group">
+        <label for="prepare-time" class="prepare-time">Prepare time</label>
+        <input
+          type="number"
+          class="prepare-time"
+          placeholder="in minutes!"
+          min="1"
+        />
+      </div>
+      <hr />
+      <h2>Ingredients</h2>
+      <div class="input-group ingredients">
+        <input
+          type="text"
+          name="ingredient"
+          class="ingredient"
+          [(ngModel)]="newIngredient.name"
+          required
+          placeholder="Tomato"
+        />
+        <input
+          type="number"
+          name="quantity"
+          class="quantity"
+          [(ngModel)]="newIngredient.quantity"
+          required
+          placeholder="2"
+          min="0.1"
+        />
+        <select
+          name="unit"
+          class="unit"
+          [(ngModel)]="newIngredient.unit"
+          required
+        >
+          <option disabled>Choose a unit</option>
+          <option value="tsp">tsp</option>
+          <option value="tbsp">tbsp</option>
+          <option value="pcs">pcs</option>
+          <option value="g">g</option>
+          <option value="kg">kg</option>
+          <option value="ml">ml</option>
+          <option value="L">L</option>
+        </select>
+      </div>
+      <ul class="ingredients-list">
+        @for (ingredient of ingredients; track $index) {
+        <li class="ingredient">
+          {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+          <button type="button" (click)="removeIngredient($index)">
+            Remove
+          </button>
+        </li>
+        }
+      </ul>
+      @if (alreadyExists === true){
+      <p class="error">This ingredient already exists!</p>
+      } @if (fillAll === false){
+      <p class="error">Please fill all the fields!</p>
+      }
+      <button type="button" (click)="addIngredient()">Add ingredient</button>
+      <hr />
+      <h2>Steps</h2>
+      <div class="input-group">
+        <textarea
+          name="step"
+          class="step"
+          [(ngModel)]="newStep"
+          required
+          placeholder="Cut the tomatoes into small pieces"
+        ></textarea>
+      </div>
+      <button type="button" (click)="addStep()">Add step</button>
+      @for (step of steps; track $index) {
+      <div class="step">
+        <h2 class="step-number">Step {{ $index + 1 }}</h2>
+        <div class="step-wrapper">
+          <p class="step-text">{{ step }}</p>
+          <button
+            type="button"
+            (click)="removeStep($index)"
+            class="remove-step-btn"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+      }
+
+      <hr />
+      <h2>Add image</h2>
+      <input
+        type="file"
+        name="image"
+        class="image"
+        required
+        accept="image/*"
+        (change)="validateFileSize()"
+      />
+      @if (fileSizeError === true){
+      <p class="error">The file size exceeds 5MB!</p>
+      }
+      <hr />
+      <button type="submit">Add recipe</button>
+    </form>
+  </section>
+</main>
+<app-footer-section></app-footer-section>
