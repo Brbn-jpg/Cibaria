@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kk.cibaria.image.Image;
 import com.kk.cibaria.ingredient.Ingredient;
 import com.kk.cibaria.rating.Rating;
+import com.kk.cibaria.step.Step;
 import com.kk.cibaria.tag.Tag;
 import com.kk.cibaria.user.UserEntity;
 import jakarta.persistence.*;
@@ -66,4 +67,8 @@ public class Recipe {
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<Image> images = new ArrayList<>();
+
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+  @JsonManagedReference
+  private List<Step> steps;
 }

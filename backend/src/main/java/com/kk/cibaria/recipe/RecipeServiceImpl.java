@@ -17,6 +17,8 @@ import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.ingredient.Ingredient;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.security.jwt.JwtService;
+import com.kk.cibaria.step.Step;
+import com.kk.cibaria.step.StepRepository;
 import com.kk.cibaria.tag.Tag;
 import com.kk.cibaria.user.UserEntity;
 import org.springframework.stereotype.Service;
@@ -32,12 +34,14 @@ public class RecipeServiceImpl implements RecipeService {
   private final UserRepository userRepository;
   private final JwtService jwtService;
   private final ImageService imageService;
+  private final StepRepository stepRepository;
 
-  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService) {
+  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, StepRepository stepRepository) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
       this.jwtService = jwtService;
       this.imageService = imageService;
+      this.stepRepository = stepRepository;
   }
 
   @Override
@@ -88,6 +92,14 @@ public class RecipeServiceImpl implements RecipeService {
       ingredient.setQuantity(i.getQuantity());
       return ingredient;
     }).toList();
+
+    List<Step> newSteps = recipe.getSteps().stream().map(s->{
+      Step step = new Step();
+      step.setContent(s.getContent());
+      step.setRecipe(newRecipe);
+      return step;
+    }).toList();
+    newRecipe.setSteps(newSteps);
     newRecipe.setIngredients(newIngredients);
     newRecipe.setPrepareTime(recipe.getPrepareTime());
     newRecipe.setServings(recipe.getServings());
