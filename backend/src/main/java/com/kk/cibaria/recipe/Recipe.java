@@ -13,7 +13,6 @@ import com.kk.cibaria.image.Image;
 import com.kk.cibaria.ingredient.Ingredient;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.step.Step;
-import com.kk.cibaria.tag.Tag;
 import com.kk.cibaria.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,10 +49,6 @@ public class Recipe {
   @Column(name = "category")
   private String category;
 
-  @Column(name = "tag")
-  @OneToMany(mappedBy = "recipe" , cascade = CascadeType.ALL)
-  @JsonManagedReference("tag")
-  private List<Tag> tag;
 
   @Column(name = "rating")
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
@@ -62,7 +57,7 @@ public class Recipe {
 
   @ManyToMany(mappedBy = "favouriteRecipes")
   @JsonIgnore
-  private List<UserEntity> favouriteByUsers;
+  private List<UserEntity> favouriteByUsers = new ArrayList<>()  ;
 
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
   @JsonManagedReference

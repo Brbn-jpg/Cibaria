@@ -5,8 +5,6 @@ import com.kk.cibaria.ingredient.IngredientRepository;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.rating.RatingRepository;
 import com.kk.cibaria.recipe.*;
-import com.kk.cibaria.tag.Tag;
-import com.kk.cibaria.tag.TagRepository;
 import com.kk.cibaria.user.UserEntity;
 import com.kk.cibaria.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -23,15 +21,13 @@ public class DataInitializer implements CommandLineRunner {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TagRepository tagRepository;
     private final IngredientRepository ingredientRepository;
     private final RatingRepository ratingRepository;
 
-    public DataInitializer(RecipeRepository recipeRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, TagRepository tagRepository, IngredientRepository ingredientRepository, RatingRepository ratingRepository) {
+    public DataInitializer(RecipeRepository recipeRepository, UserRepository userRepository, PasswordEncoder passwordEncoder,  IngredientRepository ingredientRepository, RatingRepository ratingRepository) {
         this.recipeRepository = recipeRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.tagRepository = tagRepository;
         this.ingredientRepository = ingredientRepository;
         this.ratingRepository = ratingRepository;
     }
@@ -83,13 +79,6 @@ public class DataInitializer implements CommandLineRunner {
             rating.setValue(5);
 
             ratingRepository.save(rating);
-
-            Tag tag = new Tag();
-            tag.setTagName("Vege");
-            tag.setRecipe(recipe);
-
-            tagRepository.save(tag);
-
 
             System.out.println("Dummy data were created!");
         }

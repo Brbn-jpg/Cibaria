@@ -19,7 +19,6 @@ import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.step.Step;
 import com.kk.cibaria.step.StepRepository;
-import com.kk.cibaria.tag.Tag;
 import com.kk.cibaria.user.UserEntity;
 import org.springframework.stereotype.Service;
 
@@ -104,13 +103,6 @@ public class RecipeServiceImpl implements RecipeService {
     newRecipe.setPrepareTime(recipe.getPrepareTime());
     newRecipe.setServings(recipe.getServings());
     newRecipe.setCategory(recipe.getCategory());
-    List<Tag> newTags = recipe.getTag().stream().map(t->{
-      Tag tag = new Tag();
-      tag.setRecipe(newRecipe);
-      tag.setTagName(t .getTagName());
-      return tag;
-    }).toList();
-    newRecipe.setTag(newTags);
 
     return newRecipe;
   }
@@ -133,11 +125,6 @@ public class RecipeServiceImpl implements RecipeService {
     recipeFound.setServings(recipe.getServings());
     recipeFound.setCategory(recipe.getCategory());
 
-    recipeFound.getTag().clear();
-    for (Tag tag : recipe.getTag()) {
-      tag.setRecipe(recipeFound);
-      recipeFound.getTag().add(tag);
-    }
     recipeFound.getRatings().clear();
     for (Rating rating : recipe.getRatings()) {
       UserEntity user = userRepository.findById(rating.getUser().getId()).orElse(null);
