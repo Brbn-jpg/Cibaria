@@ -3,6 +3,7 @@ package com.kk.cibaria.recipe;
 import java.io.IOException;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.cibaria.dto.FavouriteRequest;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
@@ -13,6 +14,8 @@ import jakarta.validation.constraints.Min;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("/recipes")
@@ -46,8 +49,10 @@ public class RecipeController {
   }
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public Recipe save(@RequestPart("recipe") RecipeAddDto recipe,
-                     @RequestPart(value = "images",required = false) List<MultipartFile> images) throws IOException {
+  public Recipe save(@RequestParam("recipe") String json,
+                     @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    RecipeAddDto recipe = objectMapper.readValue(json,RecipeAddDto.class);
     if(images!=null){
      return recipeService.saveRecipeWithPhotos(recipe,images);
     }else{
