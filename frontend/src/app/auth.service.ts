@@ -10,8 +10,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<any> {
-    const body = { username, password };
+  login(email: string, password: string): Observable<any> {
+    const body = { email: email, password: password };
     return this.http.post(this.apiUrl + '/authenticate', body);
   }
 
@@ -23,8 +23,10 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  register(username: string, password: string, email: string): Observable<any> {
-    const body = { username, password, email };
+  register(username: string, email: string, password: string): Observable<any> {
+    const body = { username, email, password };
+    console.log(body);
+
     return this.http.post(this.apiUrl + '/register', body);
   }
 }

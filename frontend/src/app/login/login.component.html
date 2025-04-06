@@ -9,11 +9,9 @@
       <form class="inputs" (submit)="onLogin()">
         <input
           type="text"
-          [placeholder]="
-            'LOGIN_REGISTER.LOGIN.USERNAME_PLACEHOLDER' | translate
-          "
-          [formControl]="username"
-          [(ngModel)]="formUsername"
+          [placeholder]="'LOGIN_REGISTER.LOGIN.EMAIL_PLACEHOLDER' | translate"
+          [formControl]="email"
+          [(ngModel)]="formEmail"
         />
         <input
           type="password"

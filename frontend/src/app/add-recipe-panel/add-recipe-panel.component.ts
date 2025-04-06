@@ -1,44 +1,89 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  FormGroup,
+  FormBuilder,
+  Validators,
+  ReactiveFormsModule,
+  FormControl,
+} from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-add-recipe-panel',
   standalone: true,
-  imports: [RouterLink, NavbarComponent, FooterSectionComponent, FormsModule],
+  imports: [
+    RouterLink,
+    NavbarComponent,
+    FooterSectionComponent,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './add-recipe-panel.component.html',
-  styleUrl: './add-recipe-panel.component.css',
+  styleUrls: ['./add-recipe-panel.component.css'],
 })
 export class AddRecipePanelComponent {
-  ingredients: { name: string; quantity: number; unit: string }[] = [];
-  steps: string[] = [];
+  ingredients: { ingredientName: string; quantity: number; unit: string }[] =
+    [];
+  steps: { content: string }[] = [];
 
-  newIngredient = { name: '', quantity: 0, unit: 'Choose a unit' };
+  newIngredient = { ingredientName: '', quantity: 0, unit: 'Choose a unit' };
   newStep = '';
   fillAll = true;
   alreadyExists = false;
   fileSizeError = false;
+  FailedToAdd = false;
+
+  constructor(private recipeService: RecipeService) {}
+
+  recipeForm = new FormGroup({
+    title: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
+    category: new FormControl('', [Validators.required]),
+    servings: new FormControl(1, [Validators.required, Validators.min(1)]),
+    prepareTime: new FormControl(1, [Validators.required, Validators.min(1)]),
+    quantity: new FormControl(this.ingredients, [Validators.required]),
+    unit: new FormControl(this.ingredients, [Validators.required]),
+    difficulty: new FormControl(1, [Validators.required]),
+    image: new FormControl(null, [Validators.required]),
+    steps: new FormControl(this.steps, [Validators.required]),
+    ingredients: new FormControl(this.ingredients, [Validators.required]),
+  });
+
+  ngOnInit(): void {
+    this.getToken();
+  }
+
+  isLoggedIn = false;
+
+  getToken(): void {
+    if (localStorage.getItem('token')) {
+      this.isLoggedIn = true;
+    }
+  }
 
   addIngredient() {
     const ingredientExists = this.ingredients.some(
       (ingredient) =>
-        ingredient.name.toLowerCase() === this.newIngredient.name.toLowerCase()
+        ingredient.ingredientName.toLowerCase() ===
+        this.newIngredient.ingredientName.toLowerCase()
     );
     if (ingredientExists) {
       this.alreadyExists = true;
       return;
     }
     if (
-      this.newIngredient.name &&
+      this.newIngredient.ingredientName &&
       this.newIngredient.quantity > 0 &&
       this.newIngredient.unit &&
       this.newIngredient.unit !== 'Choose a unit'
     ) {
       this.fillAll = true;
       this.ingredients.push({ ...this.newIngredient });
-      console.log(this.newIngredient);
+      console.log(this.ingredients);
     } else {
       this.fillAll = false;
     }
@@ -46,7 +91,8 @@ export class AddRecipePanelComponent {
 
   addStep() {
     if (this.newStep.trim()) {
-      this.steps.push(this.newStep.trim());
+      this.steps.push({ content: this.newStep.trim() });
+      console.log(this.steps);
       this.newStep = '';
     } else {
       alert('Please enter a step.');
@@ -62,13 +108,61 @@ export class AddRecipePanelComponent {
   }
 
   validateFileSize() {
-    const fileName = document.querySelector('.image') as HTMLInputElement;
+    const fileInput = document.querySelector('.image') as HTMLInputElement;
 
-    if (fileName.files && fileName.files[0].size > 5242880) {
+    if (fileInput.files && fileInput.files[0].size > 5242880) {
       this.fileSizeError = true;
-      fileName.value = '';
+      fileInput.value = '';
     } else {
       this.fileSizeError = false;
     }
+  }
+
+  postRecipe() {
+    if (!localStorage.getItem('token')) {
+      console.error('Użytkownik nie jest zalogowany!');
+    }
+
+    // if (this.recipeForm.invalid) {
+    //   console.error('Formularz zawiera błędy!');
+    //   this.FailedToAdd = true;
+    //   return;
+    // }
+
+    const formData = new FormData();
+    formData.append(
+      'recipe',
+      JSON.stringify({
+        recipeName: this.recipeForm.value.title!,
+        description: this.recipeForm.value.description!,
+        category: this.recipeForm.value.category!,
+        difficulty: this.recipeForm.value.difficulty,
+        servings: this.recipeForm.value.servings,
+        prepareTime: this.recipeForm.value.prepareTime,
+        ingredients: this.ingredients,
+        steps: this.steps,
+      })
+    );
+
+    const imageInput = document.querySelector('.image') as HTMLInputElement;
+    const image = new FileReader();
+    if (imageInput.files && imageInput.files.length > 0) {
+      image.onload = () => {
+        const imageFile = imageInput.files![0];
+        formData.append('image', imageFile);
+      };
+      image.readAsDataURL(imageInput.files![0]);
+    }
+
+    console.log(formData);
+
+    this.recipeService.postRecipe(formData).subscribe({
+      next: (response) => {
+        console.log('Przepis został dodany pomyślnie!', response);
+      },
+      error: (err) => {
+        console.error('Wystąpił błąd podczas dodawania przepisu', err);
+      },
+    });
   }
 }

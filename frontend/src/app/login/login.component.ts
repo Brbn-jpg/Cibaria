@@ -42,7 +42,7 @@ export class LoginComponent implements AfterViewInit {
   }
 
   onLogin(): void {
-    this.authService.login(this.formUsername, this.formPassword).subscribe({
+    this.authService.login(this.formEmail, this.formPassword).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
         this.router.navigate(['/']);
