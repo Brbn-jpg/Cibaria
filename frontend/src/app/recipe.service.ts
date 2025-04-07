@@ -16,13 +16,6 @@ export class RecipeService {
   }
 
   postRecipe(recipeData: FormData): Observable<any> {
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-    return this.http.post<any>(
-      'http://localhost:8080/api/recipes',
-      recipeData,
-      { headers }
-    );
+    return this.http.post<any>('http://localhost:8080/api/recipes', recipeData);
   }
 }

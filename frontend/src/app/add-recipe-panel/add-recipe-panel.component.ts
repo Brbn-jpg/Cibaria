@@ -48,7 +48,7 @@ export class AddRecipePanelComponent {
     quantity: new FormControl(this.ingredients, [Validators.required]),
     unit: new FormControl(this.ingredients, [Validators.required]),
     difficulty: new FormControl(1, [Validators.required]),
-    image: new FormControl(null, [Validators.required]),
+    images: new FormControl(null, [Validators.required]),
     steps: new FormControl(this.steps, [Validators.required]),
     ingredients: new FormControl(this.ingredients, [Validators.required]),
   });
@@ -134,7 +134,6 @@ export class AddRecipePanelComponent {
       'recipe',
       JSON.stringify({
         recipeName: this.recipeForm.value.title!,
-        description: this.recipeForm.value.description!,
         category: this.recipeForm.value.category!,
         difficulty: this.recipeForm.value.difficulty,
         servings: this.recipeForm.value.servings,
@@ -145,15 +144,17 @@ export class AddRecipePanelComponent {
     );
 
     const imageInput = document.querySelector('.image') as HTMLInputElement;
-    const image = new FileReader();
+    const images = new FileReader();
     if (imageInput.files && imageInput.files.length > 0) {
-      image.onload = () => {
-        const imageFile = imageInput.files![0];
-        formData.append('image', imageFile);
+      const file = imageInput.files[0];
+      let imageFile = null;
+      console.log('dupa');
+      images.onload = (e: any) => {
+        imageFile = e.target.result;
       };
-      image.readAsDataURL(imageInput.files![0]);
+      images.readAsDataURL(file);
+      formData.append('images', file);
     }
-
     console.log(formData);
 
     this.recipeService.postRecipe(formData).subscribe({

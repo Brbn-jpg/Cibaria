@@ -11,7 +11,7 @@
   "LOGIN_REGISTER": {
     "LOGIN": {
       "CATCH_PHRASE": "Log in to explore the world of Cibaria!",
-      "USERNAME_PLACEHOLDER": "Username",
+      "EMAIL_PLACEHOLDER": "Email",
       "PASSWORD_PLACEHOLDER": "Password",
       "REMEMBER_ME": "Remember me",
       "SUBMIT_BUTTON": "Login"
