@@ -29,7 +29,7 @@ Cibaria is a full-stack web application designed to help users discover, save, a
 - **Location**: `backend/`
 - **Key Features**:
   - RESTful API endpoints for recipes, users, and ratings.
-  - MySQL database integration.
+  - PostgreSQL database integration.
   - Secure authentication and authorization using Spring Security.
 
 ---
@@ -43,7 +43,7 @@ Cibaria is a full-stack web application designed to help users discover, save, a
 - **Backend**:
   - Java 17 or higher
   - Maven
-  - MySQL database
+  - PostgreSQL database
 
 ---
 
