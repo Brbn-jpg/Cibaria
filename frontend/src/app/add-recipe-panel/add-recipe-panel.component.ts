@@ -3,7 +3,6 @@ import { RouterLink } from '@angular/router';
 import {
   FormsModule,
   FormGroup,
-  FormBuilder,
   Validators,
   ReactiveFormsModule,
   FormControl,
@@ -36,6 +35,7 @@ export class AddRecipePanelComponent {
   alreadyExists = false;
   fileSizeError = false;
   FailedToAdd = false;
+  success = false;
 
   constructor(private recipeService: RecipeService) {}
 
@@ -83,7 +83,6 @@ export class AddRecipePanelComponent {
     ) {
       this.fillAll = true;
       this.ingredients.push({ ...this.newIngredient });
-      console.log(this.ingredients);
     } else {
       this.fillAll = false;
     }
@@ -92,7 +91,6 @@ export class AddRecipePanelComponent {
   addStep() {
     if (this.newStep.trim()) {
       this.steps.push({ content: this.newStep.trim() });
-      console.log(this.steps);
       this.newStep = '';
     } else {
       alert('Please enter a step.');
@@ -123,11 +121,12 @@ export class AddRecipePanelComponent {
       console.error('Użytkownik nie jest zalogowany!');
     }
 
-    // if (this.recipeForm.invalid) {
-    //   console.error('Formularz zawiera błędy!');
-    //   this.FailedToAdd = true;
-    //   return;
-    // }
+    if (this.recipeForm.pristine || this.recipeForm.untouched) {
+      this.FailedToAdd = true;
+      return;
+    } else {
+      this.success = true;
+    }
 
     const formData = new FormData();
     formData.append(

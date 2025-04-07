@@ -55,23 +55,51 @@ article {
 .grid-2-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  height: 100vh;
   gap: 4.8rem;
   margin-bottom: 9.6rem;
 }
 
 /* Image */
 
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .recipe-image {
-  width: 100%;
-  border-radius: 1rem;
+  aspect-ratio: 1/1;
+  max-width: 100%;
+  border-radius: 2rem;
+  z-index: 2;
+}
+
+.circle {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 150em;
+  height: 150rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    #fbe5b2 0%,
+    #b0a07d 20%,
+    rgba(255, 255, 255, 0) 50%
+  );
 }
 
 /* Recipe details */
 
 .recipe-details {
-  margin-bottom: 4.8rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-direction: column;
 }
 

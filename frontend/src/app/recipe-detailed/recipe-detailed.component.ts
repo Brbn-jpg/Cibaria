@@ -16,12 +16,23 @@ export interface Recipe {
     quantity: number;
     unit: string;
   }[];
+  steps: step[];
+  images: images[];
 }
 
 export interface Ingredients {
   name: string;
   quantity: number;
   unit: string;
+}
+
+export interface images {
+  imageUrl: string;
+  publicId: string;
+}
+
+export interface step {
+  content: string[];
 }
 
 @Component({
@@ -55,8 +66,6 @@ export class RecipeDetailedComponent implements OnInit {
                 unit: ingredient.unit,
               })
             );
-            // console.log('Recipe details loaded:', this.recipeDetails);
-            // console.log('Ingredients:', this.ingredients);
           },
           error: (err) => {
             console.error('Error loading recipe details:', err);

@@ -17,6 +17,12 @@ export interface recipesRequest {
   servings: number;
   category: string;
   ratings: rating[];
+  images: images[];
+}
+
+export interface images {
+  imageUrl: string;
+  publicId: string;
 }
 
 export interface rating {
@@ -46,6 +52,7 @@ export class RecipesComponent implements OnInit {
   servingsTo?: number;
   category?: string;
   totalPages: number = 0;
+  images?: images[];
   query?: string;
 
   ngOnInit() {
@@ -66,6 +73,7 @@ export class RecipesComponent implements OnInit {
     this.http
       .get<{
         content: recipesRequest[];
+        images: images[];
         totalPages: number;
       }>(this.url, { params })
       .subscribe({
@@ -109,31 +117,26 @@ export class RecipesComponent implements OnInit {
 
     const endpoint = this.query ? `${this.url}/searchRecipes` : this.url;
 
-    this.http
-      .get<{
-        content: recipesRequest[];
-        totalPages: number;
-      }>(endpoint, { params })
-      .subscribe({
-        next: (response) => {
-          console.log('Response received:', response);
-          if (response && Array.isArray(response.content)) {
-            this.recipesArray = response.content;
-            this.totalPages = response.totalPages;
+    this.http.get<any>(endpoint, { params }).subscribe({
+      next: (response) => {
+        console.log('Response received:', response);
 
-            if (this.recipesArray.length === 0) {
-              console.log('No recipes found for the given filters.');
-            }
-          } else {
-            console.error('Unexpected response format:', response);
-            this.recipesArray = [];
-          }
-        },
-        error: (err) => {
-          console.error('Error received:', err);
+        if (response && Array.isArray(response.content)) {
+          this.recipesArray = response.content;
+          this.totalPages = response.totalPages;
+        } else if (Array.isArray(response)) {
+          this.recipesArray = response;
+          this.totalPages = Math.ceil(response.length / this.pageSize);
+        } else {
+          console.error('Unexpected response format:', response);
           this.recipesArray = [];
-        },
-      });
+        }
+
+        if (this.recipesArray.length === 0) {
+          console.log('No recipes found for the given filters.');
+        }
+      },
+    });
   }
 
   loadCategories() {

@@ -1,32 +1,37 @@
 <main>
   <app-navbar></app-navbar>
   <article>
-    <div class="favourite">
-      <button class="favourite-btn" (click)="addToFav()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="favourite-icon icon"
-          viewBox="0 0 512 512"
-        >
-          <path
-            d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
-            fill="none"
-            stroke="white"
-            stroke-linejoin="round"
-            stroke-width="32"
-          />
-        </svg>
-      </button>
-
-      <p class="favourite-text">Add to favourite</p>
-    </div>
     <div class="grid-2-cols">
       <div class="recipe-details">
+        <div class="favourite">
+          <button class="favourite-btn" (click)="addToFav()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="favourite-icon icon"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                fill="none"
+                stroke="white"
+                stroke-linejoin="round"
+                stroke-width="32"
+              />
+            </svg>
+          </button>
+
+          <p class="favourite-text">Add to favourite</p>
+        </div>
         <h1 class="recipe-title">{{ recipeDetails.recipeName }}</h1>
-        <p class="recipe-desc">There will be a description later</p>
+        <div class="empty-div"></div>
       </div>
       <div class="img-container">
-        <img class="recipe-image" src="images/Cibaria.png" alt="" />
+        <img
+          class="recipe-image"
+          [src]="recipeDetails.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+          alt="{{ recipeDetails.recipeName }}"
+        />
+        <div class="circle"></div>
       </div>
     </div>
 
@@ -59,91 +64,21 @@
       </div>
     </div>
     <div class="steps">
-      <!-- @for (recipe of recipeDetails.steps; track $index){ 
-        <div class="step">
-          <h2>Step {{ $index + 1 }}</h2>
-          <p>{{ recipe.stepDescription }}</p>
-            <hr />
-        } -->
+      @for (step of recipeDetails.steps; track $index){
       <div class="step">
-        <h2>step 1</h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente qui
-          ea error architecto perspiciatis, fuga similique accusantium odit eius
-          nam!
-        </p>
+        <h2>Step {{ $index + 1 }}</h2>
+        <p>{{ step.content }}</p>
         <hr />
-        <div class="icon-container">
-          <img
-            class="icon"
-            src="images/icons/arrow-down-outline.svg"
-            alt="arrow down icon"
-          />
-        </div>
       </div>
-      <div class="step">
-        <h2>step 1</h2>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam,
-          excepturi inventore. Consectetur fuga atque delectus in odit nam
-          aspernatur ipsam. Neque voluptatem explicabo laboriosam vero excepturi
-          impedit repellat a repudiandae asperiores qui? Maxime unde natus
-          tenetur, suscipit doloribus consequatur amet reiciendis! Error, quidem
-          natus in ex doloribus itaque! Eius, id! Error, deleniti iste nisi
-          eaque sapiente, vero repellendus, amet doloribus dolor autem magni
-          perspiciatis! Ab delectus neque inventore dignissimos praesentium
-          natus velit, beatae doloribus animi numquam sunt, quisquam aspernatur
-          necessitatibus, voluptas voluptates dicta! Ducimus minima
-          exercitationem quidem similique aliquid porro, quas illum ullam quos
-          nostrum! Odio quisquam ullam nemo saepe.
-        </p>
-        <hr />
-        <div class="icon-container">
-          <img
-            class="icon"
-            src="images/icons/arrow-down-outline.svg"
-            alt="arrow down icon"
-          />
-        </div>
+      <div class="icon-container">
+        <img
+          class="icon"
+          src="images/icons/arrow-down-outline.svg"
+          alt="arrow down icon"
+        />
       </div>
-      <div class="step">
-        <h2>step 1</h2>
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto
-          voluptas voluptates ipsa, quod excepturi explicabo eaque. Consectetur
-          et doloremque amet veritatis. Amet nisi pariatur nobis odio at
-          corporis fugiat blanditiis ipsa, animi quo ad! Dolores maiores tenetur
-          atque omnis praesentium delectus ad saepe doloribus repellendus id.
-          Odit error cupiditate voluptatibus.
-        </p>
-        <hr />
-        <div class="icon-container">
-          <img
-            class="icon"
-            src="images/icons/arrow-down-outline.svg"
-            alt="arrow down icon"
-          />
-        </div>
-      </div>
-      <div class="step">
-        <h2>step 1</h2>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum illum
-          iure, fugiat, doloribus aperiam tempora ad nam, magni quae minus
-          labore vero provident amet quisquam sint quas quod ut. Modi optio quod
-          obcaecati neque accusantium odit! Ducimus sit excepturi facilis quod,
-          sed totam voluptate distinctio mollitia corrupti cumque omnis vel
-          suscipit fuga! Animi officiis rerum ut optio nesciunt corporis itaque?
-        </p>
-        <hr />
-        <div class="icon-container">
-          <img
-            class="icon"
-            src="images/icons/arrow-down-outline.svg"
-            alt="arrow down icon"
-          />
-        </div>
-      </div>
+      }
+
       <div class="end">
         <h2>Enjoy ʕっ•ᴥ•ʔっ</h2>
       </div>

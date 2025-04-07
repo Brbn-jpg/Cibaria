@@ -95,7 +95,7 @@
           <option disabled>Choose a unit</option>
           <option value="tsp">tsp</option>
           <option value="tbsp">tbsp</option>
-          <option value="null">pcs</option>
+          <option value="pcs">pcs</option>
           <option value="g">g</option>
           <option value="kg">kg</option>
           <option value="ml">ml</option>
@@ -113,9 +113,9 @@
         </li>
         }
       </ul>
-      @if (alreadyExists === true){
+      @if (alreadyExists){
       <p class="error">This ingredient already exists!</p>
-      } @if (fillAll === false){
+      } @if (!fillAll){
       <p class="error">Please fill all the fields!</p>
       }
       <button type="button" (click)="addIngredient()">Add ingredient</button>
@@ -158,13 +158,15 @@
         accept="image/*"
         (change)="validateFileSize()"
       />
-      @if (fileSizeError === true){
+      @if (fileSizeError){
       <p class="error">The file size exceeds 5MB!</p>
       }
       <hr />
       <button type="submit">Add recipe</button>
       @if (FailedToAdd){
       <p class="error">Failed to add the recipe!</p>
+      } @else if (success){
+      <p class="success">Recipe added successfully!</p>
       }
     </form>
   </section>

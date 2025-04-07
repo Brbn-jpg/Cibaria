@@ -88,8 +88,8 @@
           <div class="image-wrapper">
             <img
               class="recipe-image"
-              src="images/gallery/gallery1.webp"
-              alt=""
+              [src]="recipe.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+              alt="{{ recipe.recipeName }}"
             />
           </div>
           <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
