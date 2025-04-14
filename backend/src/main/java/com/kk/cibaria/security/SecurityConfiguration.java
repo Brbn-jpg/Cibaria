@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -37,10 +38,9 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(req -> {
-      req.requestMatchers(HttpMethod.POST, "/users", "/authenticate").permitAll();
-      req.requestMatchers(HttpMethod.GET, "/recipes/**").permitAll();
-      req.requestMatchers(HttpMethod.POST, "/recipes").hasRole("ADMIN");
-      req.requestMatchers(HttpMethod.DELETE, "/recipes").hasRole("ADMIN");
+      req.requestMatchers("/authenticate", "/register").permitAll();
+      req.requestMatchers("/recipes/**", "/image/**").permitAll();
+      req.requestMatchers("/users/**").authenticated();
       req.anyRequest().authenticated();
     });
 
@@ -75,7 +75,7 @@ public class SecurityConfiguration {
     CorsConfiguration corsConfiguration = new CorsConfiguration();
     corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
     corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT", "OPTIONS"));
-    corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+    corsConfiguration.setAllowedHeaders(List.of("*"));
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", corsConfiguration);

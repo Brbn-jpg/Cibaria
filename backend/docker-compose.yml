@@ -1,0 +1,38 @@
+version: '3.9'
+
+
+services:
+  cibaria_db:
+    container_name: cibaria_db
+    image: ga3riel/cibaria_db:17
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  cibaria_app:
+    container_name: cibaria_app
+    image: ga3riel/cibaria_app
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_URL=${DB_URL}
+      - CLOUD_NAME=${CLOUD_NAME}
+      - API_SECRET_KEY=${API_SECRET_KEY}
+      - API_KEY=${API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+    env_file:
+      - .env
+    depends_on:
+      - cibaria_db
+
+volumes:
+  pgdata: {}

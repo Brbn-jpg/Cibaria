@@ -1,6 +1,6 @@
 package com.kk.cibaria.dto;
 
-import com.kk.cibaria.model.Recipe;
+import com.kk.cibaria.recipe.Recipe;
 import lombok.Data;
 
 import java.util.List;

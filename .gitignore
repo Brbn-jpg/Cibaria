@@ -1,4 +1,4 @@
 .vscode
 docker/.env
-
 .DS_Store
+backend/.env

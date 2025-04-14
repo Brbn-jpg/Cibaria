@@ -1,10 +1,9 @@
 package com.kk.cibaria.dto;
 
-import com.kk.cibaria.model.Ingredient;
-import com.kk.cibaria.model.Tag;
+import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.step.Step;
 import lombok.Data;
 
-import java.util.Base64;
 import java.util.List;
 
 @Data
@@ -15,6 +14,5 @@ public class RecipeAddDto {
     private int prepareTime;
     private int servings;
     private String category;
-    private List<Tag> tag;
-    private String file;
+    private List<Step> steps;
 }
