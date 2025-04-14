@@ -1,0 +1,149 @@
+<main>
+  <app-navbar></app-navbar>
+  <div class="background">
+    <img src="images/gallery/gallery2.webp" alt="" class="background-image" />
+  </div>
+
+  <div class="profile-info">
+    <h2 class="username">Username</h2>
+    <p class="user-text">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
+      necessitatibus nemo ipsam ex quaerat ab nobis aliquam quia odit est!
+    </p>
+  </div>
+
+  <div class="profile-pic">
+    <img src="images/featured/tom.jpg" alt="" class="profile-picture" />
+  </div>
+
+  <h3>Favourite recipes</h3>
+
+  <div class="filters">
+    <div class="difficulty filter-wrapper">
+      <label for="difficulty">Difficulty</label>
+      <select
+        name="difficulty"
+        id="difficulty"
+        class="filter"
+        (change)="onFilterChange('difficulty', $event)"
+      >
+        <option selected value="0">Choose difficulty</option>
+        <option value="1">Easy</option>
+        <option value="2">Medium</option>
+        <option value="3">Hard</option>
+      </select>
+    </div>
+    <div class="prepare-time filter-wrapper">
+      <label for="prepare-time">Prepare time</label>
+      <div class="inputs">
+        <input
+          type="number"
+          class="prepTime from"
+          (change)="onFilterChange('prepTime', $event)"
+          placeholder="from"
+        />
+        <span> &mdash; </span>
+        <input
+          type="number"
+          class="prepTime to"
+          (change)="onFilterChange('prepTime', $event)"
+          placeholder="to"
+        />
+      </div>
+    </div>
+    <div class="servings filter-wrapper">
+      <label for="servings">Servings</label>
+      <select
+        name="servings"
+        id="servings"
+        class="filter"
+        (change)="onFilterChange('servings', $event)"
+      >
+        <option selected value="0">Choose servings</option>
+        <option value="1">1-2 servings</option>
+        <option value="2">2-4 servings</option>
+        <option value="3">5+ servings</option>
+      </select>
+    </div>
+    <div class="category filter-wrapper">
+      <label for="category">Category</label>
+      <select
+        name="category"
+        id="category"
+        class="filter"
+        (change)="onFilterChange('category', $event)"
+      >
+        <option selected value="">Choose category</option>
+        @for (category of categoriesArray; track $index){
+        <option>{{ category }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="recipes grid-4-cols">
+    @for (recipe of recipesArray; track $index) {
+    <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
+      ><figure class="recipe">
+        <div class="image-wrapper">
+          <img class="recipe-image" src="images/gallery/gallery1.webp" alt="" />
+        </div>
+        <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
+        <div class="recipe-desc">
+          <div class="recipe-rating recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/star-outline.svg"
+              alt="small star icon"
+            /><span>{{ getAverageRating(recipe.ratings) }}</span>
+          </div>
+          <div class="recipe-difficulty recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/bar-chart-outline.svg"
+              alt="chart icon"
+            /><span>{{ getDifficulty(recipe.difficulty) }}</span>
+          </div>
+          <div class="recipe-servings recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/restaurant-outline.svg"
+              alt="fork and knife icon"
+            /><span>{{ recipe.servings }} servings</span>
+          </div>
+          <div class="recipe-time recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/time-outline.svg"
+              alt="food icon"
+            /><span>{{ recipe.prepareTime }} minutes</span>
+          </div>
+          <div class="recipe-time recipe-desc-inner">
+            <img class="icon" src="images/icons/bowl-food.svg" alt="" />
+            <span>{{ recipe.category }}</span>
+          </div>
+        </div>
+      </figure></a
+    >
+    }
+  </div>
+
+  <div class="pagination">
+    <button
+      class="btn"
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(currentPage - 1)"
+    >
+      Previous
+    </button>
+    <span class="pages">page {{ currentPage }} of {{ totalPages }}</span>
+    <button
+      class="btn"
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(currentPage + 1)"
+    >
+      Next
+    </button>
+  </div>
+</main>
+<app-footer-section></app-footer-section>

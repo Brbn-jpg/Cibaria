@@ -6,14 +6,53 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { RecipesComponent } from './recipes/recipes.component';
+import { RecipeDetailedComponent } from './recipe-detailed/recipe-detailed.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AddRecipePanelComponent } from './add-recipe-panel/add-recipe-panel.component';
 
 export const routes: Routes = [
-  { path: '', component: LandingPageComponent },
-  { path: 'terms-of-service', component: TermsOfServiceComponent },
-  { path: 'about-us', component: AboutUsComponent },
-  { path: 'privacy-policy', component: PrivacyPolicyComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'recipes', component: RecipesComponent },
+  {
+    path: '',
+    component: LandingPageComponent,
+    data: { title: 'Cibaria | From Plans To Plates' },
+  },
+  {
+    path: 'terms-of-service',
+    component: TermsOfServiceComponent,
+    data: { title: 'Cibaria | Terms Of Service' },
+  },
+  {
+    path: 'about-us',
+    component: AboutUsComponent,
+    data: { title: 'Cibaria | About Us' },
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicyComponent,
+    data: { title: 'Cibaria | Privacy Policy' },
+  },
+  {
+    path: 'contact',
+    component: ContactComponent,
+    data: { title: 'Cibaria | Contact' },
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    data: { title: 'Cibaria | Login to explore the world of Cibaria' },
+  },
+  {
+    path: 'recipes',
+    component: RecipesComponent,
+    data: { title: 'Cibaria | Recipes' },
+  },
+  { path: 'recipes/:id', component: RecipeDetailedComponent },
+  {
+    path: 'add-recipe',
+    component: AddRecipePanelComponent,
+    data: { title: 'Cibaria | Add Recipe' },
+  },
+  { path: 'profile', component: ProfileComponent },
+
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

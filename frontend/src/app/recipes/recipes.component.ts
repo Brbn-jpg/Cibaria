@@ -3,13 +3,26 @@ import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
+import { NavbarComponent } from '../navbar/navbar.component';
+
+export interface category {
+  categoryName: string;
+}
 
 export interface recipesRequest {
+  id: number;
   recipeName: string;
   difficulty: number;
   prepareTime: number;
   servings: number;
+  category: string;
   ratings: rating[];
+  images: images[];
+}
+
+export interface images {
+  imageUrl: string;
+  publicId: string;
 }
 
 export interface rating {
@@ -19,59 +32,169 @@ export interface rating {
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [RouterLink, FooterSectionComponent],
+  imports: [RouterLink, FooterSectionComponent, NavbarComponent],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })
 export class RecipesComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
   http = inject(HttpClient);
+  categoriesArray: category[] = [];
   recipesArray: recipesRequest[] = [];
   totalItems: recipesRequest[] = [];
   currentPage: number = 1;
-  pageSize: number = 4;
+  pageSize: number = 12;
+  difficulty?: number;
+  prepTimeFrom?: number;
+  prepTimeTo?: number;
+  prepTime?: number;
+  servingsFrom?: number;
+  servingsTo?: number;
+  category?: string;
   totalPages: number = 0;
+  images?: images[];
+  query?: string;
 
   ngOnInit() {
+    window.scrollTo({ top: 0 });
+    this.loadCategories();
     this.loadRecipes();
-    this.recipes();
   }
 
   loadRecipes() {
-    const params: { page: number; size: number } = {
+    const params: {
+      page: number;
+      size: number;
+    } = {
       page: this.currentPage,
       size: this.pageSize,
     };
 
-    const url = `${this.url}?page=1&size=10`;
+    this.http
+      .get<{
+        content: recipesRequest[];
+        images: images[];
+        totalPages: number;
+      }>(this.url, { params })
+      .subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response.content)) {
+            this.recipesArray = response.content;
+            this.totalPages = response.totalPages;
+          } else {
+            console.error(response);
+            this.recipesArray = [];
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+  }
 
-    this.http.get<recipesRequest[]>(url, { params }).subscribe({
+  applyFilters() {
+    const params: any = {
+      page: this.currentPage,
+      size: this.pageSize,
+    };
+
+    const prepTimeTo = this.prepTimeTo ?? 99999;
+    const prepTimeFrom = this.prepTimeFrom ?? 0;
+
+    if (this.difficulty) params.difficulty = this.difficulty;
+    if (prepTimeFrom || prepTimeTo) {
+      params.prepareTime = `${prepTimeFrom}-${prepTimeTo}`;
+    }
+    if (this.servingsFrom !== undefined || this.servingsTo !== undefined) {
+      const servingsFrom = this.servingsFrom ?? 0;
+      const servingsTo = this.servingsTo ?? 99999;
+      params.servings = `${servingsFrom}-${servingsTo}`;
+    }
+    if (this.category) params.category = this.category;
+    if (this.query) params.query = this.query;
+
+    console.log('Filters applied:', params);
+
+    const endpoint = this.query ? `${this.url}/searchRecipes` : this.url;
+
+    this.http.get<any>(endpoint, { params }).subscribe({
       next: (response) => {
-        this.recipesArray = response;
-        console.log(response);
-      },
-      error: (err) => {
-        console.error(err);
+        console.log('Response received:', response);
+
+        if (response && Array.isArray(response.content)) {
+          this.recipesArray = response.content;
+          this.totalPages = response.totalPages;
+        } else if (Array.isArray(response)) {
+          this.recipesArray = response;
+          this.totalPages = Math.ceil(response.length / this.pageSize);
+        } else {
+          console.error('Unexpected response format:', response);
+          this.recipesArray = [];
+        }
+
+        if (this.recipesArray.length === 0) {
+          console.log('No recipes found for the given filters.');
+        }
       },
     });
+  }
+
+  loadCategories() {
+    this.http
+      .get<{ content: any[] }>('http://localhost:8080/api/recipes')
+      .subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response.content)) {
+            this.categoriesArray = Array.from(
+              new Set(response.content.map((recipe) => recipe.category))
+            ).sort();
+          } else {
+            console.error('Unexpected response format', response);
+          }
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+  }
+
+  onFilterChange(filterName: string, event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+
+    if (filterName === 'prepTime') {
+      const inputClass = (event.target as HTMLInputElement).classList;
+
+      if (inputClass.contains('from')) {
+        this.prepTimeFrom = value ? Number(value) : undefined;
+      } else if (inputClass.contains('to')) {
+        this.prepTimeTo = value ? Number(value) : undefined;
+      }
+    } else if (filterName === 'servings') {
+      const inputClass = (event.target as HTMLInputElement).classList;
+
+      if (inputClass.contains('from')) {
+        this.servingsFrom = value ? Number(value) : undefined;
+      } else if (inputClass.contains('to')) {
+        this.servingsTo = value ? Number(value) : undefined;
+      }
+    } else {
+      switch (filterName) {
+        case 'difficulty':
+          this.difficulty = Number(value);
+          break;
+        case 'category':
+          this.category = value;
+          break;
+      }
+    }
+
+    this.currentPage = 1;
+    this.applyFilters();
   }
 
   onPageChange(page: number) {
     this.currentPage = page;
     this.loadRecipes();
-  }
-
-  recipes() {
-    this.http.get<recipesRequest[]>(this.url).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.totalItems = response;
-        this.totalPages = Math.round(this.totalItems.length / this.pageSize);
-      },
-      error: (err) => {
-        console.error(err);
-      },
-    });
   }
 
   getAverageRating(ratings: rating[]) {
@@ -94,101 +217,11 @@ export class RecipesComponent implements OnInit {
     }
   }
 
-  // fillFigure(data: recipesRequest) {
-  //   console.log(data);
-  //   const figure = document.createElement('figure');
-  //   figure.classList.add('recipe');
-  //   const imageWrapper = document.createElement('div');
-  //   imageWrapper.classList.add('imageWrapper');
-
-  //   const recipeImage = document.createElement('img');
-  //   recipeImage.classList.add('recipe-image');
-  //   recipeImage.src = 'images/gallery/gallery1.webp';
-
-  //   const h2 = document.createElement('h2');
-  //   h2.classList.add('recipe-name');
-  //   h2.innerHTML = data.recipeName;
-
-  //   const recipeDesc = document.createElement('div');
-  //   recipeDesc.classList.add('recipe-desc');
-
-  //   const ratingDiv = document.createElement('div');
-  //   ratingDiv.classList.add('recipe-rating');
-  //   ratingDiv.classList.add('recipe-desc-inner');
-
-  //   const starIcon = document.createElement('img');
-  //   starIcon.classList.add('icon');
-  //   starIcon.src = 'images/icons/star-outline.svg';
-  //   starIcon.alt = 'rating icon';
-
-  //   let averageRating = 'No ratings';
-  //   if (data.ratings && data.ratings.length > 0) {
-  //     const sum = data.ratings.reduce((acc, curr: any) => acc + curr.value, 0);
-  //     averageRating = (sum / data.ratings.length).toFixed(1);
-  //   }
-
-  //   const rating = document.createElement('span');
-  //   rating.innerHTML = averageRating;
-
-  //   const difficultyDiv = document.createElement('div');
-  //   difficultyDiv.classList.add('recipe-difficulty');
-  //   difficultyDiv.classList.add('recipe-desc-inner');
-
-  //   const chartIcon = document.createElement('img');
-  //   chartIcon.classList.add('icon');
-  //   chartIcon.src = 'images/icons/bar-chart-outline.svg';
-  //   chartIcon.alt = 'difficulty icon';
-
-  //   let difficulty = document.createElement('span');
-  //   if (data.difficulty === 1) {
-  //     difficulty.innerHTML = 'easy';
-  //   } else if (data.difficulty === 2) {
-  //     difficulty.innerHTML = 'medium';
-  //   } else if (data.difficulty === 3) {
-  //     difficulty.innerHTML = 'hard';
-  //   }
-
-  //   const servingsDiv = document.createElement('div');
-  //   servingsDiv.classList.add('recipe-servings');
-  //   servingsDiv.classList.add('recipe-desc-inner');
-
-  //   const servingsIcon = document.createElement('img');
-  //   servingsIcon.classList.add('icon');
-  //   servingsIcon.src = 'images/icons/restaurant-outline.svg';
-  //   servingsIcon.alt = 'servings icon';
-
-  //   const servingsSize = document.createElement('span');
-  //   servingsSize.innerHTML = `${data.servings.toString()} servings`;
-
-  //   const prepareTimeDiv = document.createElement('div');
-  //   prepareTimeDiv.classList.add('recipe-time');
-  //   prepareTimeDiv.classList.add('recipe-desc-inner');
-
-  //   const timeIcon = document.createElement('img');
-  //   timeIcon.classList.add('icon');
-  //   timeIcon.src = 'images/icons/time-outline.svg';
-  //   timeIcon.alt = 'prepare time icon';
-
-  //   const time = document.createElement('span');
-  //   time.innerHTML = `${data.prepareTime} minutes`;
-
-  //   figure.appendChild(imageWrapper);
-  //   imageWrapper.appendChild(recipeImage);
-  //   figure.appendChild(h2);
-  //   figure.appendChild(recipeDesc);
-  //   recipeDesc.appendChild(ratingDiv);
-  //   ratingDiv.appendChild(starIcon);
-  //   ratingDiv.appendChild(rating);
-  //   recipeDesc.appendChild(difficultyDiv);
-  //   difficultyDiv.appendChild(chartIcon);
-  //   difficultyDiv.appendChild(difficulty);
-  //   recipeDesc.appendChild(servingsDiv);
-  //   servingsDiv.appendChild(servingsIcon);
-  //   servingsDiv.appendChild(servingsSize);
-  //   recipeDesc.appendChild(prepareTimeDiv);
-  //   prepareTimeDiv.appendChild(timeIcon);
-  //   prepareTimeDiv.appendChild(time);
-  //   document.querySelector('.recipes.grid-4-cols')?.appendChild(figure);
-  //   console.log(figure);
-  // }
+  onSearchChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    console.log(value);
+    this.query = value.trim();
+    this.currentPage = 1;
+    this.applyFilters();
+  }
 }

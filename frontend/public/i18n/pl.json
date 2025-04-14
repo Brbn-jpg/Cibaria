@@ -1,0 +1,267 @@
+{
+  "ABOUT_US": {
+    "TITLE": "O nas",
+    "TEXT": {
+      "WELCOME": "Witamy w <strong>Cibaria</strong>, Twoim najlepszym miejscu do odkrywania, dzielenia się i angażowania w przepisy z całego świata. W Cibaria wierzymy, że jedzenie łączy ludzi, a nasza platforma została zaprojektowana, aby celebrować radość gotowania i magię smaków.",
+      "EXPLORE": "Tutaj możesz odkryć skarbnicę przepisów, stworzonych zarówno przez pasjonatów gotowania w domu, jak i doświadczonych szefów kuchni. Niezależnie od tego, czy szukasz inspiracji na rodzinny obiad, eksperymentujesz z nową kuchnią, czy doskonalisz ulubiony klasyk, Cibaria jest Twoim zaufanym towarzyszem w kuchni.",
+      "COMMUNITY": "Ale to nie tylko repozytorium przepisów. Cibaria rozwija się dzięki społeczności. Dodawaj własne przepisy, aby zaprezentować swoją kulinarną kreatywność, oceniaj dania, aby pomóc innym miłośnikom jedzenia, i dziel się komentarzami, aby wymieniać porady, poprawki i pochwały. Każda ocena i komentarz przyczyniają się do tego, aby Cibaria była dynamiczną i współpracującą przestrzenią, w której głos i smak każdego mają znaczenie.",
+      "JOIN": "Dołącz do nas w tej pełnej smaków podróży i gotujmy, dzielmy się i smakujmy razem. Witamy w Cibaria – gdzie każde danie opowiada historię!"
+    }
+  },
+  "LOGIN_REGISTER": {
+    "LOGIN": {
+      "CATCH_PHRASE": "Zaloguj się, aby odkrywać świat Cibarii!",
+      "USERNAME_PLACEHOLDER": "Nazwa użytkownika",
+      "PASSWORD_PLACEHOLDER": "Hasło",
+      "REMEMBER_ME": "Zapamiętaj mnie",
+      "SUBMIT_BUTTON": "Zaloguj się"
+    },
+    "REGISTER": {
+      "CATCH_PHRASE": "Zarejestruj się i rozpocznij swoją podróż z Cibarią!",
+      "USERNAME_PLACEHOLDER": "Nazwa użytkownika",
+      "EMAIL_PLACEHOLDER": "E-mail",
+      "PASSWORD_PLACEHOLDER": "Hasło",
+      "CONFIRM_PASSWORD_PLACEHOLDER": "Potwierdź hasło",
+      "SUBMIT_BUTTON": "Zarejestruj się"
+    },
+    "SWITCH": {
+      "NO_ACCOUNT": "Nie masz konta?",
+      "HAVE_ACCOUNT": "Masz już konto?",
+      "REGISTER_BUTTON": "Zarejestruj się",
+      "LOGIN_BUTTON": "Zaloguj się"
+    }
+  },
+  "NAV": {
+    "HOME": "Strona główna",
+    "ABOUT": "O nas",
+    "RECIPES": "Przepisy",
+    "CONTACT": "Kontakt",
+    "LOGOUT": "Wyloguj",
+    "PROFILE": "Profil",
+    "LOGIN": "Zaloguj się"
+  },
+  "MAINPAGE": {
+    "TITLE": "Przekształcanie pomysłów w niezapomniane kulinarne doświadczenia",
+    "SUBTITLE": " Przekształć swoje kulinarne wizje w wykwintne dzieła z łatwością i odrobiną finezji. Niech każdy pomysł ożyje jako niezapomniane danie, podane z gracją i smakowane kęs po kęsie. ",
+    "BTNSTART": "Zacznij teraz",
+    "BTNINFO": "Więcej informacji",
+    "EXPERIENCE": {
+      "FOOD_FIELD": "w branży kulinarnej",
+      "RECIPES": "przepisów",
+      "CLIENTS": "zadowoleni klienci"
+    },
+    "10Y": "10 lat"
+  },
+  "SLIDER": {
+    "FEATURED": "Wyróżnione w"
+  },
+  "FEATURE": {
+    "TITLE1": "Smaki na każdą okazję!",
+    "SUBTITLE1": " Odkryj przepisy, które zachwycą Twoich bliskich, niezależnie od okazji. Od szybkich dań na co dzień po wyjątkowe uroczystości, wprowadź kreatywność i radość do swojej kuchni dzięki potrawom, które wszyscy pokochają. ",
+    "TITLE2": "Twój czas, Twój plan.",
+    "SUBTITLE2": " Przejmij pełną kontrolę nad swoim harmonogramem gotowania i dostosuj go do swojego codziennego życia. Niezależnie od tego, czy wolisz planować posiłki z wyprzedzeniem, czy podejmować decyzje na bieżąco, możesz zorganizować swoje gotowanie bez wysiłku i zawsze mieć kulinarne cele pod kontrolą. ",
+    "TITLE3": "Kontroluj smak i jakość.",
+    "SUBTITLE3": " Przygotowując posiłki samodzielnie, masz pełną kontrolę nad składnikami i smakami każdej potrawy. Ciesz się spokojem ducha, wiedząc dokładnie, co jesz – świeże, zdrowe i idealnie dopasowane do Twojego gustu. "
+  },
+  "TESTIMONIALS": {
+    "NAME": "Opinie",
+    "TITLE": " Zobacz, co inni mówią o swojej drodze do pysznego i bezstresowego gotowania! ",
+    "ANNA": " Ta aplikacja całkowicie zmieniła sposób, w jaki planuję posiłki. Jest tak łatwa w użyciu, a teraz zawsze wiem, co ugotować! ",
+    "JULIA": " Uwielbiam, jak ta aplikacja pomaga mi być zorganizowaną. Przepisy są niesamowite, a ja oszczędzam tyle czasu w ciągu tygodnia! ",
+    "MICHAEL": " Gotowanie kiedyś wydawało się obowiązkiem, ale teraz to przyjemność i łatwość. Funkcja planowania to dla mnie rewolucja. ",
+    "TOM": " Wreszcie aplikacja, która sprawia, że gotowanie jest bezstresowe! Czuję się pewniej w kuchni i uwielbiam eksperymentować z nowymi przepisami. "
+  },
+  "CTA": {
+    "TITLE": "Pozostańmy w kontakcie",
+    "SUBTITLE": " Zapisz się do naszego newslettera już teraz i bądź pierwszym, który dowie się o ekscytujących nowych przepisach! Otrzymaj ekskluzywny dostęp 3 dni wcześniej i planuj posiłki z inspiracją dostarczaną prosto do Twojej skrzynki. ",
+    "CTABTN": "Skontaktuj się",
+    "NAME": "Wpisz swoje imię",
+    "EMAIL": "Wpisz swój e-mail",
+    "WHERE": "Gdzie o nas usłyszałeś?",
+    "OPTIONS": {
+      "SOCIALMEDIA": "Socialmedia",
+      "ADS": "Reklamy",
+      "FRIENDS_FAMILY": "Rodzina i znajomi",
+      "PODCAST": "Podcast",
+      "OTHER": "Inne"
+    }
+  },
+  "FOOTER": {
+    "TITLE": "Odkrywaj, zapisuj i oceniaj przepisy – wszystko, czego potrzebujesz, aby codzienne gotowanie było przyjemnością!",
+    "COPY": "Cibaria ©2024 Wszelkie prawa zastrzeżone.",
+    "EXTRALINKS": {
+      "TITLE": "Dodatkowe linki",
+      "LINK1": "Strona główna",
+      "LINK2": "O nas",
+      "LINK3": "Przepisy",
+      "LINK4": "Kontakt"
+    },
+    "LEGAL": {
+      "TITLE": "Wymagania prawne",
+      "PRIVACY": "Polityka prywatności",
+      "TERMS": "Regulamin"
+    }
+  },
+  "CONTACT_US": {
+    "TITLE": "Skontaktuj się z nami",
+    "INTRO": "Chętnie Cię wysłuchamy! Niezależnie od tego, czy masz pytanie, opinię, czy potrzebujesz wsparcia, oto jak możesz się z nami skontaktować:",
+    "GENERAL_INQUIRIES": {
+      "TITLE": "Ogólne zapytania",
+      "TEXT": "Masz ogólne pytanie lub chcesz dowiedzieć się więcej o Cibarii? Napisz do nas na: ",
+      "MAIL": "support@cibaria.edu"
+    },
+    "SUPPORT": {
+      "TITLE": "Wsparcie",
+      "TEXT": "Napotkałeś problem lub potrzebujesz pomocy z kontem? Skontaktuj się z naszym zespołem wsparcia:",
+      "MAIL": "support@cibaria.edu"
+    },
+    "PRIVACY_CONCERNS": {
+      "TITLE": "Pytania dotyczące prywatności",
+      "TEXT": "Masz pytania dotyczące przetwarzania Twoich danych lub chcesz skorzystać ze swoich praw dotyczących prywatności? Skontaktuj się z naszym zespołem ds. prywatności:",
+      "MAIL": "privacy@cibaria.edu"
+    },
+    "BUSINESS_PARTNERSHIPS": {
+      "TITLE": "Partnerstwa biznesowe",
+      "TEXT": "Zainteresowany współpracą z nami? Nawiążmy współpracę! Skontaktuj się z nami na: ",
+      "MAIL": "parents@cibaria.edu"
+    },
+    "SOCIAL_MEDIA": {
+      "TITLE": "Media społecznościowe",
+      "TEXT": "Pozostań w kontakcie i śledź nas, aby być na bieżąco z aktualnościami, poradami i inspiracjami:",
+      "LINKS": [
+        {
+          "NAME": "Facebook",
+          "URL": "https://www.facebook.com/cibaria"
+        },
+        {
+          "NAME": "Instagram",
+          "URL": "https://www.instagram.com/cibaria"
+        },
+        {
+          "NAME": "TikTok",
+          "URL": "https://www.tiktok.com/cibaria"
+        },
+        {
+          "NAME": "YouTube",
+          "URL": "https://www.youtube.com/cibaria"
+        },
+        {
+          "NAME": "X",
+          "URL": "https://www.x.com/cibaria"
+        }
+      ]
+    },
+    "MAILING_ADDRESS": {
+      "TITLE": "Adres korespondencyjny",
+      "TEXT": "Jeśli wolisz skontaktować się z nami pocztą, możesz napisać na adres:",
+      "ADDRESS": ["Cibaria HQ", "123 Recipe Lane,", "Foodie City, FL 12345"]
+    },
+    "FOOTER": "Staramy się odpowiadać na wszystkie zapytania w ciągu 2 dni roboczych. Dziękujemy, że jesteś częścią naszej społeczności!"
+  },
+  "PRIVACY_POLICY": {
+    "TITLE": "Polityka prywatności",
+    "COLLECT": {
+      "TITLE": "Jakie informacje zbieramy",
+      "TEXT": "Zbieramy następujące informacje:",
+      "ACCOUNT": "Informacje o koncie: nazwa użytkownika, adres e-mail.",
+      "USAGE": "Dane użytkowania: historia zapisanych przepisów, ulubione listy, komentarze i oceny.",
+      "DEVICE": "Informacje o urządzeniu: typ przeglądarki, adres IP."
+    },
+    "USE": {
+      "TITLE": "Jak wykorzystujemy Twoje informacje",
+      "TEXT": "Wykorzystujemy Twoje dane do:",
+      "SERVICE": "Świadczenia i ulepszania naszych usług, takich jak organizowanie przepisów i dostosowywanie funkcji.",
+      "PERSONALIZE": "Personalizacji Twojego doświadczenia, w tym rekomendowania przepisów na podstawie Twoich preferencji.",
+      "COMMUNICATE": "Komunikowania się w sprawie Twojego konta, w tym aktualizacji i powiadomień.",
+      "ANALYZE": "Analizy wzorców użytkowania na naszej platformie w celu poprawy jej funkcjonalności."
+    },
+    "SHARE": {
+      "TITLE": "Udostępnianie informacji",
+      "TEXT": "Nie sprzedajemy Twoich danych osobowych. Jednak możemy udostępniać informacje:",
+      "PROVIDERS": "Dostawcom usług wspierającym działanie Cibaria, takim jak hosting i analityka.",
+      "LAW": "Organom ścigania, jeśli wymaga tego prawo."
+    },
+    "SECURITY": {
+      "TITLE": "Bezpieczeństwo danych",
+      "TEXT": "Wdrażamy odpowiednie środki bezpieczeństwa, aby chronić Twoje dane. Jednak jako projekt pasjonacki nie możemy zagwarantować pełnego bezpieczeństwa."
+    },
+    "RIGHTS": {
+      "TITLE": "Twoje prawa",
+      "TEXT": "Masz prawo do:",
+      "ACCESS": "Dostępu do swoich danych osobowych przechowywanych na naszej platformie.",
+      "CORRECT": "Poprawiania nieprawidłowych lub nieaktualnych informacji.",
+      "DELETE": "Żądania usunięcia swojego konta wraz z zapisanymi danymi.",
+      "OPT_OUT": "Rezygnacji z otrzymywania komunikacji promocyjnej."
+    },
+    "CONTACT": {
+      "TITLE": "Skontaktuj się z nami",
+      "TEXT": "Jeśli masz jakiekolwiek pytania dotyczące prywatności, skontaktuj się z nami pod adresem:",
+      "MAIL": "support@cibaria.edu"
+    }
+  },
+  "TERMS_OF_SERVICE": {
+    "TITLE": "Warunki korzystania",
+    "ACCEPTANCE": {
+      "TITLE": "Akceptacja warunków",
+      "TEXT": "Korzystając z platformy Cibaria, zgadzasz się na te Warunki korzystania. Jeśli się nie zgadzasz, musisz powstrzymać się od korzystania z naszych usług."
+    },
+    "ELIGIBILITY": {
+      "TITLE": "Kwalifikowalność",
+      "TEXT": "Musisz mieć co najmniej 16 lat, aby korzystać z Cibaria. Rejestrując konto, potwierdzasz, że spełniasz ten wymóg."
+    },
+    "ACCOUNT": {
+      "TITLE": "Rejestracja i bezpieczeństwo konta",
+      "STEPS": {
+        "CONFIDENTIALITY": "Jesteś odpowiedzialny za zachowanie poufności swoich danych logowania do konta.",
+        "NO_SHARING": "Zgadzasz się nie udostępniać swojego konta innym osobom ani nie korzystać z konta innego użytkownika bez jego zgody.",
+        "NOTIFY": "Niezwłocznie powiadom nas pod adresem mailto:support@cibaria.edu, jeśli podejrzewasz nieautoryzowany dostęp do swojego konta."
+      }
+    },
+    "USER_CONTENT": {
+      "TITLE": "Treści tworzone przez użytkowników",
+      "TEXT": "Cibaria umożliwia użytkownikom tworzenie, zapisywanie i udostępnianie treści związanych z przepisami. Przesyłając treści, zgadzasz się na następujące warunki:",
+      "STEPS": {
+        "OWNERSHIP": "Jesteś właścicielem lub masz prawo do korzystania z wszelkich treści, które przesyłasz, w tym tekstów, obrazów i innych materiałów.",
+        "LICENSE": "Udzielasz Cibaria niewyłącznej, wolnej od opłat licencyjnych, globalnej licencji na wyświetlanie, modyfikowanie i dystrybucję Twoich treści w ramach funkcjonowania platformy.",
+        "RESTRICTIONS": "Nie będziesz przesyłać treści, które są obraźliwe, nieodpowiednie lub naruszają prawo lub prawa osób trzecich."
+      }
+    },
+    "PROHIBITED": {
+      "TITLE": "Zakazane działania",
+      "TEXT": "Zgadzasz się nie:",
+      "STEPS": {
+        "ILLEGAL_USE": "Używać platformy do celów lub działań niezgodnych z prawem.",
+        "INTERFERENCE": "Zakłócać funkcjonowania platformy, np. poprzez wprowadzanie złośliwego oprogramowania lub przeprowadzanie skrobania danych.",
+        "HARASSMENT": "Nękać, wykorzystywać lub szkodzić innym użytkownikom."
+      }
+    },
+    "INTELLECTUAL_PROPERTY": {
+      "TITLE": "Własność intelektualna",
+      "TEXT": "Wszystkie funkcje platformy, elementy projektowe i treści, z wyjątkiem treści generowanych przez użytkowników, są własnością Cibaria. Zgadzasz się nie kopiować, nie dystrybuować ani nie wykorzystywać naszej własności intelektualnej bez wcześniejszej pisemnej zgody."
+    },
+    "TERMINATION": {
+      "TITLE": "Zakończenie korzystania",
+      "TEXT": "Zastrzegamy sobie prawo do zawieszenia lub zakończenia Twojego konta, jeśli naruszysz te Warunki korzystania lub podejmiesz działania szkodzące Cibaria lub jej użytkownikom."
+    },
+    "LIABILITY": {
+      "TITLE": "Ograniczenie odpowiedzialności",
+      "TEXT": "Cibaria jest udostępniana „w stanie, w jakim się znajduje”. Nie ponosimy odpowiedzialności za:",
+      "STEPS": {
+        "ERRORS": "Błędy, przerwy lub utratę danych związane z platformą.",
+        "SAFETY": "Jakiekolwiek kwestie zdrowotne lub bezpieczeństwa wynikające z przepisów zamieszczonych przez użytkowników. Zawsze weryfikuj bezpieczeństwo i dokładność przepisów przed ich użyciem."
+      }
+    },
+    "CHANGES": {
+      "TITLE": "Zmiany warunków",
+      "TEXT": "Możemy aktualizować te Warunki korzystania w dowolnym momencie. Znaczące zmiany będą komunikowane za pośrednictwem platformy lub e-maila. Dalsze korzystanie z platformy oznacza akceptację zaktualizowanych warunków."
+    },
+    "GOVERNING_LAW": {
+      "TITLE": "Prawo obowiązujące",
+      "TEXT": "Te Warunki korzystania podlegają prawu Polski. Wszelkie spory będą rozstrzygane przez sądy polskie."
+    },
+    "CONTACT": {
+      "TITLE": "Kontakt",
+      "TEXT": "Jeśli masz pytania lub wątpliwości dotyczące tych Warunków korzystania, skontaktuj się z nami pod adresem <a href='mailto:support@cibaria.edu'>support&#64;cibaria.edu</a>."
+    }
+  }
+}

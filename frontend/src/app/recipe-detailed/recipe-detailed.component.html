@@ -1,0 +1,89 @@
+<main>
+  <app-navbar></app-navbar>
+  <article>
+    <div class="grid-2-cols">
+      <div class="recipe-details">
+        <div class="favourite">
+          <button class="favourite-btn" (click)="addToFav()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="favourite-icon icon"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                fill="none"
+                stroke="white"
+                stroke-linejoin="round"
+                stroke-width="32"
+              />
+            </svg>
+          </button>
+
+          <p class="favourite-text">Add to favourite</p>
+        </div>
+        <h1 class="recipe-title">{{ recipeDetails.recipeName }}</h1>
+        <div class="empty-div"></div>
+      </div>
+      <div class="img-container">
+        <img
+          class="recipe-image"
+          [src]="recipeDetails.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+          alt="{{ recipeDetails.recipeName }}"
+        />
+        <div class="circle"></div>
+      </div>
+    </div>
+
+    <div class="ingredients-servings hidden">
+      <div class="prep-container">
+        <h2><span>Prepare time:</span> {{ recipeDetails.prepareTime }}</h2>
+        <h2><span>Servings:</span> {{ recipeDetails.servings }}</h2>
+        <h2><span>Category:</span> {{ recipeDetails.category }}</h2>
+      </div>
+      <div class="ingredients">
+        <h2>Ingredients:</h2>
+        <ul>
+          @for (recipe of recipeDetails.ingredients; track $index){
+          <li>
+            <input
+              #checkbox
+              [className]="checkbox.checked ? 'checked' : ''"
+              type="checkbox"
+              [name]="recipe.ingredientName"
+              (change)="check()"
+            /><label [for]="recipe.ingredientName"
+              ><span>{{ recipe.ingredientName }}</span>
+              <span class="quantity-unit">
+                {{ recipe.quantity }} {{ recipe.unit }}</span
+              ></label
+            >
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="steps">
+      @for (step of recipeDetails.steps; track $index){
+      <div class="step">
+        <h2>Step {{ $index + 1 }}</h2>
+        <p>{{ step.content }}</p>
+        <hr />
+      </div>
+      <div class="icon-container">
+        <img
+          class="icon"
+          src="images/icons/arrow-down-outline.svg"
+          alt="arrow down icon"
+        />
+      </div>
+      }
+
+      <div class="end">
+        <h2>Enjoy ʕっ•ᴥ•ʔっ</h2>
+      </div>
+    </div>
+  </article>
+</main>
+
+<app-footer-section></app-footer-section>

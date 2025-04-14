@@ -1,143 +1,87 @@
 <main class="priavcy-policy-main">
-  <nav>
-    <a href="" [routerLink]="['/']"
-      ><img src="images/Cibaria.png" alt="Cibaria logo" class="logo"
-    /></a>
-    <ul class="nav-links">
-      <li>
-        <a class="nav-link" href="" [routerLink]="['']">Home</a>
-      </li>
-      <li>
-        <a class="nav-link" href="" [routerLink]="['/about-us']">About Us</a>
-      </li>
-      <li><a class="nav-link" href="" routerLink="/recipes">Recipes</a></li>
-      <li><a class="nav-link" href="" routerLink="/contact">Contact</a></li>
-      <li><a class="nav-link" href="" routerLink="/login">Login</a></li>
-    </ul>
-  </nav>
+  <app-navbar></app-navbar>
   <section>
     <article class="privacy-policy">
       <div></div>
       <div class="content">
-        <h1>Terms of Service</h1>
+        <h1>{{ "TERMS_OF_SERVICE.TITLE" | translate }}</h1>
 
-        <h2>Acceptance of Terms</h2>
-        <p>
-          WBy using the Cibaria platform, you agree to these Terms of Service.
-          If you do not agree, you must refrain from accessing or using our
-          services.
-        </p>
+        <h2>{{ "TERMS_OF_SERVICE.ACCEPTANCE.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.ACCEPTANCE.TEXT" | translate }}</p>
         <br />
-        <h2>Eligibility</h2>
-        <p>
-          You must be at least 16 years old to use Cibaria. By registering an
-          account, you confirm that you meet this requirement.
-        </p>
+        <h2>{{ "TERMS_OF_SERVICE.ELIGIBILITY.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.ELIGIBILITY.TEXT" | translate }}</p>
         <br />
-        <h2>Account Registration and Security</h2>
+        <h2>{{ "TERMS_OF_SERVICE.ACCOUNT.TITLE" | translate }}</h2>
         <ul class="steps">
           <li class="step">
-            You are responsible for maintaining the confidentiality of your
-            account credentials.
+            {{ "TERMS_OF_SERVICE.ACCOUNT.STEPS.CONFIDENTIALITY" | translate }}
           </li>
           <li class="step">
-            You agree not to share your account with others or use another
-            user’s account without permission.
+            {{ "TERMS_OF_SERVICE.ACCOUNT.STEPS.NO_SHARING" | translate }}
           </li>
           <li class="step">
-            Notify us immediately at
-            <a href="mailto:">support&#64;cibaria.edu</a> if you suspect
-            unauthorized access to your account.
+            {{ "TERMS_OF_SERVICE.ACCOUNT.STEPS.NOTIFY" | translate }}
           </li>
         </ul>
         <br />
-        <h2>User-Generated Content</h2>
-        <p>
-          Cibaria allows users to create, save, and share recipe-related
-          content. By submitting content, you agree to the following:
-        </p>
+        <h2>{{ "TERMS_OF_SERVICE.USER_CONTENT.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.USER_CONTENT.TEXT" | translate }}</p>
         <ul class="steps">
           <li class="step">
-            You own or have permission to use any content you upload, including
-            text, images, and other materials.
+            {{ "TERMS_OF_SERVICE.USER_CONTENT.STEPS.OWNERSHIP" | translate }}
           </li>
           <li class="step">
-            You grant Cibaria a non-exclusive, royalty-free, worldwide license
-            to display, modify, and distribute your content within the platform
-            for purposes related to its operation.
+            {{ "TERMS_OF_SERVICE.USER_CONTENT.STEPS.LICENSE" | translate }}
           </li>
           <li class="step">
-            You will not upload content that is offensive, inappropriate, or
-            violates any laws or third-party rights.
+            {{ "TERMS_OF_SERVICE.USER_CONTENT.STEPS.RESTRICTIONS" | translate }}
           </li>
         </ul>
         <br />
-        <h2>Prohibited Activities</h2>
-        <p>You agree not to:</p>
+        <h2>{{ "TERMS_OF_SERVICE.PROHIBITED.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.PROHIBITED.TEXT" | translate }}</p>
         <ul class="steps">
           <li class="step">
-            Use the platform for illegal purposes or activities.
+            {{ "TERMS_OF_SERVICE.PROHIBITED.STEPS.ILLEGAL_USE" | translate }}
           </li>
           <li class="step">
-            Interfere with the functioning of the platform, such as by
-            introducing malware or engaging in data scraping.
-          </li>
-          <li class="step">Harass, abuse, or harm other users.</li>
-        </ul>
-        <br />
-        <h2>Intellectual Property</h2>
-        <p>
-          All platform features, design elements, and content, except
-          user-generated content, are the property of Cibaria. You agree not to
-          copy, distribute, or use our intellectual property without prior
-          written permission.
-        </p>
-        <br />
-        <h2>Termination of Use</h2>
-        <p>
-          We reserve the right to suspend or terminate your account if you
-          violate these Terms of Service or engage in activities that harm
-          Cibaria or its users.
-        </p>
-        <br />
-        <h2>Limitation of Liability</h2>
-        <p>Cibaria is provided "as is." We are not responsible for:</p>
-        <ul class="steps">
-          <li class="step">
-            Errors, interruptions, or data loss related to the platform.
+            {{ "TERMS_OF_SERVICE.PROHIBITED.STEPS.INTERFERENCE" | translate }}
           </li>
           <li class="step">
-            Any health or safety issues arising from recipes posted by users.
-            Always verify the safety and accuracy of recipes before use.
+            {{ "TERMS_OF_SERVICE.PROHIBITED.STEPS.HARASSMENT" | translate }}
           </li>
         </ul>
         <br />
-        <h2>Intellectual Property</h2>
+        <h2>
+          {{ "TERMS_OF_SERVICE.INTELLECTUAL_PROPERTY.TITLE" | translate }}
+        </h2>
         <p>
-          All platform features, design elements, and content, except
-          user-generated content, are the property of Cibaria. You agree not to
-          copy, distribute, or use our intellectual property without prior
-          written permission.
+          {{ "TERMS_OF_SERVICE.INTELLECTUAL_PROPERTY.TEXT" | translate }}
         </p>
         <br />
-        <h2>Changes to Terms</h2>
-        <p>
-          We may update these Terms of Service at any time. Significant changes
-          will be communicated to you via the platform or email. Continued use
-          of the platform constitutes acceptance of the updated terms.
-        </p>
+        <h2>{{ "TERMS_OF_SERVICE.TERMINATION.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.TERMINATION.TEXT" | translate }}</p>
         <br />
-        <h2>Governing Law</h2>
-        <p>
-          These Terms of Service are governed by the laws of Poland. Any
-          disputes will be resolved in the courts of Poland.
-        </p>
+        <h2>{{ "TERMS_OF_SERVICE.LIABILITY.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.LIABILITY.TEXT" | translate }}</p>
+        <ul class="steps">
+          <li class="step">
+            {{ "TERMS_OF_SERVICE.LIABILITY.STEPS.ERRORS" | translate }}
+          </li>
+          <li class="step">
+            {{ "TERMS_OF_SERVICE.LIABILITY.STEPS.SAFETY" | translate }}
+          </li>
+        </ul>
         <br />
-        <h2>Contact Us</h2>
-        <p>
-          If you have questions or concerns about these Terms of Service, please
-          reach out to us at <a href="mailto:">support&#64;cibaria.edu</a>.
-        </p>
+        <h2>{{ "TERMS_OF_SERVICE.CHANGES.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.CHANGES.TEXT" | translate }}</p>
+        <br />
+        <h2>{{ "TERMS_OF_SERVICE.GOVERNING_LAW.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.GOVERNING_LAW.TEXT" | translate }}</p>
+        <br />
+        <h2>{{ "TERMS_OF_SERVICE.CONTACT.TITLE" | translate }}</h2>
+        <p>{{ "TERMS_OF_SERVICE.CONTACT.TEXT" | translate }}</p>
       </div>
       <div></div>
     </article>

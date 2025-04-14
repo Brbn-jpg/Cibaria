@@ -4,27 +4,38 @@
       <div class="cibaria">
         <h4 class="cibaria-header">Cibaria</h4>
         <p class="cibaria-p">
-          Discover, save, and rate recipes – everything you need to <br />
-          make cooking a joy every day!
+          {{ "FOOTER.TITLE" | translate }}
         </p>
       </div>
       <ul class="major-links">
         <li class="major-link">
           <ul>
-            <li class="link">Extra links</li>
+            <li class="link">{{ "FOOTER.EXTRALINKS.TITLE" | translate }}</li>
             <li class="link">
-              <a href="" [routerLink]="['']">Home</a>
+              <a href="" [routerLink]="['']">{{
+                "FOOTER.EXTRALINKS.LINK1" | translate
+              }}</a>
             </li>
             <li class="link">
-              <a href="" [routerLink]="['/about-us']">About us</a>
+              <a href="" [routerLink]="['/about-us']">{{
+                "FOOTER.EXTRALINKS.LINK2" | translate
+              }}</a>
             </li>
-            <li class="link"><a href="">Recipes</a></li>
-            <li class="link"><a href="">Contact</a></li>
+            <li class="link">
+              <a href="" [routerLink]="['/recipes']">{{
+                "FOOTER.EXTRALINKS.LINK3" | translate
+              }}</a>
+            </li>
+            <li class="link">
+              <a href="" [routerLink]="['/contact']">{{
+                "FOOTER.EXTRALINKS.LINK4" | translate
+              }}</a>
+            </li>
           </ul>
         </li>
         <li class="major-link">
           <ul>
-            <li class="link">Social media</li>
+            <li class="link">Socialmedia</li>
             <li class="link"><a href="">Facebook</a></li>
             <li class="link"><a href="">Instagram</a></li>
             <li class="link"><a href="">TikTok</a></li>
@@ -34,21 +45,23 @@
         </li>
         <li class="major-link">
           <ul>
-            <li class="link">Legal requirements</li>
+            <li class="link">{{ "FOOTER.LEGAL.TITLE" | translate }}</li>
             <li class="link">
-              <a href="" [routerLink]="['/privacy-policy']">Privacy policy</a>
+              <a href="" [routerLink]="['/privacy-policy']">{{
+                "FOOTER.LEGAL.PRIVACY" | translate
+              }}</a>
             </li>
             <li class="link">
-              <a href="" [routerLink]="['/terms-of-service']"
-                >Terms of Service</a
-              >
+              <a href="" [routerLink]="['/terms-of-service']">
+                {{ "FOOTER.LEGAL.TERMS" | translate }}
+              </a>
             </li>
           </ul>
         </li>
       </ul>
     </div>
     <div>
-      <h5>Cibaria &copy;2024 All rights reserved.</h5>
+      <h5>{{ "FOOTER.COPY" | translate }}</h5>
     </div>
   </div>
 </footer>
