@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
 * {
   margin: 0;
   padding: 0;
@@ -7,4 +6,11 @@
 html {
   font-size: 62.5%;
   font-family: sans-serif;
+}
+
+.overflow-h {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
 }

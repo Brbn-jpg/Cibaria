@@ -66,3 +66,31 @@
 h5 {
   font-size: 1.1rem;
 }
+
+@media (max-width: 50em) {
+  .footer-content {
+    gap: 1.2rem;
+  }
+
+  .cibaria-p {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 45em) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .major-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+  }
+
+  .major-link {
+    margin-bottom: 1.6rem;
+  }
+}

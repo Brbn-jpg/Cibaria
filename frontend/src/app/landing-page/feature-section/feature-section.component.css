@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 8rem;
+  /* margin-left: 8rem; */
 }
 
 .catch-phrase {
@@ -35,4 +35,45 @@ img {
   max-width: 48rem;
   height: auto;
   border-radius: 3rem;
+}
+
+@media (max-width: 75em) {
+  img {
+    max-width: 36rem;
+  }
+
+  .catch-div {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 68em) {
+  .grid-2-cols {
+    row-gap: 2.4rem;
+  }
+
+  img {
+    max-width: 28rem;
+  }
+}
+
+@media (max-width: 50em) {
+  .grid-2-cols {
+    row-gap: 2.4rem;
+  }
+}
+
+@media (max-width: 40em) {
+  .grid-2-cols {
+    grid-template-columns: 1fr;
+    row-gap: 2.4rem;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .callendar {
+    grid-row: 4;
+  }
 }

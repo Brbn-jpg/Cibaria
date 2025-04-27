@@ -1,5 +1,9 @@
 <main class="hero-section">
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <article>
     <div class="grid-3-cols">
       <div class="hero-left">
@@ -19,7 +23,7 @@
             "MAINPAGE.BTNINFO" | translate
           }}</a>
         </div>
-        <div class="grid-3-cols">
+        <div class="grid-3-cols trust">
           <div>
             <h3 class="trust-header">{{ "MAINPAGE.10Y" | translate }}</h3>
             <p class="trust-p">
