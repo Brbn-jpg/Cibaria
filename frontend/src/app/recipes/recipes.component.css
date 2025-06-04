@@ -15,7 +15,6 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 label {
@@ -27,7 +26,6 @@ label {
 .filters {
   display: flex;
   justify-content: space-evenly;
-  gap: 2.4rem;
   margin-bottom: 4.8rem;
 }
 
@@ -180,6 +178,20 @@ article {
   transition: all 450ms ease-in-out;
 }
 
+.settings-btn,
+.close {
+  color: #fff;
+  background-color: transparent;
+  border: none;
+}
+
+.close {
+  position: absolute;
+  top: 12rem;
+  left: 5.4rem;
+  z-index: 1000;
+}
+
 .btn:hover {
   order: none;
   box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.102),
@@ -215,6 +227,29 @@ article {
   font-size: 4.6rem;
 }
 
+.settings {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-in;
+
+  gap: 2.4rem;
+}
+
+.menu {
+  position: absolute;
+  gap: 3.6rem;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 900;
+  overflow: hidden;
+}
+
 .servings-input {
   padding: 1rem 3.2rem;
   width: 12rem;
@@ -223,4 +258,73 @@ article {
   border-radius: 1rem;
   color: #fff;
   box-shadow: 0px 1px 3px rgba(255, 255, 255, 0.7);
+}
+
+.settings-icon {
+  height: 4rem;
+  width: 4rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+.active {
+  position: fixed;
+  visibility: visible;
+  z-index: 1000;
+  opacity: 1;
+  pointer-events: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-overlay {
+  position: fixed;
+  content: "";
+  top: 0;
+  left: 0;
+  transform: translate(0%, 0%);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.menu-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 84.5em) {
+}
+/* > 1280px */
+@media (max-width: 80em) {
+  .grid-4-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 50em) {
+  .grid-4-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 35em) {
+  .grid-4-cols {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .pages {
+    width: 100%;
+    white-space: nowrap;
+  }
 }

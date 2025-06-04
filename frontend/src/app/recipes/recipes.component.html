@@ -1,5 +1,9 @@
 <main>
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <article>
     <div class="filters">
       <div class="search filter-wrapper">
@@ -12,6 +16,99 @@
           placeholder="Search for recipes"
         />
       </div>
+      @if (Filtering) { @if (Open){
+      <div class="close-btn">
+        <button class="close" (click)="closeMenu()">
+          <img
+            src="images/mobile-menu/menu-close.svg"
+            alt="close menu"
+            class="settings-icon"
+          />
+        </button>
+      </div>
+      }
+      <div class="settings">
+        <div class="menu-overlay"></div>
+        <div class="filter-wrapper">
+          <label class="settings-label">Filters</label>
+          <button class="settings-btn" (click)="openMenu()">
+            <img
+              src="images/mobile-menu/menu-open.svg"
+              alt="open menu"
+              class="settings-icon"
+            />
+          </button>
+        </div>
+        <div class="menu">
+          <div class="difficulty filter-wrapper">
+            <label for="difficulty">Difficulty</label>
+            <select
+              name="difficulty"
+              id="difficulty"
+              class="filter"
+              (change)="onFilterChange('difficulty', $event)"
+            >
+              <option selected value="0">Choose difficulty</option>
+              <option value="1">Easy</option>
+              <option value="2">Medium</option>
+              <option value="3">Hard</option>
+            </select>
+          </div>
+          <div class="prepare-time filter-wrapper">
+            <label for="prepare-time">Prepare time</label>
+            <div class="inputs">
+              <input
+                type="number"
+                class="prepTime from"
+                (change)="onFilterChange('prepTime', $event)"
+                placeholder="from"
+              />
+              <span> &mdash; </span>
+              <input
+                type="number"
+                class="prepTime to"
+                (change)="onFilterChange('prepTime', $event)"
+                placeholder="to"
+              />
+            </div>
+          </div>
+          <div class="servings filter-wrapper">
+            <label for="servings">Servings</label>
+            <div class="inputs">
+              <input
+                id="servings-from"
+                type="number"
+                (input)="onFilterChange('servings', $event)"
+                class="servings-input from"
+                placeholder="from"
+              />
+              <span> &mdash; </span>
+              <input
+                id="servings-to"
+                type="number"
+                (input)="onFilterChange('servings', $event)"
+                class="servings-input to"
+                placeholder="to"
+              />
+            </div>
+          </div>
+          <div class="category filter-wrapper">
+            <label for="category">Category</label>
+            <select
+              name="category"
+              id="category"
+              class="filter"
+              (change)="onFilterChange('category', $event)"
+            >
+              <option selected value="">Choose category</option>
+              @for (category of categoriesArray; track $index){
+              <option>{{ category }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+      } @else {
       <div class="difficulty filter-wrapper">
         <label for="difficulty">Difficulty</label>
         <select
@@ -78,6 +175,7 @@
           }
         </select>
       </div>
+      }
     </div>
     <hr />
 

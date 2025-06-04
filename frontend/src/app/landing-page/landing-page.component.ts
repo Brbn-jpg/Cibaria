@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { HeroSectionComponent } from './hero-section/hero-section.component';
 import { SliderComponent } from './slider/slider.component';
 import { FeatureSectionComponent } from './feature-section/feature-section.component';
@@ -20,8 +20,15 @@ import { FooterSectionComponent } from '../footer-section/footer-section.compone
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
 })
-export class LandingPageComponent implements AfterViewInit {
-  ngAfterViewInit() {
+export class LandingPageComponent implements OnInit {
+  ngOnInit() {
     window.scrollTo({ top: 0 });
+    this.isMobile = window.innerWidth <= 800;
+  }
+
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800;
   }
 }

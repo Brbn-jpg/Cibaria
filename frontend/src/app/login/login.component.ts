@@ -1,11 +1,12 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     FooterSectionComponent,
     NavbarComponent,
     TranslateModule,
+    MobileNavComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -27,7 +29,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     ]),
   ],
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements OnInit {
   formUsername = '';
   formRetypePassword = '';
   formPassword = '';
@@ -77,8 +79,9 @@ export class LoginComponent implements AfterViewInit {
     this.isEqual = this.formPassword === this.formRetypePassword;
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     window.scrollTo({ top: 0 });
+    this.isMobile = window.innerWidth <= 800;
   }
 
   login = true;
@@ -93,5 +96,11 @@ export class LoginComponent implements AfterViewInit {
 
   changeLanguage(language: string): void {
     this.translate.use(language);
+  }
+
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800 ? true : false;
   }
 }

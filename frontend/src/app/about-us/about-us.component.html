@@ -1,5 +1,9 @@
 <main class="about-us-main">
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <section>
     <article class="about-us">
       <div class="col1">

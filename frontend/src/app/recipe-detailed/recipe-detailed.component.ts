@@ -1,5 +1,5 @@
 import { RecipeService } from '../recipe.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -53,6 +53,7 @@ export class RecipeDetailedComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 800;
     this.route.params.subscribe((params) => {
       this.recipeId = +params['id'];
       if (this.recipeId) {
@@ -110,5 +111,11 @@ export class RecipeDetailedComponent implements OnInit {
   addToFav() {
     const favButton = document.querySelector('path') as SVGPathElement;
     favButton.classList.toggle('active');
+  }
+
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800;
   }
 }

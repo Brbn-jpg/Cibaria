@@ -1,9 +1,20 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+  ElementRef,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { LanguageService } from '../language.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ScrollLockService } from '../scroll-lock.service';
+import { filter } from 'rxjs';
 
 export interface category {
   categoryName: string;
@@ -32,13 +43,19 @@ export interface rating {
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [RouterLink, FooterSectionComponent, NavbarComponent],
+  imports: [
+    RouterLink,
+    FooterSectionComponent,
+    NavbarComponent,
+    MobileNavComponent,
+  ],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })
 export class RecipesComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
   http = inject(HttpClient);
+  el: ElementRef = inject(ElementRef);
   categoriesArray: category[] = [];
   recipesArray: recipesRequest[] = [];
   totalItems: recipesRequest[] = [];
@@ -51,14 +68,34 @@ export class RecipesComponent implements OnInit {
   servingsFrom?: number;
   servingsTo?: number;
   category?: string;
-  totalPages: number = 0;
+  totalPages: number = 1;
   images?: images[];
   query?: string;
+  language: string = 'en';
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
     this.loadCategories();
     this.loadRecipes();
+    this.isMobile = window.innerWidth <= 800;
+    this.Filtering = window.innerWidth <= 1350;
+  }
+
+  constructor(
+    private translate: TranslateService,
+    private languageService: LanguageService,
+    private scrollLockService: ScrollLockService,
+    private router: Router
+  ) {
+    this.languageService.language$.subscribe((language) => {
+      this.language = language;
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe(() => {
+          this.scrollLockService.unlockScroll();
+        });
+    });
+    this.translate.setDefaultLang(this.language);
   }
 
   loadRecipes() {
@@ -223,5 +260,44 @@ export class RecipesComponent implements OnInit {
     this.query = value.trim();
     this.currentPage = 1;
     this.applyFilters();
+  }
+
+  openMenu() {
+    const menu = this.el.nativeElement.querySelector('.menu');
+    const menu_overlay = this.el.nativeElement.querySelector('.menu-overlay');
+    if (menu_overlay) {
+      menu_overlay.classList.add('active');
+    }
+    if (menu) {
+      menu.classList.add('active');
+      this.scrollLockService.lockScroll();
+      this.Open = true;
+    }
+  }
+
+  closeMenu() {
+    const menu = this.el.nativeElement.querySelector('.menu');
+    const menu_overlay = this.el.nativeElement.querySelector('.menu-overlay');
+    if (menu_overlay) {
+      menu_overlay.classList.remove('active');
+    }
+    if (menu) {
+      menu.classList.remove('active');
+      this.scrollLockService.unlockScroll();
+
+      this.Open = false;
+    }
+  }
+
+  Open: boolean = false;
+  isMobile: boolean = false;
+  Filtering: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800 ? true : false;
+    this.Filtering = window.innerWidth <= 1350 ? true : false;
+    if ((this.Open = window.innerWidth <= 1351)) {
+      this.closeMenu();
+    }
   }
 }

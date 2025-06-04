@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { HttpClient } from '@angular/common/http';
@@ -48,6 +48,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
+    this.isMobile = window.innerWidth <= 800;
     this.loadCategories();
     this.loadRecipes();
   }
@@ -190,5 +191,10 @@ export class ProfileComponent implements OnInit {
       default:
         return 'no value';
     }
+  }
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800;
   }
 }

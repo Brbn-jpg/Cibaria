@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   FormsModule,
@@ -54,6 +54,8 @@ export class AddRecipePanelComponent {
   });
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth <= 800;
+
     this.getToken();
   }
 
@@ -164,5 +166,11 @@ export class AddRecipePanelComponent {
         console.error('Wystąpił błąd podczas dodawania przepisu', err);
       },
     });
+  }
+
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800;
   }
 }
