@@ -1,8 +1,20 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { HttpClient } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs';
+import { LanguageService } from '../language.service';
+import { images } from '../recipes/recipes.component';
+import { ScrollLockService } from '../scroll-lock.service';
 
 export interface category {
   categoryName: string;
@@ -26,13 +38,19 @@ export interface rating {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [RouterLink, NavbarComponent, FooterSectionComponent],
+  imports: [
+    RouterLink,
+    NavbarComponent,
+    FooterSectionComponent,
+    MobileNavComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
   http = inject(HttpClient);
+  el: ElementRef = inject(ElementRef);
   categoriesArray: category[] = [];
   recipesArray: recipesRequest[] = [];
   totalItems: recipesRequest[] = [];
@@ -42,15 +60,37 @@ export class ProfileComponent implements OnInit {
   prepTimeFrom?: number;
   prepTimeTo?: number;
   prepTime?: number;
-  servings?: number;
+  servingsFrom?: number;
+  servingsTo?: number;
   category?: string;
-  totalPages: number = 0;
+  totalPages: number = 1;
+  images?: images[];
+  query?: string;
+  language: string = 'en';
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
-    this.isMobile = window.innerWidth <= 800;
     this.loadCategories();
     this.loadRecipes();
+    this.isMobile = window.innerWidth <= 800;
+    this.Filtering = window.innerWidth <= 1350;
+  }
+
+  constructor(
+    private translate: TranslateService,
+    private languageService: LanguageService,
+    private scrollLockService: ScrollLockService,
+    private router: Router
+  ) {
+    this.languageService.language$.subscribe((language) => {
+      this.language = language;
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe(() => {
+          this.scrollLockService.unlockScroll();
+        });
+    });
+    this.translate.setDefaultLang(this.language);
   }
 
   loadRecipes() {
@@ -65,6 +105,7 @@ export class ProfileComponent implements OnInit {
     this.http
       .get<{
         content: recipesRequest[];
+        images: images[];
         totalPages: number;
       }>(this.url, { params })
       .subscribe({
@@ -94,30 +135,40 @@ export class ProfileComponent implements OnInit {
 
     if (this.difficulty) params.difficulty = this.difficulty;
     if (prepTimeFrom || prepTimeTo) {
-      params.prepareTime = `${prepTimeFrom || 0}-${prepTimeTo || ''}`;
+      params.prepareTime = `${prepTimeFrom}-${prepTimeTo}`;
     }
-    if (this.servings) params.servings = this.servings;
+    if (this.servingsFrom !== undefined || this.servingsTo !== undefined) {
+      const servingsFrom = this.servingsFrom ?? 0;
+      const servingsTo = this.servingsTo ?? 99999;
+      params.servings = `${servingsFrom}-${servingsTo}`;
+    }
     if (this.category) params.category = this.category;
+    if (this.query) params.query = this.query;
 
-    this.http
-      .get<{
-        content: recipesRequest[];
-        totalPages: number;
-      }>(this.url, { params })
-      .subscribe({
-        next: (response) => {
-          if (response && Array.isArray(response.content)) {
-            this.recipesArray = response.content;
-            this.totalPages = response.totalPages;
-          } else {
-            console.error(response);
-            this.recipesArray = [];
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
+    console.log('Filters applied:', params);
+
+    const endpoint = this.query ? `${this.url}/searchRecipes` : this.url;
+
+    this.http.get<any>(endpoint, { params }).subscribe({
+      next: (response) => {
+        console.log('Response received:', response);
+
+        if (response && Array.isArray(response.content)) {
+          this.recipesArray = response.content;
+          this.totalPages = response.totalPages;
+        } else if (Array.isArray(response)) {
+          this.recipesArray = response;
+          this.totalPages = Math.ceil(response.length / this.pageSize);
+        } else {
+          console.error('Unexpected response format:', response);
+          this.recipesArray = [];
+        }
+
+        if (this.recipesArray.length === 0) {
+          console.log('No recipes found for the given filters.');
+        }
+      },
+    });
   }
 
   loadCategories() {
@@ -140,7 +191,7 @@ export class ProfileComponent implements OnInit {
   }
 
   onFilterChange(filterName: string, event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
+    const value = (event.target as HTMLInputElement).value;
 
     if (filterName === 'prepTime') {
       const inputClass = (event.target as HTMLInputElement).classList;
@@ -150,13 +201,18 @@ export class ProfileComponent implements OnInit {
       } else if (inputClass.contains('to')) {
         this.prepTimeTo = value ? Number(value) : undefined;
       }
+    } else if (filterName === 'servings') {
+      const inputClass = (event.target as HTMLInputElement).classList;
+
+      if (inputClass.contains('from')) {
+        this.servingsFrom = value ? Number(value) : undefined;
+      } else if (inputClass.contains('to')) {
+        this.servingsTo = value ? Number(value) : undefined;
+      }
     } else {
       switch (filterName) {
         case 'difficulty':
           this.difficulty = Number(value);
-          break;
-        case 'servings':
-          this.servings = Number(value);
           break;
         case 'category':
           this.category = value;
@@ -192,9 +248,51 @@ export class ProfileComponent implements OnInit {
         return 'no value';
     }
   }
+
+  onSearchChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    console.log(value);
+    this.query = value.trim();
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  openMenu() {
+    const menu = this.el.nativeElement.querySelector('.menu');
+    const menu_overlay = this.el.nativeElement.querySelector('.menu-overlay');
+    if (menu_overlay) {
+      menu_overlay.classList.add('active');
+    }
+    if (menu) {
+      menu.classList.add('active');
+      this.scrollLockService.lockScroll();
+      this.Open = true;
+    }
+  }
+
+  closeMenu() {
+    const menu = this.el.nativeElement.querySelector('.menu');
+    const menu_overlay = this.el.nativeElement.querySelector('.menu-overlay');
+    if (menu_overlay) {
+      menu_overlay.classList.remove('active');
+    }
+    if (menu) {
+      menu.classList.remove('active');
+      this.scrollLockService.unlockScroll();
+
+      this.Open = false;
+    }
+  }
+
+  Open: boolean = false;
   isMobile: boolean = false;
+  Filtering: boolean = false;
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
-    this.isMobile = window.innerWidth <= 800;
+    this.isMobile = window.innerWidth <= 800 ? true : false;
+    this.Filtering = window.innerWidth <= 1350 ? true : false;
+    if ((this.Open = window.innerWidth <= 1351)) {
+      this.closeMenu();
+    }
   }
 }

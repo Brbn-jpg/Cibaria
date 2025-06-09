@@ -5,17 +5,8 @@
   <app-mobile-nav></app-mobile-nav>
   }
   <article>
+    @if (recipesArray.length > 0) {
     <div class="filters">
-      <div class="search filter-wrapper">
-        <label for="search">Search</label>
-        <input
-          type="text"
-          id="search"
-          class="search-input"
-          (input)="onSearchChange($event)"
-          placeholder="Search for recipes"
-        />
-      </div>
       @if (Filtering) { @if (Open){
       <div class="close-btn">
         <button class="close" (click)="closeMenu()">
@@ -40,6 +31,16 @@
           </button>
         </div>
         <div class="menu">
+          <div class="search filter-wrapper">
+            <label for="search">Search</label>
+            <input
+              type="text"
+              id="search"
+              class="search-input"
+              (input)="onSearchChange($event)"
+              placeholder="Search for recipes"
+            />
+          </div>
           <div class="difficulty filter-wrapper">
             <label for="difficulty">Difficulty</label>
             <select
@@ -109,6 +110,16 @@
         </div>
       </div>
       } @else {
+      <div class="search filter-wrapper">
+        <label for="search">Search</label>
+        <input
+          type="text"
+          id="search"
+          class="search-input"
+          (input)="onSearchChange($event)"
+          placeholder="Search for recipes"
+        />
+      </div>
       <div class="difficulty filter-wrapper">
         <label for="difficulty">Difficulty</label>
         <select
@@ -178,7 +189,7 @@
       }
     </div>
     <hr />
-
+    }
     <div class="recipes grid-4-cols">
       @for (recipe of recipesArray; track $index) {
       <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
@@ -231,6 +242,7 @@
       <p class="no-recipes">No recipes found</p>
       }
     </div>
+    @if (recipesArray.length > 0) {
     <div class="pagination">
       <button
         class="btn"
@@ -248,6 +260,7 @@
         Next
       </button>
     </div>
+    }
   </article>
 </main>
 

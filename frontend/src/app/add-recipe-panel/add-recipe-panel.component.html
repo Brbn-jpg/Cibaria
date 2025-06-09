@@ -1,5 +1,9 @@
 <main class="add-recipe-panel">
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <section>
     <h1>Add a new recipe</h1>
     <form [formGroup]="recipeForm" (submit)="postRecipe()">

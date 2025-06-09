@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import {
   FormsModule,
   FormGroup,
@@ -10,16 +9,17 @@ import {
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { RecipeService } from '../recipe.service';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({
   selector: 'app-add-recipe-panel',
   standalone: true,
   imports: [
-    RouterLink,
     NavbarComponent,
     FooterSectionComponent,
     FormsModule,
     ReactiveFormsModule,
+    MobileNavComponent,
   ],
   templateUrl: './add-recipe-panel.component.html',
   styleUrls: ['./add-recipe-panel.component.css'],

@@ -101,6 +101,6 @@ nav {
 
 @media (max-width: 35em) {
   nav {
-    padding: 2.4rem 2.4rem 2.4rem 2.4rem;
+    padding: 0.6rem 2.4rem;
   }
 }
