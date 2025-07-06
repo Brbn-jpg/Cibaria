@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.formEmail, this.formPassword).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
-        this.router.navigate(['/']);
+        this.router.navigate(['/profile']);
         console.log(response.token);
       },
       error: (err) => {
@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (response) => {
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/']);
+          this.router.navigate(['/profile']);
           console.log(response.token);
         },
         error: (err) => {

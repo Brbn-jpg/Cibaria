@@ -22,12 +22,12 @@ export class MobileNavComponent {
     login: mainUrl + '/login',
   };
 
+  isLoggedIn = false;
+  Open = false;
+
   OnInit(): void {
     this.getToken();
   }
-
-  isLoggedIn = false;
-  Open = false;
 
   getToken(): void {
     if (localStorage.getItem('token')) {

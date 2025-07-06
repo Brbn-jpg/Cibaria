@@ -49,6 +49,7 @@ export interface rating {
 })
 export class ProfileComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
+  urlUser: string = 'http://localhost:8080/api/users/aboutme';
   http = inject(HttpClient);
   el: ElementRef = inject(ElementRef);
   categoriesArray: category[] = [];
@@ -67,11 +68,13 @@ export class ProfileComponent implements OnInit {
   images?: images[];
   query?: string;
   language: string = 'en';
+  username?: string;
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
     this.loadCategories();
     this.loadRecipes();
+    // this.loadUserData();
     this.isMobile = window.innerWidth <= 800;
     this.Filtering = window.innerWidth <= 1350;
   }
@@ -295,4 +298,85 @@ export class ProfileComponent implements OnInit {
       this.closeMenu();
     }
   }
+
+  editProfilePicture(event: Event) {
+    // TODO: Implement posting it to the backend
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = (e: Event) => {
+      const input = e.target as HTMLInputElement;
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0];
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size exceeds 5 MB limit.');
+          return;
+        } else {
+          const reader = new FileReader();
+          console.log('File selected:', file);
+          reader.onload = () => {
+            const profilePicture = document.querySelector('.profile-picture');
+            if (profilePicture) {
+              profilePicture.setAttribute('src', reader.result as string);
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    };
+    fileInput.click();
+  }
+
+  editBackgroundPicture() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.onchange = (e: Event) => {
+      const input = e.target as HTMLInputElement;
+      if (input.files && input.files.length > 0) {
+        const file = input.files[0];
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size exceeds 5 MB limit.');
+          return;
+        } else {
+          const reader = new FileReader();
+          console.log('File selected:', file);
+          reader.onload = () => {
+            const profilePicture = document.querySelector('.background-image');
+            if (profilePicture) {
+              profilePicture.setAttribute('src', reader.result as string);
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    };
+    fileInput.click();
+  }
+
+  // TODO: Uncomment this method when the backend is ready to handle user data
+
+  // loadUserData() {
+  //   this.http.get<any>(this.urlUser, { withCredentials: true }).subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         const profilePicture = document.querySelector('.profile-picture');
+  //         const backgroundImage = document.querySelector('.background-image');
+  //         const usernameElement = document.querySelector('.username');
+  //         if (profilePicture && response.profilePicture) {
+  //           profilePicture.setAttribute('src', response.profilePicture);
+  //         }
+  //         if (backgroundImage && response.backgroundImage) {
+  //           backgroundImage.setAttribute('src', response.backgroundImage);
+  //         }
+  //         if (usernameElement && response.username) {
+  //           usernameElement.textContent = response.username;
+  //           this.username = response.username;
+  //         }
+  //       } else {
+  //         console.error('No user data found');
+  //       }
+  //     },
+  //   });
+  // }
 }

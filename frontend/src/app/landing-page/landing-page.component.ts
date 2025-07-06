@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HeroSectionComponent } from './hero-section/hero-section.component';
 import { SliderComponent } from './slider/slider.component';
 import { FeatureSectionComponent } from './feature-section/feature-section.component';
 import { TestimonialsSectionComponent } from './testimonials-section/testimonials-section.component';
 import { CtaSectionComponent } from './cta-section/cta-section.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-landing-page',
@@ -16,6 +18,8 @@ import { FooterSectionComponent } from '../footer-section/footer-section.compone
     TestimonialsSectionComponent,
     CtaSectionComponent,
     FooterSectionComponent,
+    MobileNavComponent,
+    NavbarComponent,
   ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
@@ -29,6 +33,6 @@ export class LandingPageComponent implements OnInit {
   isMobile: boolean = false;
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
-    this.isMobile = window.innerWidth <= 800;
+    this.isMobile = window.innerWidth <= 800 ? true : false;
   }
 }

@@ -4,20 +4,42 @@
   } @else {
   <app-mobile-nav></app-mobile-nav>
   }
-  <div class="background">
-    <img src="images/gallery/gallery2.webp" alt="" class="background-image" />
+  <div class="background" (click)="editBackgroundPicture()">
+    <div class="background-image-wrapper">
+      <img src="images/gallery/gallery2.webp" alt="" class="background-image" />
+    </div>
+    <div class="background-overlay">
+      <img
+        src="images/icons/edit-icon.svg"
+        alt="Edit profile"
+        class="edit-icon"
+      />
+    </div>
   </div>
 
   <div class="profile-info">
-    <h2 class="username">Username</h2>
+    <h2 class="username">{{ username }}</h2>
     <p class="user-text">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
       necessitatibus nemo ipsam ex quaerat ab nobis aliquam quia odit est!
     </p>
   </div>
 
-  <div class="profile-pic">
-    <img src="images/featured/tom.jpg" alt="" class="profile-picture" />
+  <div class="profile-pic" (click)="editProfilePicture($event)">
+    <div class="profile-pic-wrapper">
+      <img
+        src="images/featured/tom.jpg"
+        alt="Your profile picture"
+        class="profile-picture"
+      />
+    </div>
+    <div class="profile-pic-overlay">
+      <img
+        src="images/icons/edit-icon.svg"
+        alt="Edit profile"
+        class="edit-icon"
+      />
+    </div>
   </div>
 
   <h3>Favourite recipes</h3>

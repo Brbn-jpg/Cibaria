@@ -8,6 +8,8 @@
   min-height: 100%;
   color: #fff;
   padding-bottom: 16rem;
+  min-height: 100vh;
+  padding-top: 12.2rem;
 }
 
 main {
@@ -16,6 +18,7 @@ main {
   border: 1px solid #868e96;
   border-radius: 1rem;
   margin: 0 24rem;
+  height: 100%;
 }
 
 .actions {
