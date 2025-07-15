@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
-import com.kk.cibaria.user.UserEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface RecipeService {

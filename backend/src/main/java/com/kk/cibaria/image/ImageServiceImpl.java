@@ -1,13 +1,10 @@
 package com.kk.cibaria.image;
 
-import com.cloudinary.Cloudinary;
 import com.kk.cibaria.cloudinary.CloudinaryService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ImageServiceImpl implements ImageService {
