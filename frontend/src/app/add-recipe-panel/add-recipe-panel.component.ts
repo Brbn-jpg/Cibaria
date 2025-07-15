@@ -149,7 +149,6 @@ export class AddRecipePanelComponent {
     if (imageInput.files && imageInput.files.length > 0) {
       const file = imageInput.files[0];
       let imageFile = null;
-      console.log('dupa');
       images.onload = (e: any) => {
         imageFile = e.target.result;
       };

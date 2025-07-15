@@ -17,7 +17,6 @@ export class LanguageService {
   }
 
   setLanguage(language: string): void {
-    console.log(language);
     this.languageSubject.next(language);
     localStorage.setItem('language', language);
   }
