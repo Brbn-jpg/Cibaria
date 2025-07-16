@@ -30,6 +30,4 @@ public class CloudinaryConfiguration {
 
         return new Cloudinary(config);
     }
-
-
 }
