@@ -7,15 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.cibaria.dto.FavouriteRequest;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
-import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
-import com.kk.cibaria.user.UserEntity;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
 
 @RestController
 @RequestMapping("/recipes")

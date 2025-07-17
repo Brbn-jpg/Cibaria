@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.crypto.SecretKey;
 
-import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.user.UserEntity;
 import com.kk.cibaria.user.UserRepository;
 import org.springframework.beans.factory.annotation.Value;

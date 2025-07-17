@@ -1,10 +1,7 @@
-version: '3.9'
-
-
 services:
-  cibaria_db:
-    container_name: cibaria_db
-    image: ga3riel/cibaria_db:17
+  cibaria_database:
+    container_name: cibaria_database
+    image: postgres:15-alpine
     ports:
       - 5433:5432
     environment:
@@ -16,13 +13,13 @@ services:
     env_file:
       - .env
 
-  cibaria_app:
-    container_name: cibaria_app
-    image: ga3riel/cibaria_app
+  cibaria_application:
+    container_name: cibaria_application
     build: .
     ports:
       - 8080:8080
     environment:
+      - POSTGRES_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
       - DB_URL=${DB_URL}
       - CLOUD_NAME=${CLOUD_NAME}
@@ -32,7 +29,7 @@ services:
     env_file:
       - .env
     depends_on:
-      - cibaria_db
+      - cibaria_database
 
 volumes:
   pgdata: {}

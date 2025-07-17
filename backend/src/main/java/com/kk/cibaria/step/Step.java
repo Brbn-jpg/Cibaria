@@ -3,7 +3,6 @@ package com.kk.cibaria.step;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kk.cibaria.recipe.Recipe;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

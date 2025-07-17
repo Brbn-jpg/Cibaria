@@ -6,7 +6,7 @@ spring:
     name: cibaria
   datasource:
     url: ${DB_URL}
-    username: cibaria
+    username: ${POSTGRES_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
