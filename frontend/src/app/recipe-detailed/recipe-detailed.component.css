@@ -7,6 +7,7 @@ main {
   );
   color: #fff;
   overflow: hidden;
+  padding-top: 16rem;
 }
 
 /* Article styling  */

@@ -1,9 +1,4 @@
 <main class="hero-section">
-  @if (!isMobile) {
-  <app-navbar></app-navbar>
-  } @else {
-  <app-mobile-nav></app-mobile-nav>
-  }
   <article>
     <div class="grid-3-cols">
       <div class="hero-left">
@@ -44,11 +39,13 @@
           </div>
         </div>
       </div>
-      <img
-        src="images/hero-img.png"
-        alt="{{ 'MAINPAGE.TITLE' | translate }}"
-        class="hero-right-img"
-      />
+      <div class="hero-right">
+        <img
+          src="images/hero-img.png"
+          alt="{{ 'MAINPAGE.TITLE' | translate }}"
+          class="hero-right-img"
+        />
+      </div>
     </div>
   </article>
 </main>

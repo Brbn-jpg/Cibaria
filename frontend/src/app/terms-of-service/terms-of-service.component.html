@@ -1,8 +1,11 @@
-<main class="priavcy-policy-main">
+<main class="terms-of-service-main">
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <section>
-    <article class="privacy-policy">
-      <div></div>
+    <article class="terms-of-service">
       <div class="content">
         <h1>{{ "TERMS_OF_SERVICE.TITLE" | translate }}</h1>
 
@@ -83,7 +86,6 @@
         <h2>{{ "TERMS_OF_SERVICE.CONTACT.TITLE" | translate }}</h2>
         <p>{{ "TERMS_OF_SERVICE.CONTACT.TEXT" | translate }}</p>
       </div>
-      <div></div>
     </article>
   </section>
 </main>

@@ -1,5 +1,9 @@
 <section class="login-register">
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <main>
     @if(login){
     <div @showSection class="login">

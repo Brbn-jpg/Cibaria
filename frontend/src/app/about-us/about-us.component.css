@@ -9,6 +9,7 @@
   width: 100vw;
   color: #fff;
   overflow: hidden;
+  padding-top: 16rem;
 }
 
 /* text styling */
@@ -34,4 +35,16 @@
 
 .about-us-img {
   width: 100%;
+}
+
+@media (max-width: 50em) {
+  .about-us {
+    grid-template-columns: 1fr;
+    margin: 0 2.4rem;
+    gap: 2.4rem;
+  }
+
+  .about-us-img {
+    display: none;
+  }
 }

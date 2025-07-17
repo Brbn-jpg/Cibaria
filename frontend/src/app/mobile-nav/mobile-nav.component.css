@@ -29,11 +29,19 @@
 }
 
 nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: transparent;
+}
+
+.wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 2.4rem 4.8rem 2.4rem 4.8rem;
-  z-index: 999;
   position: relative;
 }
 
@@ -100,7 +108,7 @@ nav {
 }
 
 @media (max-width: 35em) {
-  nav {
-    padding: 2.4rem 2.4rem 2.4rem 2.4rem;
+  .wrapper {
+    padding: 0.6rem 2.4rem;
   }
 }

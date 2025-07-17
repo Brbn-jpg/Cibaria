@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, HostListener } from '@angular/core';
 import {
   FormsModule,
   FormGroup,
@@ -10,16 +9,17 @@ import {
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { RecipeService } from '../recipe.service';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({
   selector: 'app-add-recipe-panel',
   standalone: true,
   imports: [
-    RouterLink,
     NavbarComponent,
     FooterSectionComponent,
     FormsModule,
     ReactiveFormsModule,
+    MobileNavComponent,
   ],
   templateUrl: './add-recipe-panel.component.html',
   styleUrls: ['./add-recipe-panel.component.css'],
@@ -54,6 +54,8 @@ export class AddRecipePanelComponent {
   });
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth <= 800;
+
     this.getToken();
   }
 
@@ -147,7 +149,6 @@ export class AddRecipePanelComponent {
     if (imageInput.files && imageInput.files.length > 0) {
       const file = imageInput.files[0];
       let imageFile = null;
-      console.log('dupa');
       images.onload = (e: any) => {
         imageFile = e.target.result;
       };
@@ -159,10 +160,18 @@ export class AddRecipePanelComponent {
     this.recipeService.postRecipe(formData).subscribe({
       next: (response) => {
         console.log('Przepis został dodany pomyślnie!', response);
+        this.success = true;
       },
       error: (err) => {
         console.error('Wystąpił błąd podczas dodawania przepisu', err);
+        this.FailedToAdd = true;
       },
     });
+  }
+
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800;
   }
 }

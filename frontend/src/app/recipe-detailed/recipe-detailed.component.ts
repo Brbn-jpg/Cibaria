@@ -1,5 +1,5 @@
 import { RecipeService } from '../recipe.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -53,11 +53,13 @@ export class RecipeDetailedComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 800;
     this.route.params.subscribe((params) => {
       this.recipeId = +params['id'];
       if (this.recipeId) {
         this.recipeService.loadRecipeDetails(this.recipeId).subscribe({
           next: (response) => {
+            console.log('Recipe details loaded:', response);
             this.recipeDetails = response;
             this.ingredients = this.recipeDetails.ingredients.map(
               (ingredient) => ({
@@ -110,5 +112,24 @@ export class RecipeDetailedComponent implements OnInit {
   addToFav() {
     const favButton = document.querySelector('path') as SVGPathElement;
     favButton.classList.toggle('active');
+    this.recipeService.addToFavourites(this.recipeId).subscribe({
+      next: (response) => {
+        if (response === null) {
+          console.log('Recipe added to favourites, but backend returned null.');
+        } else {
+          console.log('Recipe added to favourites:', response);
+        }
+      },
+      error: (err) => {
+        console.error('Error adding recipe to favourites:', err);
+        console.log('Recipe ID:', this.recipeId);
+      },
+    });
+  }
+
+  isMobile: boolean = false;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.isMobile = window.innerWidth <= 800;
   }
 }
