@@ -160,9 +160,11 @@ export class AddRecipePanelComponent {
     this.recipeService.postRecipe(formData).subscribe({
       next: (response) => {
         console.log('Przepis został dodany pomyślnie!', response);
+        this.success = true;
       },
       error: (err) => {
         console.error('Wystąpił błąd podczas dodawania przepisu', err);
+        this.FailedToAdd = true;
       },
     });
   }

@@ -22,14 +22,14 @@
 
           <p class="favourite-text">Add to favourite</p>
         </div>
-        <h1 class="recipe-title">{{ recipeDetails.recipeName }}</h1>
+        <h1 class="recipe-title">{{ recipeDetails?.recipeName }}</h1>
         <div class="empty-div"></div>
       </div>
       <div class="img-container">
         <img
           class="recipe-image"
-          [src]="recipeDetails.images?.[0]?.imageUrl || 'images/Cibaria.png'"
-          alt="{{ recipeDetails.recipeName }}"
+          [src]="recipeDetails?.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+          alt="{{ recipeDetails?.recipeName }}"
         />
         <div class="circle"></div>
       </div>
@@ -37,14 +37,14 @@
 
     <div class="ingredients-servings hidden">
       <div class="prep-container">
-        <h2><span>Prepare time:</span> {{ recipeDetails.prepareTime }}</h2>
-        <h2><span>Servings:</span> {{ recipeDetails.servings }}</h2>
-        <h2><span>Category:</span> {{ recipeDetails.category }}</h2>
+        <h2><span>Prepare time:</span> {{ recipeDetails?.prepareTime }}</h2>
+        <h2><span>Servings:</span> {{ recipeDetails?.servings }}</h2>
+        <h2><span>Category:</span> {{ recipeDetails?.category }}</h2>
       </div>
       <div class="ingredients">
         <h2>Ingredients:</h2>
         <ul>
-          @for (recipe of recipeDetails.ingredients; track $index){
+          @for (recipe of recipeDetails?.ingredients; track $index){
           <li>
             <input
               #checkbox
@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="steps">
-      @for (step of recipeDetails.steps; track $index){
+      @for (step of recipeDetails?.steps; track $index){
       <div class="step">
         <h2>Step {{ $index + 1 }}</h2>
         <p>{{ step.content }}</p>

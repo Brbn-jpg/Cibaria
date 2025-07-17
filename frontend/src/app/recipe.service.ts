@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Recipe } from './recipe-detailed/recipe-detailed.component';
@@ -8,14 +8,24 @@ import { Recipe } from './recipe-detailed/recipe-detailed.component';
 })
 export class RecipeService {
   constructor(private http: HttpClient) {}
-
+  url = 'http://localhost:8080/api/recipes';
   loadRecipeDetails(recipeId: number): Observable<Recipe> {
-    return this.http.get<Recipe>(
-      `http://localhost:8080/api/recipes/${recipeId}`
-    );
+    return this.http.get<Recipe>(`${this.url}/${recipeId}`);
   }
 
   postRecipe(recipeData: FormData): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/api/recipes', recipeData);
+    return this.http.post<any>(this.url, recipeData);
+  }
+
+  addToFavourites(recipeId: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : undefined;
+    return this.http.post<any>(
+      this.url + '/favourites/add',
+      { recipeId },
+      { headers }
+    );
   }
 }
