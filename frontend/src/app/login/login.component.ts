@@ -3,7 +3,7 @@ import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';

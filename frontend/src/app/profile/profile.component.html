@@ -43,7 +43,7 @@
   </div>
 
   <h3>Favourite recipes</h3>
-  @if (recipesArray.length > 0) {
+  @if (favouriteRecipes.length > 0) {
   <div class="filters">
     @if (Filtering) { @if (Open){
     <div class="close-btn">
@@ -230,11 +230,15 @@
   <hr />
   }
   <div class="recipes grid-4-cols">
-    @for (recipe of recipesArray; track $index) {
+    @for (recipe of favouriteRecipes; track $index) {
     <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
       ><figure class="recipe">
         <div class="image-wrapper">
-          <img class="recipe-image" src="images/gallery/gallery1.webp" alt="" />
+          <img
+            class="recipe-image"
+            [src]="recipe?.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
+            alt="{{ recipe?.recipeName }}"
+          />
         </div>
         <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
         <div class="recipe-desc">
@@ -273,12 +277,12 @@
         </div>
       </figure></a
     >
-    } @if (recipesArray.length === 0) {
+    } @if (favouriteRecipes.length === 0) {
     <p class="no-recipes">No recipes found</p>
     }
   </div>
 
-  @if (recipesArray.length > 0) {
+  @if (favouriteRecipes.length > 0) {
   <div class="pagination">
     <button
       class="btn"

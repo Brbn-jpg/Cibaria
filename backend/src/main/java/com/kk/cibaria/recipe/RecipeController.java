@@ -12,6 +12,9 @@ import jakarta.validation.constraints.Min;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -65,8 +68,13 @@ public class RecipeController {
   @DeleteMapping("/{id}")
   public void delete(@PathVariable int id) {
     recipeService.delete(id);
-  }
+  } 
 
+  @GetMapping("/favourites/isFavourite")
+  public boolean isRecipeFavourite(@RequestHeader("Authorization") String token,
+                                   @RequestParam int recipeId) {
+    return recipeService.isRecipeFavourite(token, recipeId);
+  }
 
   @PostMapping("/favourites/add")
   public void addRecipeToFavourites(@RequestHeader("Authorization") String token,

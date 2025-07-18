@@ -12,27 +12,35 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs';
-import { LanguageService } from '../language.service';
+import { LanguageService } from '../services/language.service';
 import { images } from '../recipes/recipes.component';
-import { ScrollLockService } from '../scroll-lock.service';
+import { ScrollLockService } from '../services/scroll-lock.service';
+import { ProfileService } from '../services/profile.service';
 
 export interface category {
   categoryName: string;
 }
 
-export interface recipesRequest {
-  id: number;
-  recipeName: string;
-  difficulty: number;
-  prepareTime: number;
-  servings: number;
-  category: string;
-  ratings: rating[];
+export interface UserProfileResponse {
+  photoUrl: string | null;
+  username: string;
+  favourites: FavouriteRecipe[];
 }
 
-export interface rating {
-  ratingId: number;
-  value: number;
+export interface FavouriteRecipe {
+  id: number;
+  imageUrl: ImageUrl[];
+  recipeName: string;
+  servings: number;
+  difficulty: number;
+  prepareTime: number;
+  category: string;
+  ratings: number;
+}
+
+export interface ImageUrl {
+  id: number;
+  imageUrl: string;
 }
 
 @Component({
@@ -49,12 +57,13 @@ export interface rating {
 })
 export class ProfileComponent implements OnInit {
   url: string = 'http://localhost:8080/api/recipes';
-  urlUser: string = 'http://localhost:8080/api/users/aboutme';
   http = inject(HttpClient);
   el: ElementRef = inject(ElementRef);
   categoriesArray: category[] = [];
-  recipesArray: recipesRequest[] = [];
-  totalItems: recipesRequest[] = [];
+
+  favouriteRecipes: FavouriteRecipe[] = [];
+  filteredFavouriteRecipes: FavouriteRecipe[] = [];
+
   currentPage: number = 1;
   pageSize: number = 12;
   difficulty?: number;
@@ -69,12 +78,12 @@ export class ProfileComponent implements OnInit {
   query?: string;
   language: string = 'en';
   username?: string;
+  userPhotoUrl: string | null = null;
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
     this.loadCategories();
-    this.loadRecipes();
-    // this.loadUserData();
+    this.loadUserData();
     this.isMobile = window.innerWidth <= 800;
     this.Filtering = window.innerWidth <= 1350;
   }
@@ -83,6 +92,7 @@ export class ProfileComponent implements OnInit {
     private translate: TranslateService,
     private languageService: LanguageService,
     private scrollLockService: ScrollLockService,
+    private profileService: ProfileService,
     private router: Router
   ) {
     this.languageService.language$.subscribe((language) => {
@@ -96,101 +106,56 @@ export class ProfileComponent implements OnInit {
     this.translate.setDefaultLang(this.language);
   }
 
-  loadRecipes() {
-    const params: {
-      page: number;
-      size: number;
-    } = {
-      page: this.currentPage,
-      size: this.pageSize,
-    };
-
-    this.http
-      .get<{
-        content: recipesRequest[];
-        images: images[];
-        totalPages: number;
-      }>(this.url, { params })
-      .subscribe({
-        next: (response) => {
-          if (response && Array.isArray(response.content)) {
-            this.recipesArray = response.content;
-            this.totalPages = response.totalPages;
-          } else {
-            console.error(response);
-            this.recipesArray = [];
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-  }
-
   applyFilters() {
-    const params: any = {
-      page: this.currentPage,
-      size: this.pageSize,
-    };
+    let filtered = [...this.favouriteRecipes];
 
-    const prepTimeTo = this.prepTimeTo ?? 99999;
-    const prepTimeFrom = this.prepTimeFrom ?? 0;
-
-    if (this.difficulty) params.difficulty = this.difficulty;
-    if (prepTimeFrom || prepTimeTo) {
-      params.prepareTime = `${prepTimeFrom}-${prepTimeTo}`;
+    if (this.difficulty) {
+      filtered = filtered.filter(
+        (recipe) => recipe.difficulty === this.difficulty
+      );
     }
+
+    if (this.prepTimeFrom !== undefined || this.prepTimeTo !== undefined) {
+      const prepTimeFrom = this.prepTimeFrom ?? 0;
+      const prepTimeTo = this.prepTimeTo ?? 99999;
+      filtered = filtered.filter(
+        (recipe) =>
+          recipe.prepareTime >= prepTimeFrom && recipe.prepareTime <= prepTimeTo
+      );
+    }
+
     if (this.servingsFrom !== undefined || this.servingsTo !== undefined) {
       const servingsFrom = this.servingsFrom ?? 0;
       const servingsTo = this.servingsTo ?? 99999;
-      params.servings = `${servingsFrom}-${servingsTo}`;
+      filtered = filtered.filter(
+        (recipe) =>
+          recipe.servings >= servingsFrom && recipe.servings <= servingsTo
+      );
     }
-    if (this.category) params.category = this.category;
-    if (this.query) params.query = this.query;
 
-    console.log('Filters applied:', params);
+    if (this.category) {
+      filtered = filtered.filter((recipe) => recipe.category === this.category);
+    }
 
-    const endpoint = this.query ? `${this.url}/searchRecipes` : this.url;
+    if (this.query) {
+      const queryLower = this.query.toLowerCase();
+      filtered = filtered.filter((recipe) =>
+        recipe.recipeName.toLowerCase().includes(queryLower)
+      );
+    }
 
-    this.http.get<any>(endpoint, { params }).subscribe({
-      next: (response) => {
-        console.log('Response received:', response);
-
-        if (response && Array.isArray(response.content)) {
-          this.recipesArray = response.content;
-          this.totalPages = response.totalPages;
-        } else if (Array.isArray(response)) {
-          this.recipesArray = response;
-          this.totalPages = Math.ceil(response.length / this.pageSize);
-        } else {
-          console.error('Unexpected response format:', response);
-          this.recipesArray = [];
-        }
-
-        if (this.recipesArray.length === 0) {
-          console.log('No recipes found for the given filters.');
-        }
-      },
-    });
+    this.filteredFavouriteRecipes = filtered;
+    this.totalPages = Math.ceil(filtered.length / this.pageSize);
   }
 
   loadCategories() {
-    this.http
-      .get<{ content: any[] }>('http://localhost:8080/api/recipes')
-      .subscribe({
-        next: (response) => {
-          if (response && Array.isArray(response.content)) {
-            this.categoriesArray = Array.from(
-              new Set(response.content.map((recipe) => recipe.category))
-            ).sort();
-          } else {
-            console.error('Unexpected response format', response);
-          }
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
+    if (this.favouriteRecipes.length > 0) {
+      this.categoriesArray = Array.from(
+        new Set(this.favouriteRecipes.map((recipe) => recipe.category))
+      )
+        .sort()
+        .map((categoryName) => ({ categoryName }));
+    }
   }
 
   onFilterChange(filterName: string, event: Event) {
@@ -229,14 +194,10 @@ export class ProfileComponent implements OnInit {
 
   onPageChange(page: number) {
     this.currentPage = page;
-    this.loadRecipes();
   }
 
-  getAverageRating(ratings: rating[]) {
-    if (ratings.length === 0) {
-      return 0;
-    }
-    return ratings.reduce((x, y) => x + y.value, 0);
+  getAverageRating(avgRating: number): number {
+    return avgRating;
   }
 
   getDifficulty(difficulty: number) {
@@ -254,7 +215,6 @@ export class ProfileComponent implements OnInit {
 
   onSearchChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
-    console.log(value);
     this.query = value.trim();
     this.currentPage = 1;
     this.applyFilters();
@@ -313,7 +273,6 @@ export class ProfileComponent implements OnInit {
           return;
         } else {
           const reader = new FileReader();
-          console.log('File selected:', file);
           reader.onload = () => {
             const profilePicture = document.querySelector('.profile-picture');
             if (profilePicture) {
@@ -340,7 +299,6 @@ export class ProfileComponent implements OnInit {
           return;
         } else {
           const reader = new FileReader();
-          console.log('File selected:', file);
           reader.onload = () => {
             const profilePicture = document.querySelector('.background-image');
             if (profilePicture) {
@@ -354,29 +312,28 @@ export class ProfileComponent implements OnInit {
     fileInput.click();
   }
 
-  // TODO: Uncomment this method when the backend is ready to handle user data
+  loadUserData() {
+    this.profileService.getUserProfile().subscribe({
+      next: (response: UserProfileResponse) => {
+        if (response) {
+          this.username = response.username;
+          this.userPhotoUrl = response.photoUrl;
+          this.favouriteRecipes = response.favourites;
+          this.filteredFavouriteRecipes = [...this.favouriteRecipes];
 
-  // loadUserData() {
-  //   this.http.get<any>(this.urlUser, { withCredentials: true }).subscribe({
-  //     next: (response) => {
-  //       if (response) {
-  //         const profilePicture = document.querySelector('.profile-picture');
-  //         const backgroundImage = document.querySelector('.background-image');
-  //         const usernameElement = document.querySelector('.username');
-  //         if (profilePicture && response.profilePicture) {
-  //           profilePicture.setAttribute('src', response.profilePicture);
-  //         }
-  //         if (backgroundImage && response.backgroundImage) {
-  //           backgroundImage.setAttribute('src', response.backgroundImage);
-  //         }
-  //         if (usernameElement && response.username) {
-  //           usernameElement.textContent = response.username;
-  //           this.username = response.username;
-  //         }
-  //       } else {
-  //         console.error('No user data found');
-  //       }
-  //     },
-  //   });
-  // }
+          this.loadCategories();
+        }
+      },
+    });
+  }
+
+  getFavouriteAverageRating(avgRating: number): number {
+    return avgRating;
+  }
+
+  get paginatedFavouriteRecipes(): FavouriteRecipe[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.filteredFavouriteRecipes.slice(startIndex, endIndex);
+  }
 }

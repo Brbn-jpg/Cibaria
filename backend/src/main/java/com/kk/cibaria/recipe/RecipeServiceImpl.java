@@ -150,6 +150,15 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
+  public boolean isRecipeFavourite(String token, int recipeId) {
+    int id = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User was not found"));
+    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new RecipeNotFoundException("Recipe was not found"));
+
+    return user.getFavouriteRecipes().contains(recipe);
+  }
+
+  @Override
   public void addRecipeToFavourites(String token, int recipeId) {
     int id = jwtService.extractId(token.substring(7));
     UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));

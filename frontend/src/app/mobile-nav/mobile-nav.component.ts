@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { LanguageService } from '../language.service';
-import { ScrollLockService } from '../scroll-lock.service';
+import { LanguageService } from '../services/language.service';
+import { ScrollLockService } from '../services/scroll-lock.service';
 import { filter } from 'rxjs';
 
 const mainUrl = 'http://localhost:4200/';

@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
-import { RecipeService } from '../recipe.service';
+import { RecipeService } from '../services/recipe.service';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({

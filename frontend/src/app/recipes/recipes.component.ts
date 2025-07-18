@@ -11,9 +11,9 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
-import { LanguageService } from '../language.service';
+import { LanguageService } from '../services/language.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ScrollLockService } from '../scroll-lock.service';
+import { ScrollLockService } from '../services/scroll-lock.service';
 import { filter } from 'rxjs';
 
 export interface category {

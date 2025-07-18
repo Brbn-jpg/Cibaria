@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(
             () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
 
+    
     userFound.setId(id);
     userFound.setUsername(user.getUsername());
     userFound.setPassword(user.getPassword());
@@ -100,6 +101,8 @@ public class UserServiceImpl implements UserService {
     if(!favouriteRecipes.isEmpty()){
       List<MyProfileRecipeDto> recipeDtos = favouriteRecipes.stream().map(recipe -> {
         MyProfileRecipeDto dto = new MyProfileRecipeDto();
+        dto.setId(recipe.getId());
+        dto.setImageUrl(recipe.getImages());
         dto.setRecipeName(recipe.getRecipeName());
         dto.setCategory(recipe.getCategory());
         dto.setServings(recipe.getServings());
