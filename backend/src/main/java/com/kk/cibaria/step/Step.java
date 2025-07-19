@@ -18,7 +18,7 @@ public class Step {
 
     @ManyToOne
     @JoinColumn(name = "recipeId")
-    @JsonBackReference
+    @JsonBackReference("recipe-steps")
     private Recipe recipe;
 
     public Step(String content, Recipe recipe){

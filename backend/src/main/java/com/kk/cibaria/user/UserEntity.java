@@ -1,9 +1,11 @@
 package com.kk.cibaria.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.kk.cibaria.image.Image;
+import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.recipe.Recipe;
 import jakarta.persistence.*;
@@ -42,4 +44,7 @@ public class UserEntity {
   inverseJoinColumns = @JoinColumn(name = "recipe_id"))
   List<Recipe> favouriteRecipes;
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @JsonManagedReference("user-images")
+  private List<Image> images = new ArrayList<>();
 }

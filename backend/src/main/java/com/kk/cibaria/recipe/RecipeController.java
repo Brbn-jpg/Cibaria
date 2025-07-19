@@ -12,8 +12,6 @@ import jakarta.validation.constraints.Min;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -51,6 +49,11 @@ public class RecipeController {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Recipe save(@RequestParam("recipe") String json,
                      @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
+
+     System.out.println("=== KONTROLER ===");
+    System.out.println("JSON: " + json);
+    System.out.println("Images count: " + (images != null ? images.size() : 0));
+    
     ObjectMapper objectMapper = new ObjectMapper();
     RecipeAddDto recipe = objectMapper.readValue(json,RecipeAddDto.class);
     if(images!=null){

@@ -22,8 +22,10 @@ export interface category {
 }
 
 export interface UserProfileResponse {
-  photoUrl: string | null;
+  id: number;
   username: string;
+  photoUrl: string;
+  backgroundUrl: string;
   favourites: FavouriteRecipe[];
 }
 
@@ -61,6 +63,7 @@ export class ProfileComponent implements OnInit {
   el: ElementRef = inject(ElementRef);
   categoriesArray: category[] = [];
 
+  userId!: number;
   favouriteRecipes: FavouriteRecipe[] = [];
   filteredFavouriteRecipes: FavouriteRecipe[] = [];
 
@@ -79,6 +82,7 @@ export class ProfileComponent implements OnInit {
   language: string = 'en';
   username?: string;
   userPhotoUrl: string | null = null;
+  backgroundImageUrl: string | null = null;
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
@@ -259,65 +263,22 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  editProfilePicture(event: Event) {
-    // TODO: Implement posting it to the backend
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.onchange = (e: Event) => {
-      const input = e.target as HTMLInputElement;
-      if (input.files && input.files.length > 0) {
-        const file = input.files[0];
-        if (file.size > 5 * 1024 * 1024) {
-          alert('File size exceeds 5 MB limit.');
-          return;
-        } else {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const profilePicture = document.querySelector('.profile-picture');
-            if (profilePicture) {
-              profilePicture.setAttribute('src', reader.result as string);
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-    };
-    fileInput.click();
+  onEditProfilePicture(event: Event) {
+    this.profileService.editProfilePicture(this.userId, event);
   }
 
-  editBackgroundPicture() {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.onchange = (e: Event) => {
-      const input = e.target as HTMLInputElement;
-      if (input.files && input.files.length > 0) {
-        const file = input.files[0];
-        if (file.size > 5 * 1024 * 1024) {
-          alert('File size exceeds 5 MB limit.');
-          return;
-        } else {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const profilePicture = document.querySelector('.background-image');
-            if (profilePicture) {
-              profilePicture.setAttribute('src', reader.result as string);
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-    };
-    fileInput.click();
+  onEditBackgroundPicture(event: Event) {
+    this.profileService.editBackgroundPicture(this.userId, event);
   }
 
   loadUserData() {
     this.profileService.getUserProfile().subscribe({
       next: (response: UserProfileResponse) => {
         if (response) {
+          this.userId = response.id;
           this.username = response.username;
           this.userPhotoUrl = response.photoUrl;
+          this.backgroundImageUrl = response.backgroundUrl;
           this.favouriteRecipes = response.favourites;
           this.filteredFavouriteRecipes = [...this.favouriteRecipes];
 

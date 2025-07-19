@@ -4,9 +4,14 @@
   } @else {
   <app-mobile-nav></app-mobile-nav>
   }
-  <div class="background" (click)="editBackgroundPicture()">
+  <div class="background" (click)="onEditBackgroundPicture($event)">
     <div class="background-image-wrapper">
-      <img src="images/gallery/gallery2.webp" alt="" class="background-image" />
+      <img
+        [src]="backgroundImageUrl || 'images/gallery/gallery2.webp'"
+        crossorigin="anonymous"
+        alt=""
+        class="background-image"
+      />
     </div>
     <div class="background-overlay">
       <img
@@ -25,10 +30,11 @@
     </p>
   </div>
 
-  <div class="profile-pic" (click)="editProfilePicture($event)">
+  <div class="profile-pic" (click)="onEditProfilePicture($event)">
     <div class="profile-pic-wrapper">
       <img
-        src="images/featured/tom.jpg"
+        [src]="userPhotoUrl || 'images/featured/tom.jpg'"
+        crossorigin="anonymous"
         alt="Your profile picture"
         class="profile-picture"
       />

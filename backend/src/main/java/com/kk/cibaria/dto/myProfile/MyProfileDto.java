@@ -6,7 +6,9 @@ import java.util.List;
 
 @Data
 public class MyProfileDto {
-    private String photoUrl = null;
+    private int id;
+    private String photoUrl;
+    private String backgroundUrl;
     private String username;
     private List<MyProfileRecipeDto> favourites;
 }

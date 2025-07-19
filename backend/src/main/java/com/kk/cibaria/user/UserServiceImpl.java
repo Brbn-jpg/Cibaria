@@ -1,7 +1,9 @@
 package com.kk.cibaria.user;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.kk.cibaria.recipe.Recipe;
 import com.kk.cibaria.dto.auth.RegisterDto;
@@ -11,10 +13,18 @@ import com.kk.cibaria.dto.myProfile.MyProfileRecipeDto;
 import com.kk.cibaria.exception.UserEmailAlreadyExistException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
+import com.kk.cibaria.cloudinary.CloudinaryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kk.cibaria.exception.UserNotFoundException;
+import com.kk.cibaria.image.Image;
+import com.kk.cibaria.image.ImageService;
+import com.kk.cibaria.image.ImageRepository;
+import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.rating.Rating;
 
 @Service
@@ -24,12 +34,24 @@ public class UserServiceImpl implements UserService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final UserDetailService userDetailService;
+  private final ImageService imageService;
+  private final CloudinaryService cloudinaryService;
+  private final ImageRepository imageRepository;
 
-  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, UserDetailService userDetailService) {
+  public UserServiceImpl(UserRepository userRepository, 
+                        PasswordEncoder passwordEncoder, 
+                        JwtService jwtService, 
+                        UserDetailService userDetailService, 
+                        ImageService imageService,
+                        CloudinaryService cloudinaryService,
+                        ImageRepository imageRepository) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
-      this.jwtService = jwtService;
-      this.userDetailService = userDetailService;
+    this.jwtService = jwtService;
+    this.userDetailService = userDetailService;
+    this.imageService = imageService;
+    this.cloudinaryService = cloudinaryService;
+    this.imageRepository = imageRepository;
   }
 
   @Override
@@ -66,7 +88,6 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(
             () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
 
-    
     userFound.setId(id);
     userFound.setUsername(user.getUsername());
     userFound.setPassword(user.getPassword());
@@ -82,11 +103,85 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Transactional
+  public String updateProfilePicture(int userId, MultipartFile file) throws IOException {
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+
+    deleteExistingImage(user, ImageType.PROFILE_PICTURE);
+    
+    user = userRepository.findById(userId).get();
+    
+    Image image = createUserImage(file, user, ImageType.PROFILE_PICTURE);
+    return image.getImageUrl();
+  }
+
+  @Override
+  @Transactional
+  public String updateBackgroundPicture(int userId, MultipartFile file) throws IOException {
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+
+    deleteExistingImage(user, ImageType.BACKGROUND_PICTURE);
+    
+    user = userRepository.findById(userId).get();
+    
+    Image image = createUserImage(file, user, ImageType.BACKGROUND_PICTURE);
+    return image.getImageUrl();
+  }
+
+  @Override
   public void delete(int id) {
     UserEntity user = userRepository.findById(id).orElseThrow(
         () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
 
     userRepository.delete(user);
+  }
+
+  // Helper methods
+  public String getProfilePicture(UserEntity user) {
+    return user.getImages().stream()
+      .filter(image -> image.getImageType() == ImageType.PROFILE_PICTURE)
+      .findFirst()
+      .map(Image::getImageUrl)
+      .orElse(null);
+  }
+
+  public String getBackgroundPicture(UserEntity user) {
+    return user.getImages().stream()
+      .filter(image -> image.getImageType() == ImageType.BACKGROUND_PICTURE)
+      .findFirst()
+      .map(Image::getImageUrl)
+      .orElse(null);
+  }
+
+  private void deleteExistingImage(UserEntity user, ImageType imageType) {
+    List<Image> imagesToDelete = user.getImages().stream()
+        .filter(img -> img.getImageType() == imageType)
+        .collect(Collectors.toList());
+    
+    for (Image img : imagesToDelete) {
+        try {
+            cloudinaryService.removePhoto(img.getPublicId());
+            imageRepository.deleteById(img.getId());
+            user.getImages().remove(img);
+        } catch (Exception e) {
+            System.err.println("Error deleting image: " + e.getMessage());
+        }
+    }
+}
+
+  private Image createUserImage(MultipartFile file, UserEntity user, ImageType imageType) throws IOException {
+    Image image = imageService.createPhoto(file, imageType);
+    
+    image.setUser(user);
+    image.setImageType(imageType);
+    Image savedImage = imageRepository.save(image);
+
+    user.getImages().add(savedImage);
+    userRepository.save(user);
+  
+    return savedImage;
   }
 
   @Override
@@ -95,6 +190,9 @@ public class UserServiceImpl implements UserService {
     UserEntity user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User not found"));
 
     MyProfileDto myProfileDto = new MyProfileDto();
+    myProfileDto.setId(user.getId());
+    myProfileDto.setPhotoUrl(getProfilePicture(user));
+    myProfileDto.setBackgroundUrl(getBackgroundPicture(user));
     myProfileDto.setUsername(user.getUsername());
 
     List<Recipe> favouriteRecipes = user.getFavouriteRecipes();
@@ -110,20 +208,19 @@ public class UserServiceImpl implements UserService {
         dto.setPrepareTime(recipe.getPrepareTime());
 
         int ratings = recipe.getRatings().size();
-        if(ratings>0){
+        if(ratings > 0){
           int ratingSum = recipe.getRatings().stream().mapToInt(Rating::getValue).sum();
-          Long averageRating = (long) (ratingSum/ratings);
+          Long averageRating = (long) (ratingSum / ratings);
           dto.setAvgRating(averageRating);
-        }else{
+        } else {
           dto.setAvgRating(0L);
         }
         return dto;
       }).toList();
       myProfileDto.setFavourites(recipeDtos);
-    }else{
+    } else {
       myProfileDto.setFavourites(null);
     }
     return myProfileDto;
   }
-
 }

@@ -16,7 +16,7 @@ public class ImageController {
 
     @PostMapping("/addPhoto")
     public Image createPhoto(@RequestParam MultipartFile file) throws IOException {
-        return imageService.createPhoto(file);
+        return imageService.createPhoto(file, null);
     }
 
     @PostMapping("/deletePhoto")

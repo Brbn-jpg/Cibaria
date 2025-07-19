@@ -14,6 +14,11 @@ export class RecipeService {
   }
 
   postRecipe(recipeData: FormData): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : undefined;
+
     return this.http.post<any>(this.url, recipeData);
   }
 

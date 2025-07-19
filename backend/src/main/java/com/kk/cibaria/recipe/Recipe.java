@@ -58,10 +58,10 @@ public class Recipe {
   private List<UserEntity> favouriteByUsers = new ArrayList<>()  ;
 
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-  @JsonManagedReference
+  @JsonManagedReference("recipe-images")
   private List<Image> images = new ArrayList<>();
 
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-  @JsonManagedReference
+  @JsonManagedReference("recipe-steps")
   private List<Step> steps;
 }

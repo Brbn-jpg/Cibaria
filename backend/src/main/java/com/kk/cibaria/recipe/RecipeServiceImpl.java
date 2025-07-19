@@ -13,6 +13,7 @@ import com.kk.cibaria.helper.Pagination;
 import com.kk.cibaria.helper.RecipeFilter;
 import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
+import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.ingredient.Ingredient;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.security.jwt.JwtService;
@@ -66,7 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
       List<Image> imagesSaved = new ArrayList<>();
       images.forEach(image->{
         try {
-          imagesSaved.add(imageService.createPhoto(image));
+          imagesSaved.add(imageService.createPhoto(image, ImageType.RECIPE));
         } catch (IOException e) {
           throw new ImageErrorException(e.getMessage());
         }

@@ -1,6 +1,9 @@
 package com.kk.cibaria.user;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kk.cibaria.dto.auth.RegisterDto;
 import com.kk.cibaria.dto.auth.TokenResponseDto;
@@ -19,4 +22,7 @@ public interface UserService {
 
    MyProfileDto getMyProfile(String token);
 
+   String updateProfilePicture(int userId, MultipartFile file) throws IOException;
+   
+   String updateBackgroundPicture(int userId, MultipartFile file) throws IOException;
 }
