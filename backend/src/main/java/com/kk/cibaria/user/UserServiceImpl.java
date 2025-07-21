@@ -10,11 +10,13 @@ import com.kk.cibaria.dto.auth.RegisterDto;
 import com.kk.cibaria.dto.auth.TokenResponseDto;
 import com.kk.cibaria.dto.myProfile.MyProfileDto;
 import com.kk.cibaria.dto.myProfile.MyProfileRecipeDto;
+import com.kk.cibaria.exception.UnauthorizedException;
 import com.kk.cibaria.exception.UserEmailAlreadyExistException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.cloudinary.CloudinaryService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,11 +90,12 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(
             () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
 
-    userFound.setId(id);
+    userFound.setId(id); // probably unnecessary, but keeping for now
     userFound.setUsername(user.getUsername());
+    userFound.setDescription(user.getDescription());
     userFound.setPassword(user.getPassword());
     userFound.setEmail(user.getEmail());
-    userFound.getRating().clear();
+    userFound.getRating().clear(); // probably unnecessary as well, but keeping for now might make a separate method for this
 
     for (Rating rating : user.getRating()) {
       rating.setUser(userFound);
@@ -103,14 +106,38 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public UserEntity updateProfile(int id, MyProfileDto profileDto, String token) {
+    MyProfileDto currentUser = getMyProfile(token);
+    if (currentUser.getId() != id) {
+        throw new UnauthorizedException("You can only update your own profile");
+    }
+
+    UserEntity userFound = userRepository.findById(id)
+        .orElseThrow(
+            () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
+
+    if (profileDto.getUsername() != null && !profileDto.getUsername().isEmpty()) {
+        userFound.setUsername(profileDto.getUsername());
+    }
+    if (profileDto.getDescription() != null) {
+        userFound.setDescription(profileDto.getDescription());
+    }
+    return userRepository.save(userFound);
+  }
+
+  @Override
   @Transactional
-  public String updateProfilePicture(int userId, MultipartFile file) throws IOException {
+  public String updateProfilePicture(int userId, MultipartFile file, String token) throws IOException {
+
+    MyProfileDto currentUser = getMyProfile(token);
+    if (currentUser.getId() != userId) {
+        throw new UnauthorizedException("You can only update your own profile picture");
+    }
+
     UserEntity user = userRepository.findById(userId).orElseThrow(
       () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
 
     deleteExistingImage(user, ImageType.PROFILE_PICTURE);
-    
-    user = userRepository.findById(userId).get();
     
     Image image = createUserImage(file, user, ImageType.PROFILE_PICTURE);
     return image.getImageUrl();
@@ -118,13 +145,16 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public String updateBackgroundPicture(int userId, MultipartFile file) throws IOException {
+  public String updateBackgroundPicture(int userId, MultipartFile file, String token) throws IOException {
+    MyProfileDto currentUser = getMyProfile(token);
+    if (currentUser.getId() != userId) {
+        throw new UnauthorizedException("You can only update your own profile picture");
+    }
+
     UserEntity user = userRepository.findById(userId).orElseThrow(
       () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
 
     deleteExistingImage(user, ImageType.BACKGROUND_PICTURE);
-    
-    user = userRepository.findById(userId).get();
     
     Image image = createUserImage(file, user, ImageType.BACKGROUND_PICTURE);
     return image.getImageUrl();
@@ -194,6 +224,7 @@ public class UserServiceImpl implements UserService {
     myProfileDto.setPhotoUrl(getProfilePicture(user));
     myProfileDto.setBackgroundUrl(getBackgroundPicture(user));
     myProfileDto.setUsername(user.getUsername());
+    myProfileDto.setDescription(user.getDescription());
 
     List<Recipe> favouriteRecipes = user.getFavouriteRecipes();
     if(!favouriteRecipes.isEmpty()){

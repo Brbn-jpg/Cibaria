@@ -10,5 +10,6 @@ public class MyProfileDto {
     private String photoUrl;
     private String backgroundUrl;
     private String username;
+    private String description;
     private List<MyProfileRecipeDto> favourites;
 }

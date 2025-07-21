@@ -29,9 +29,14 @@ public class UserController {
     return userService.getById(id);
   }
 
-  @PutMapping("/{id}")
-  public UserEntity update(@PathVariable int id, @RequestBody UserEntity user) {
+  @PutMapping("/{id}") 
+  public UserEntity update(@PathVariable int id, @RequestBody UserEntity user, @RequestHeader("Authorization") String token) {
     return userService.update(id, user);
+  }
+
+  @PutMapping("/{id}/profile")
+  public UserEntity updateProfile(@PathVariable int id, @RequestBody MyProfileDto profileDto, @RequestHeader("Authorization") String token) {
+    return userService.updateProfile(id, profileDto, token);
   }
 
   @GetMapping("/aboutme")
@@ -42,18 +47,18 @@ public class UserController {
   @PutMapping("/{userId}/profile-picture")
     public ResponseEntity<String> updateProfilePicture(
             @PathVariable int userId,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) throws IOException {
         
-        String imageUrl = userService.updateProfilePicture(userId, file);
+        String imageUrl = userService.updateProfilePicture(userId, file, token);
         return ResponseEntity.ok(imageUrl);
     }
 
     @PutMapping("/{userId}/background-picture")
     public ResponseEntity<String> updateBackgroundPicture(
             @PathVariable int userId,
-            @RequestParam("file") MultipartFile file) throws IOException {
+            @RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) throws IOException {
         
-        String imageUrl = userService.updateBackgroundPicture(userId, file);
+        String imageUrl = userService.updateBackgroundPicture(userId, file, token);
         return ResponseEntity.ok(imageUrl);
     }
 

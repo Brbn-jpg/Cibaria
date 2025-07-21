@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kk.cibaria.image.Image;
-import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.recipe.Recipe;
 import jakarta.persistence.*;
@@ -33,6 +32,9 @@ public class UserEntity {
 
   @Column(name = "role")
   private String role = "USER";
+
+  @Column(name = "description")
+  private String description;
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @JsonManagedReference("user")

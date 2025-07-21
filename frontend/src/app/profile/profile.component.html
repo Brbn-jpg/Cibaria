@@ -23,11 +23,66 @@
   </div>
 
   <div class="profile-info">
-    <h2 class="username">{{ username }}</h2>
+    <div class="userbox-big">
+      <div class="userbox">
+        <h2 class="username">{{ username }}</h2>
+        @if(!edit) {
+        <button class="edit-profile" (click)="editProfile($event)">
+          <img
+            src="images/icons/editprofile-icon.svg"
+            alt="edit profile"
+            class="edit-profile-icon"
+          />
+        </button>
+        }
+      </div>
+    </div>
+
+    @if(description) {
     <p class="user-text">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur
-      necessitatibus nemo ipsam ex quaerat ab nobis aliquam quia odit est!
+      {{ description }}
     </p>
+    } @if (edit) {
+    <div class="edit-section">
+      <div class="edit-field">
+        <label class="edit-label">Username</label>
+        <input
+          id="username-id"
+          placeholder="Enter new username"
+          #usernameInput
+          [(ngModel)]="username"
+          maxlength="16"
+          class="edit-input"
+        />
+        <small class="small-input"
+          >{{ usernameInput.value?.length || 0 }}/16</small
+        >
+        <div>
+          <button class="save-btn" (click)="saveUsername()">Save</button>
+        </div>
+      </div>
+
+      <div class="edit-field">
+        <label class="edit-label">Description</label>
+        <textarea
+          id="description-id"
+          placeholder="Enter new description"
+          #descriptionInput
+          [(ngModel)]="description"
+          maxlength="255"
+          class="edit-input"
+        >
+        </textarea>
+        <small class="small-textarea"
+          >{{ descriptionInput.value?.length || 0 }}/255</small
+        >
+        <div>
+          <button class="save-btn" (click)="saveDescription()">Save</button>
+          <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    }
   </div>
 
   <div class="profile-pic" (click)="onEditProfilePicture($event)">

@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { HttpClient } from '@angular/common/http';
@@ -26,6 +27,7 @@ export interface UserProfileResponse {
   username: string;
   photoUrl: string;
   backgroundUrl: string;
+  description: string;
   favourites: FavouriteRecipe[];
 }
 
@@ -53,6 +55,7 @@ export interface ImageUrl {
     NavbarComponent,
     FooterSectionComponent,
     MobileNavComponent,
+    FormsModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -83,6 +86,11 @@ export class ProfileComponent implements OnInit {
   username?: string;
   userPhotoUrl: string | null = null;
   backgroundImageUrl: string | null = null;
+  description?: string;
+
+  edit: boolean = false;
+  newUsername?: string = '';
+  newDescription: string = '';
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
@@ -280,12 +288,93 @@ export class ProfileComponent implements OnInit {
           this.userPhotoUrl = response.photoUrl;
           this.backgroundImageUrl = response.backgroundUrl;
           this.favouriteRecipes = response.favourites;
+          this.description = response.description;
           this.filteredFavouriteRecipes = [...this.favouriteRecipes];
-
           this.loadCategories();
         }
       },
     });
+  }
+
+  editProfile(event: Event) {
+    event.preventDefault();
+    this.edit = !this.edit;
+
+    // Initialize temporary values with current values when entering edit mode
+    if (this.edit) {
+      this.newUsername = this.username;
+      this.newDescription = this.description || '';
+    }
+  }
+
+  saveUsername() {
+    const usernameTextarea = document.getElementById(
+      'username-id'
+    ) as HTMLInputElement;
+
+    if (
+      !usernameTextarea ||
+      !usernameTextarea.value ||
+      usernameTextarea.value.trim() === ''
+    ) {
+      alert('Username cannot be empty');
+      return;
+    }
+
+    const newUsername = usernameTextarea.value.trim();
+
+    const profileData = {
+      username: newUsername,
+      description: this.description,
+    };
+    console.log('New username:', newUsername);
+
+    this.profileService.updateUserProfile(this.userId, profileData).subscribe({
+      next: (response) => {
+        console.log('Username updated successfully:', response);
+        this.username = newUsername;
+        this.newUsername = newUsername;
+        this.loadUserData(); // Reload user data to reflect changes
+      },
+      error: (error) => {
+        console.error('Error updating username:', error);
+        alert('Failed to update username. Please try again.');
+      },
+    });
+  }
+
+  saveDescription() {
+    const descriptionTextarea = document.getElementById(
+      'description-id'
+    ) as HTMLTextAreaElement;
+
+    const newDescription = descriptionTextarea
+      ? descriptionTextarea.value.trim()
+      : '';
+    console.log('New description:', newDescription);
+    const profileData = {
+      username: this.username,
+      description: newDescription,
+    };
+
+    this.profileService.updateUserProfile(this.userId, profileData).subscribe({
+      next: (response) => {
+        console.log('Description updated successfully:', response);
+        this.description = newDescription;
+        this.newDescription = newDescription;
+        this.loadUserData(); // Reload user data to reflect changes
+      },
+      error: (error) => {
+        console.error('Error updating description:', error);
+        alert('Failed to update description. Please try again.');
+      },
+    });
+  }
+
+  cancelEdit() {
+    this.edit = false;
+    this.newUsername = this.username;
+    this.newDescription = this.description || '';
   }
 
   getFavouriteAverageRating(avgRating: number): number {

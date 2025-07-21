@@ -18,20 +18,25 @@ export class ProfileService {
     });
   }
 
-  // Pomocnicza metoda do bezpiecznego ustawiania obrazów
+  updateUserProfile(userId: number, userData: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = token
+      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
+      : undefined;
+    return this.http.put<any>(
+      `http://localhost:8080/api/users/${userId}/profile`,
+      userData,
+      {
+        headers,
+      }
+    );
+  }
+
   private setImageSafely(selector: string, imageUrl: string): void {
     const imageElement = document.querySelector(selector) as HTMLImageElement;
     if (imageElement) {
-      // Ustaw crossOrigin przed ustawieniem src
       imageElement.crossOrigin = 'anonymous';
       imageElement.src = imageUrl;
-
-      // Obsługa błędów ładowania
-      imageElement.onerror = () => {
-        console.warn(`Failed to load image: ${imageUrl}`);
-        // Opcjonalnie ustaw domyślny obraz
-        // imageElement.src = 'assets/default-profile.png';
-      };
     }
   }
 
@@ -49,7 +54,6 @@ export class ProfileService {
         }
         this.uploadProfilePicture(userId, file).subscribe({
           next: (imageUrl) => {
-            // Użyj nowej metody do bezpiecznego ustawiania obrazu
             this.setImageSafely('.profile-picture', imageUrl);
           },
           error: (error) => {
@@ -76,7 +80,6 @@ export class ProfileService {
         }
         this.uploadBackgroundPicture(userId, file).subscribe({
           next: (imageUrl) => {
-            // Użyj nowej metody do bezpiecznego ustawiania obrazu
             this.setImageSafely('.background-image', imageUrl);
           },
           error: (error) => {

@@ -22,7 +22,9 @@ public interface UserService {
 
    MyProfileDto getMyProfile(String token);
 
-   String updateProfilePicture(int userId, MultipartFile file) throws IOException;
+   String updateProfilePicture(int userId, MultipartFile file, String token) throws IOException;
    
-   String updateBackgroundPicture(int userId, MultipartFile file) throws IOException;
+   String updateBackgroundPicture(int userId, MultipartFile file, String token) throws IOException;
+
+   UserEntity updateProfile(int id, MyProfileDto profileDto, String token);
 }
