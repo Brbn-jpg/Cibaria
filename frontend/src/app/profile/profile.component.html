@@ -26,15 +26,26 @@
     <div class="userbox-big">
       <div class="userbox">
         <h2 class="username">{{ username }}</h2>
-        @if(!edit) {
-        <button class="edit-profile" (click)="editProfile($event)">
-          <img
-            src="images/icons/editprofile-icon.svg"
-            alt="edit profile"
-            class="edit-profile-icon"
-          />
-        </button>
-        }
+        <div class="settings">
+          @if(!edit) {
+          <button class="edit-profile" (click)="editProfile($event)">
+            <img
+              src="images/icons/editprofile-icon.svg"
+              alt="edit profile"
+              class="edit-profile-icon"
+            />
+          </button>
+          } @if(!settings) {
+          <!-- TODO: Add profile settings -->
+          <button class="edit-profile">
+            <img
+              src="images/icons/settings-icon.svg"
+              alt="settings"
+              class="profile-settings-icon"
+            />
+          </button>
+          }
+        </div>
       </div>
     </div>
 
@@ -57,6 +68,15 @@
         <small class="small-input"
           >{{ usernameInput.value?.length || 0 }}/16</small
         >
+        @if (saveUsernameIcon) {
+        <div class="tick-icon">
+          <img
+            src="images/icons/tick-icon.svg"
+            alt="tick icon"
+            class="tick-icon"
+          />
+        </div>
+        }
         <div>
           <button class="save-btn" (click)="saveUsername()">Save</button>
         </div>
@@ -76,6 +96,15 @@
         <small class="small-textarea"
           >{{ descriptionInput.value?.length || 0 }}/255</small
         >
+        @if (saveDescriptionIcon) {
+        <div class="tick-icon">
+          <img
+            src="images/icons/tick-icon.svg"
+            alt="tick icon"
+            class="tick-icon"
+          />
+        </div>
+        }
         <div>
           <button class="save-btn" (click)="saveDescription()">Save</button>
           <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>

@@ -91,6 +91,9 @@ export class ProfileComponent implements OnInit {
   edit: boolean = false;
   newUsername?: string = '';
   newDescription: string = '';
+  saveUsernameIcon: boolean = false;
+  saveDescriptionIcon: boolean = false;
+  settings: boolean = false;
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
@@ -330,14 +333,13 @@ export class ProfileComponent implements OnInit {
     console.log('New username:', newUsername);
 
     this.profileService.updateUserProfile(this.userId, profileData).subscribe({
-      next: (response) => {
-        console.log('Username updated successfully:', response);
+      next: () => {
+        this.saveUsernameIcon = true;
         this.username = newUsername;
         this.newUsername = newUsername;
         this.loadUserData(); // Reload user data to reflect changes
       },
       error: (error) => {
-        console.error('Error updating username:', error);
         alert('Failed to update username. Please try again.');
       },
     });
@@ -358,14 +360,13 @@ export class ProfileComponent implements OnInit {
     };
 
     this.profileService.updateUserProfile(this.userId, profileData).subscribe({
-      next: (response) => {
-        console.log('Description updated successfully:', response);
+      next: () => {
+        this.saveDescriptionIcon = true;
         this.description = newDescription;
         this.newDescription = newDescription;
         this.loadUserData(); // Reload user data to reflect changes
       },
       error: (error) => {
-        console.error('Error updating description:', error);
         alert('Failed to update description. Please try again.');
       },
     });
