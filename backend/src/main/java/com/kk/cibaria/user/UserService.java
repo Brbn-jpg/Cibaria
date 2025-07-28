@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kk.cibaria.dto.auth.RegisterDto;
 import com.kk.cibaria.dto.auth.TokenResponseDto;
 import com.kk.cibaria.dto.myProfile.MyProfileDto;
+import com.kk.cibaria.dto.myProfile.UpdateEmailDto;
+import com.kk.cibaria.dto.myProfile.UpdatePasswordDto;
 
 public interface UserService {
    List<UserEntity> getAll();
@@ -22,9 +24,13 @@ public interface UserService {
 
    MyProfileDto getMyProfile(String token);
 
-   String updateProfilePicture(int userId, MultipartFile file, String token) throws IOException;
+   String updateProfilePicture(int id, MultipartFile file, String token) throws IOException;
    
-   String updateBackgroundPicture(int userId, MultipartFile file, String token) throws IOException;
+   String updateBackgroundPicture(int id, MultipartFile file, String token) throws IOException;
 
    UserEntity updateProfile(int id, MyProfileDto profileDto, String token);
+
+   UserEntity updateEmail(int id, UpdateEmailDto updateEmailDto, String token);
+
+   UserEntity updatePassword(int id, UpdatePasswordDto updatePasswordDto, String token);
 }

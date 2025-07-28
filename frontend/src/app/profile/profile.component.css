@@ -24,6 +24,7 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
+  fill: #d4ae6c;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease-in-out;
   width: 100%;
@@ -114,6 +115,13 @@ main {
   transform: scale(1.15);
 }
 
+.edit-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4.8rem;
+  margin-right: 4.8rem;
+}
+
 .edit-section {
   display: flex;
   flex-direction: column;
@@ -162,8 +170,8 @@ textarea.edit-input {
 
 .small-input {
   position: absolute;
-  bottom: 5rem;
-  right: 1.6rem;
+  bottom: 4rem;
+  right: 0;
   font-size: 1.2rem;
   color: #d4ae6c;
   pointer-events: none;
@@ -171,8 +179,8 @@ textarea.edit-input {
 
 .small-textarea {
   position: absolute;
-  bottom: 5rem;
-  right: 1.6rem;
+  bottom: 4rem;
+  right: 0;
   font-size: 1.2rem;
   color: #d4ae6c;
   pointer-events: none;
@@ -231,6 +239,11 @@ textarea.edit-input {
 
 .profile-picture {
   border: 3px solid #000;
+  background: linear-gradient(
+    180deg,
+    rgba(23, 21, 21, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
   height: 30rem;
   width: 30rem;
   object-fit: cover;

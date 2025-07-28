@@ -2,33 +2,68 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export interface UpdateEmailDto {
+  newEmail: string;
+  password: string;
+}
+
+export interface UpdatePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
   constructor(private http: HttpClient) {}
 
-  getUserProfile(): Observable<any> {
+  private baseUrl = 'http://localhost:8080/api';
+
+  private getAuthHeaders(): HttpHeaders | undefined {
     const token = localStorage.getItem('token');
-    const headers = token
+    return token
       ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
       : undefined;
+  }
+
+  getUserProfile(): Observable<any> {
+    const headers = this.getAuthHeaders();
     return this.http.get<any>('http://localhost:8080/api/users/aboutme', {
       headers,
     });
   }
 
+  // Username and description only
   updateUserProfile(userId: number, userData: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = token
-      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
-      : undefined;
+    const headers = this.getAuthHeaders();
     return this.http.put<any>(
       `http://localhost:8080/api/users/${userId}/profile`,
       userData,
       {
         headers,
       }
+    );
+  }
+
+  updateUserEmail(userId: number, userData: UpdateEmailDto): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put<any>(
+      `${this.baseUrl}/users/${userId}/email`,
+      userData,
+      { headers }
+    );
+  }
+
+  updateUserPassword(
+    userId: number,
+    userData: UpdatePasswordDto
+  ): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put<any>(
+      `${this.baseUrl}/users/${userId}/password`,
+      userData,
+      { headers }
     );
   }
 
@@ -95,10 +130,7 @@ export class ProfileService {
   private uploadProfilePicture(userId: number, file: File): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
-    const token = localStorage.getItem('token');
-    const headers = token
-      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
-      : undefined;
+    const headers = this.getAuthHeaders();
     return this.http.put(
       `http://localhost:8080/api/users/${userId}/profile-picture`,
       formData,
@@ -115,10 +147,7 @@ export class ProfileService {
   ): Observable<string> {
     const formData = new FormData();
     formData.append('file', file);
-    const token = localStorage.getItem('token');
-    const headers = token
-      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
-      : undefined;
+    const headers = this.getAuthHeaders();
     return this.http.put(
       `http://localhost:8080/api/users/${userId}/background-picture`,
       formData,

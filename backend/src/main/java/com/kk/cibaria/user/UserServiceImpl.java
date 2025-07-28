@@ -10,6 +10,10 @@ import com.kk.cibaria.dto.auth.RegisterDto;
 import com.kk.cibaria.dto.auth.TokenResponseDto;
 import com.kk.cibaria.dto.myProfile.MyProfileDto;
 import com.kk.cibaria.dto.myProfile.MyProfileRecipeDto;
+import com.kk.cibaria.dto.myProfile.UpdateEmailDto;
+import com.kk.cibaria.dto.myProfile.UpdatePasswordDto;
+import com.kk.cibaria.exception.InvalidEmailFormatException;
+import com.kk.cibaria.exception.InvalidPasswordException;
 import com.kk.cibaria.exception.UnauthorizedException;
 import com.kk.cibaria.exception.UserEmailAlreadyExistException;
 import com.kk.cibaria.security.UserDetailService;
@@ -23,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kk.cibaria.exception.UserNotFoundException;
+import com.kk.cibaria.exception.WeakPasswordException;
 import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.image.ImageRepository;
@@ -167,6 +172,65 @@ public class UserServiceImpl implements UserService {
 
     userRepository.delete(user);
   }
+
+  @Override
+  @Transactional
+  public UserEntity updateEmail(int userId, UpdateEmailDto dto, String token) {
+      MyProfileDto currentUser = getMyProfile(token);
+      if (currentUser.getId() != userId) {
+          throw new UnauthorizedException("You can only update your own email");
+      }
+
+      UserEntity user = userRepository.findById(userId).orElseThrow(
+          () -> new UserNotFoundException(String.format("User with id: %s does not exist", userId)));
+
+      String newEmail = dto.getNewEmail().trim().toLowerCase();
+      if (!newEmail.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+          throw new InvalidEmailFormatException("Invalid email format");
+      }
+      
+      if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+          throw new InvalidPasswordException("Password is incorrect");
+      }
+
+      Optional<UserEntity> existingUser = userRepository.findByEmail(newEmail);
+      if (existingUser.isPresent() && existingUser.get().getId() != userId) {
+          throw new UserEmailAlreadyExistException("Email already exists");
+      }
+
+      user.setEmail(newEmail);
+      return userRepository.save(user);
+  }
+
+  @Override
+  @Transactional
+  public UserEntity updatePassword(int userId, UpdatePasswordDto updatePasswordDto, String token) {
+    MyProfileDto currentUser = getMyProfile(token);
+    if (currentUser.getId() != userId) {
+        throw new UnauthorizedException("You can only update your own password");
+    }
+
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+          () -> new UserNotFoundException(String.format("User with id: %s does not exist", userId)));
+
+    if (!passwordEncoder.matches(updatePasswordDto.getCurrentPassword(), user.getPassword())) {
+        throw new InvalidPasswordException("Current password is incorrect");
+    }
+
+    String newPassword = updatePasswordDto.getNewPassword();
+    if (newPassword.length() < 8 || !newPassword.matches(".*\\d.*") || !newPassword.matches(".*[A-Z].*")) {
+      throw new WeakPasswordException("Password must be at least 8 characters long and contain a digit and an uppercase letter");
+    }
+
+    if (passwordEncoder.matches(updatePasswordDto.getNewPassword(), user.getPassword())) {
+      throw new IllegalArgumentException("New password must be different from the current password");
+    }
+
+    user.setPassword(passwordEncoder.encode(updatePasswordDto.getNewPassword()));
+    return userRepository.save(user);
+  }
+
+
 
   // Helper methods
   public String getProfilePicture(UserEntity user) {

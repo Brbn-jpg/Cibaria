@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.kk.cibaria.dto.myProfile.MyProfileDto;
+import com.kk.cibaria.dto.myProfile.UpdateEmailDto;
+import com.kk.cibaria.dto.myProfile.UpdatePasswordDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,16 @@ public class UserController {
   @PutMapping("/{id}/profile")
   public UserEntity updateProfile(@PathVariable int id, @RequestBody MyProfileDto profileDto, @RequestHeader("Authorization") String token) {
     return userService.updateProfile(id, profileDto, token);
+  }
+
+  @PutMapping("/{id}/email")
+  public UserEntity updateEmail(@PathVariable int id, @RequestBody UpdateEmailDto updateEmailDto, @RequestHeader("Authorization") String token) {
+    return userService.updateEmail(id, updateEmailDto, token);
+  } 
+
+  @PutMapping("/{id}/password")
+  public UserEntity updatePassword(@PathVariable int id, @RequestBody UpdatePasswordDto updatePasswordDto, @RequestHeader("Authorization") String token) {
+    return userService.updatePassword(id, updatePasswordDto, token);
   }
 
   @GetMapping("/aboutme")

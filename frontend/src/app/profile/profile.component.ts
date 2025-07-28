@@ -95,6 +95,12 @@ export class ProfileComponent implements OnInit {
   saveDescriptionIcon: boolean = false;
   settings: boolean = false;
 
+  email: string = '';
+  password: string = '';
+  newPasswordInput: string = '';
+  saveEmailIcon: boolean = false;
+  savePasswordIcon: boolean = false;
+
   ngOnInit() {
     window.scrollTo({ top: 0 });
     this.loadCategories();
@@ -290,11 +296,15 @@ export class ProfileComponent implements OnInit {
           this.username = response.username;
           this.userPhotoUrl = response.photoUrl;
           this.backgroundImageUrl = response.backgroundUrl;
-          this.favouriteRecipes = response.favourites;
+          this.favouriteRecipes = response.favourites || [];
           this.description = response.description;
           this.filteredFavouriteRecipes = [...this.favouriteRecipes];
           this.loadCategories();
         }
+      },
+      error: (error) => {
+        this.favouriteRecipes = [];
+        this.filteredFavouriteRecipes = [];
       },
     });
   }
@@ -307,6 +317,17 @@ export class ProfileComponent implements OnInit {
     if (this.edit) {
       this.newUsername = this.username;
       this.newDescription = this.description || '';
+    }
+  }
+
+  editSettings(event: Event) {
+    event.preventDefault();
+    this.settings = !this.settings;
+    if (this.settings) {
+      this.email = '';
+      this.password = '';
+      this.saveEmailIcon = false;
+      this.savePasswordIcon = false;
     }
   }
 
@@ -338,6 +359,9 @@ export class ProfileComponent implements OnInit {
         this.username = newUsername;
         this.newUsername = newUsername;
         this.loadUserData(); // Reload user data to reflect changes
+        setTimeout(() => {
+          this.saveUsernameIcon = false;
+        }, 5000);
       },
       error: (error) => {
         alert('Failed to update username. Please try again.');
@@ -365,6 +389,9 @@ export class ProfileComponent implements OnInit {
         this.description = newDescription;
         this.newDescription = newDescription;
         this.loadUserData(); // Reload user data to reflect changes
+        setTimeout(() => {
+          this.saveDescriptionIcon = false;
+        }, 5000);
       },
       error: (error) => {
         alert('Failed to update description. Please try again.');
@@ -372,10 +399,175 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  saveEmail() {
+    const passwordInput = document.getElementById(
+      'password-id'
+    ) as HTMLInputElement;
+
+    // Validate new email using Angular binding
+    if (!this.email || this.email.trim() === '') {
+      alert('Email cannot be empty');
+      return;
+    }
+
+    // Validate password from DOM element
+    if (
+      !passwordInput ||
+      !passwordInput.value ||
+      passwordInput.value.trim() === ''
+    ) {
+      alert('Password is required to change email');
+      return;
+    }
+
+    const newEmail = this.email.trim().toLowerCase();
+    const password = passwordInput.value.trim();
+
+    // Validate email format
+    const emailRegex = /^[A-Za-z0-9+_.-]+@(.+)$/;
+    if (!emailRegex.test(newEmail)) {
+      alert('Invalid email format');
+      return;
+    }
+
+    console.log('Updating email...');
+
+    const updateEmailDto = {
+      newEmail: newEmail,
+      password: password,
+    };
+
+    this.profileService.updateUserEmail(this.userId, updateEmailDto).subscribe({
+      next: () => {
+        this.saveEmailIcon = true;
+        // Clear fields
+        this.email = '';
+        passwordInput.value = '';
+        this.loadUserData();
+        setTimeout(() => {
+          this.saveEmailIcon = false;
+        }, 5000);
+      },
+      error: (error) => {
+        console.error('Failed to update email:', error);
+        let errorMessage = 'Failed to update email. Please try again.';
+
+        if (error.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error.status === 400) {
+          errorMessage = 'Invalid email format or password incorrect';
+        } else if (error.status === 409) {
+          errorMessage = 'Email already exists';
+        } else if (error.status === 401) {
+          errorMessage = 'Unauthorized - please login again';
+        }
+
+        alert(errorMessage);
+      },
+    });
+  }
+
+  savePassword() {
+    const currentPasswordInput = document.getElementById(
+      'current-password-id'
+    ) as HTMLInputElement;
+
+    // Validate current password from DOM element
+    if (
+      !currentPasswordInput ||
+      !currentPasswordInput.value ||
+      currentPasswordInput.value.trim() === ''
+    ) {
+      alert('Current password cannot be empty');
+      return;
+    }
+
+    // Validate new password using Angular binding
+    if (!this.newPasswordInput || this.newPasswordInput.trim() === '') {
+      alert('New password cannot be empty');
+      return;
+    }
+
+    const currentPassword = currentPasswordInput.value.trim();
+    const newPassword = this.newPasswordInput.trim();
+
+    // Validate password length (zgodnie z backendem)
+    if (newPassword.length < 8) {
+      alert('Password must be at least 8 characters long');
+      return;
+    }
+
+    if (newPassword.length > 64) {
+      alert('Password cannot be longer than 64 characters');
+      return;
+    }
+
+    // Validate password complexity (digit and uppercase letter)
+    if (!/.*\d.*/.test(newPassword)) {
+      alert('Password must contain at least one digit');
+      return;
+    }
+
+    if (!/.*[A-Z].*/.test(newPassword)) {
+      alert('Password must contain at least one uppercase letter');
+      return;
+    }
+
+    // Check if new password is different from current
+    if (currentPassword === newPassword) {
+      alert('New password must be different from the current password');
+      return;
+    }
+
+    console.log('Updating password...');
+
+    const updatePasswordDto = {
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    };
+
+    this.profileService
+      .updateUserPassword(this.userId, updatePasswordDto)
+      .subscribe({
+        next: () => {
+          this.savePasswordIcon = true;
+          // Clear all password fields
+          currentPasswordInput.value = '';
+          this.newPasswordInput = '';
+          this.loadUserData(); // Reload user data to reflect changes
+          setTimeout(() => {
+            this.savePasswordIcon = false;
+          }, 5000);
+        },
+        error: (error) => {
+          console.error('Failed to update password:', error);
+          let errorMessage = 'Failed to update password. Please try again.';
+
+          if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.status === 400) {
+            errorMessage =
+              'Current password is incorrect or new password is too weak';
+          } else if (error.status === 401) {
+            errorMessage = 'Unauthorized - please login again';
+          }
+
+          alert(errorMessage);
+        },
+      });
+  }
+
   cancelEdit() {
     this.edit = false;
     this.newUsername = this.username;
     this.newDescription = this.description || '';
+  }
+
+  cancelSettings() {
+    this.settings = false;
+    this.email = '';
+    this.password = '';
+    this.newPasswordInput = '';
   }
 
   getFavouriteAverageRating(avgRating: number): number {
