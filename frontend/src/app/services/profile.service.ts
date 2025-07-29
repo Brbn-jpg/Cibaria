@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface UpdateEmailDto {
   newEmail: string;
@@ -17,6 +17,28 @@ export interface UpdatePasswordDto {
 })
 export class ProfileService {
   constructor(private http: HttpClient) {}
+
+  private editModeSubject = new BehaviorSubject<boolean>(false);
+  editMode$ = this.editModeSubject.asObservable();
+
+  setEditMode(value: boolean) {
+    this.editModeSubject.next(value);
+  }
+
+  getEditMode(): boolean {
+    return this.editModeSubject.getValue();
+  }
+
+  private settingsModeSubject = new BehaviorSubject<boolean>(false);
+  settingsMode$ = this.settingsModeSubject.asObservable();
+
+  setSettingsMode(value: boolean) {
+    this.settingsModeSubject.next(value);
+  }
+
+  getSettingsMode(): boolean {
+    return this.settingsModeSubject.getValue();
+  }
 
   private baseUrl = 'http://localhost:8080/api';
 

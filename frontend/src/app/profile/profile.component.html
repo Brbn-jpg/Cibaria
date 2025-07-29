@@ -4,6 +4,7 @@
   } @else {
   <app-mobile-nav></app-mobile-nav>
   }
+  <app-toast-notification></app-toast-notification>
   <div class="background" (click)="onEditBackgroundPicture($event)">
     <div class="background-image-wrapper">
       <img
@@ -27,7 +28,7 @@
       <div class="userbox">
         <h2 class="username">{{ username }}</h2>
         <div class="settings">
-          @if(!edit) {
+          @if(!editMode) {
           <button class="edit-profile" (click)="editProfile($event)">
             <img
               src="images/icons/editprofile-icon.svg"
@@ -36,7 +37,6 @@
             />
           </button>
           } @if(!settings) {
-          <!-- TODO: Add profile settings -->
           <button class="edit-profile" (click)="editSettings($event)">
             <img
               src="images/icons/settings-icon.svg"
@@ -53,140 +53,12 @@
     <p class="user-text">
       {{ description }}
     </p>
-
     }
     <div class="edit-wrapper">
-      @if (edit) {
-      <div class="edit-section">
-        <div class="edit-field">
-          <label class="edit-label">Username</label>
-          <input
-            id="username-id"
-            placeholder="Enter new username"
-            #usernameInput
-            [(ngModel)]="username"
-            maxlength="16"
-            class="edit-input"
-          />
-          <small class="small-input"
-            >{{ usernameInput.value?.length || 0 }}/16</small
-          >
-          @if (saveUsernameIcon) {
-          <div class="tick-icon">
-            <img
-              src="images/icons/tick-icon.svg"
-              alt="tick icon"
-              class="tick-icon"
-            />
-          </div>
-          }
-          <div>
-            <button class="save-btn" (click)="saveUsername()">Save</button>
-          </div>
-        </div>
-
-        <div class="edit-field">
-          <label class="edit-label">Description</label>
-          <textarea
-            id="description-id"
-            placeholder="Enter new description"
-            #descriptionInput
-            [(ngModel)]="description"
-            maxlength="255"
-            class="edit-input"
-          >
-          </textarea>
-          <small class="small-textarea"
-            >{{ descriptionInput.value?.length || 0 }}/255</small
-          >
-          @if (saveDescriptionIcon) {
-          <div class="tick-icon">
-            <img
-              src="images/icons/tick-icon.svg"
-              alt="tick icon"
-              class="tick-icon"
-            />
-          </div>
-          }
-          <div>
-            <button class="save-btn" (click)="saveDescription()">Save</button>
-            <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
-          </div>
-        </div>
-      </div>
+      @if (editMode) {
+      <app-edit-profile></app-edit-profile>
       } @if (settings){
-      <div class="edit-section">
-        <div class="edit-field">
-          <label class="edit-label">Email</label>
-          <input
-            id="email-id"
-            placeholder="Enter new email"
-            #emailInput
-            [(ngModel)]="email"
-            type="email"
-            class="edit-input"
-          />
-          <small class="small-input"
-            >{{ emailInput.value?.length || 0 }}/64</small
-          >
-          <input
-            id="password-id"
-            placeholder="Enter your password"
-            type="password"
-            class="edit-input"
-            placeholer="Current password to confirm"
-          />
-
-          @if (saveEmailIcon) {
-          <div class="tick-icon">
-            <img
-              src="images/icons/tick-icon.svg"
-              alt="tick icon"
-              class="tick-icon"
-            />
-          </div>
-          }
-          <div>
-            <button class="save-btn" (click)="saveEmail()">Save</button>
-          </div>
-        </div>
-        <div class="edit-field">
-          <label class="edit-label">Password</label>
-          <input
-            id="current-password-id"
-            type="password"
-            placeholder="Current password to confirm"
-            class="edit-input"
-          />
-          <input
-            id="new-password-id"
-            placeholder="Enter new password"
-            #newPasswordRef
-            [(ngModel)]="newPasswordInput"
-            type="password"
-            class="edit-input"
-            autocomplete="new-password"
-          />
-          <small class="small-input"
-            >{{ newPasswordInput.length || 0 }}/64</small
-          >
-          @if (savePasswordIcon) {
-          <div class="tick-icon">
-            <img
-              src="images/icons/tick-icon.svg"
-              alt="tick icon"
-              class="tick-icon"
-            />
-          </div>
-          }
-          <div>
-            <button class="save-btn" (click)="savePassword()">Save</button>
-            <button class="cancel-btn" (click)="cancelSettings()">
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
+      <app-settings-profile></app-settings-profile>
       }
     </div>
   </div>
@@ -209,6 +81,7 @@
   </div>
 
   <h3>Favourite recipes</h3>
+  <!-- FILTERS -->
   @if (favouriteRecipes.length > 0) {
   <div class="filters">
     @if (Filtering) { @if (Open){
@@ -399,6 +272,7 @@
   </div>
   <hr />
   }
+  <!-- FAVOURITE RECIPES -->
   <div class="recipes grid-4-cols">
     @for (recipe of paginatedFavouriteRecipes; track $index) {
     <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
@@ -455,6 +329,7 @@
     }
   </div>
 
+  <!-- PAGINATION & FOOTER -->
   @if (filteredFavouriteRecipes.length > 0) {
   <div class="pagination">
     <button
