@@ -29,10 +29,28 @@ export interface UserProfileResponse {
   photoUrl: string;
   backgroundUrl: string;
   description: string;
+}
+
+export interface UserFavouritesResponse {
   favourites: FavouriteRecipe[];
 }
 
+export interface UserRecipesResponse {
+  userRecipes: UserRecipe[];
+}
+
 export interface FavouriteRecipe {
+  id: number;
+  imageUrl: ImageUrl[];
+  recipeName: string;
+  servings: number;
+  difficulty: number;
+  prepareTime: number;
+  category: string;
+  ratings: number;
+}
+
+export interface UserRecipe {
   id: number;
   imageUrl: ImageUrl[];
   recipeName: string;
@@ -71,6 +89,11 @@ export class ProfileComponent implements OnInit {
   userId!: number;
   favouriteRecipes: FavouriteRecipe[] = [];
   filteredFavouriteRecipes: FavouriteRecipe[] = [];
+
+  userRecipe: UserRecipe[] = [];
+  filteredUserRecipes: UserRecipe[] = [];
+
+  activeTab: 'favourites' | 'userRecipes' = 'favourites';
 
   currentPage: number = 1;
   pageSize: number = 12;
@@ -117,6 +140,8 @@ export class ProfileComponent implements OnInit {
     window.scrollTo({ top: 0 });
     this.loadCategories();
     this.loadUserData();
+    this.loadUserRecipes();
+    this.loadUserFavourites();
 
     this.profileService.editMode$.subscribe((value) => {
       this.editMode = value;
@@ -131,7 +156,13 @@ export class ProfileComponent implements OnInit {
   }
 
   applyFilters() {
-    let filtered = [...this.favouriteRecipes];
+    let filtered: FavouriteRecipe[] | UserRecipe[] = [];
+
+    if (this.activeTab === 'favourites') {
+      filtered = [...this.favouriteRecipes];
+    } else if (this.activeTab === 'userRecipes') {
+      filtered = [...this.userRecipe];
+    }
 
     if (this.difficulty) {
       filtered = filtered.filter(
@@ -168,17 +199,38 @@ export class ProfileComponent implements OnInit {
       );
     }
 
-    this.filteredFavouriteRecipes = filtered;
-    this.totalPages = Math.ceil(filtered.length / this.pageSize);
+    if (this.activeTab === 'favourites') {
+      this.filteredFavouriteRecipes = filtered as FavouriteRecipe[];
+      this.totalPages = Math.ceil(
+        this.filteredFavouriteRecipes.length / this.pageSize
+      );
+    } else if (this.activeTab === 'userRecipes') {
+      this.filteredUserRecipes = filtered as UserRecipe[];
+      this.totalPages = Math.ceil(
+        this.filteredUserRecipes.length / this.pageSize
+      );
+    }
+  }
+
+  setActiveTab(tab: 'favourites' | 'userRecipes') {
+    this.activeTab = tab;
+    this.currentPage = 1;
+    this.loadCategories();
+    this.applyFilters();
   }
 
   loadCategories() {
-    if (this.favouriteRecipes.length > 0) {
+    const source =
+      this.activeTab === 'favourites' ? this.favouriteRecipes : this.userRecipe;
+
+    if (source.length > 0) {
       this.categoriesArray = Array.from(
-        new Set(this.favouriteRecipes.map((recipe) => recipe.category))
+        new Set(source.map((recipe) => recipe.category))
       )
         .sort()
         .map((categoryName) => ({ categoryName }));
+    } else {
+      this.categoriesArray = [];
     }
   }
 
@@ -295,8 +347,36 @@ export class ProfileComponent implements OnInit {
           this.username = response.username;
           this.userPhotoUrl = response.photoUrl;
           this.backgroundImageUrl = response.backgroundUrl;
-          this.favouriteRecipes = response.favourites || [];
           this.description = response.description;
+        }
+      },
+    });
+  }
+
+  loadUserRecipes() {
+    this.profileService.getUserRecipes().subscribe({
+      next: (response: UserRecipesResponse) => {
+        console.log('UserRecipes response:', response);
+        if (response && response.userRecipes) {
+          this.userRecipe = response.userRecipes;
+          this.filteredUserRecipes = [...this.userRecipe];
+          this.loadCategories();
+        }
+      },
+      error: (error) => {
+        this.userRecipe = [];
+        this.filteredUserRecipes = [];
+      },
+    });
+  }
+
+  loadUserFavourites() {
+    this.profileService.getUserFavourites().subscribe({
+      next: (response: UserFavouritesResponse) => {
+        console.log('FavouriteREcipes response:', response);
+
+        if (response) {
+          this.favouriteRecipes = response.favourites || [];
           this.filteredFavouriteRecipes = [...this.favouriteRecipes];
           this.loadCategories();
         }
@@ -324,5 +404,11 @@ export class ProfileComponent implements OnInit {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     return this.filteredFavouriteRecipes.slice(startIndex, endIndex);
+  }
+
+  get paginatedUserRecipes(): UserRecipe[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.filteredUserRecipes.slice(startIndex, endIndex);
   }
 }

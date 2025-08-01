@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -55,6 +56,23 @@ public class UserController {
   public MyProfileDto getMyProfile(@RequestHeader("Authorization") String token){
     return userService.getMyProfile(token);
   }
+
+  // @GetMapping("/my-favourite")
+  // public ResponseEntity<List<MyProfileRecipeDto>> getFavouriteRecipes(@RequestHeader("Authorization") String token){
+  //   List<MyProfileRecipeDto> myFavouriteRecipes = userService.getMyFavourite(token);
+  //   return ResponseEntity.ok(myFavouriteRecipes);
+  // }
+
+  @GetMapping("/recipes")
+  public MyProfileDto getUserRecipes(@RequestHeader("Authorization") String token){
+    return userService.getUserRecipes(token);
+  }
+
+  @GetMapping("/favourites")
+  public MyProfileDto getFavouriteRecipes(@RequestHeader("Authorization") String token){
+    return userService.getFavouriteRecipes(token);
+  }
+  
 
   @PutMapping("/{userId}/profile-picture")
     public ResponseEntity<String> updateProfilePicture(

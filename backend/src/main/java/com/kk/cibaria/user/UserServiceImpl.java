@@ -1,6 +1,7 @@
 package com.kk.cibaria.user;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +21,6 @@ import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.cloudinary.CloudinaryService;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -263,7 +263,7 @@ public class UserServiceImpl implements UserService {
             System.err.println("Error deleting image: " + e.getMessage());
         }
     }
-}
+  }
 
   private Image createUserImage(MultipartFile file, UserEntity user, ImageType imageType) throws IOException {
     Image image = imageService.createPhoto(file, imageType);
@@ -281,7 +281,8 @@ public class UserServiceImpl implements UserService {
   @Override
   public MyProfileDto getMyProfile(String token) {
     int userId = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User not found"));
+    UserEntity user = userRepository.findById(userId)
+    .orElseThrow(()->new UserNotFoundException("User with id: %s does not exist in the database " + userId));
 
     MyProfileDto myProfileDto = new MyProfileDto();
     myProfileDto.setId(user.getId());
@@ -290,32 +291,65 @@ public class UserServiceImpl implements UserService {
     myProfileDto.setUsername(user.getUsername());
     myProfileDto.setDescription(user.getDescription());
 
-    List<Recipe> favouriteRecipes = user.getFavouriteRecipes();
-    if(!favouriteRecipes.isEmpty()){
-      List<MyProfileRecipeDto> recipeDtos = favouriteRecipes.stream().map(recipe -> {
-        MyProfileRecipeDto dto = new MyProfileRecipeDto();
-        dto.setId(recipe.getId());
-        dto.setImageUrl(recipe.getImages());
-        dto.setRecipeName(recipe.getRecipeName());
-        dto.setCategory(recipe.getCategory());
-        dto.setServings(recipe.getServings());
-        dto.setDifficulty(recipe.getDifficulty());
-        dto.setPrepareTime(recipe.getPrepareTime());
 
-        int ratings = recipe.getRatings().size();
-        if(ratings > 0){
-          int ratingSum = recipe.getRatings().stream().mapToInt(Rating::getValue).sum();
-          Long averageRating = (long) (ratingSum / ratings);
-          dto.setAvgRating(averageRating);
-        } else {
-          dto.setAvgRating(0L);
-        }
-        return dto;
-      }).toList();
-      myProfileDto.setFavourites(recipeDtos);
-    } else {
-      myProfileDto.setFavourites(null);
-    }
     return myProfileDto;
+  }
+
+  @Override 
+  public MyProfileDto getFavouriteRecipes(String token){
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId)
+    .orElseThrow(()->new UserNotFoundException("User with id: %s does not exist in the database "+ userId));
+
+    MyProfileDto myProfileDto = new MyProfileDto();
+    myProfileDto.setFavourites(mapToRecipeDtos(user.getFavouriteRecipes()));
+
+    return myProfileDto;
+  }
+
+  @Override 
+  public MyProfileDto getUserRecipes(String token){
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId)
+    .orElseThrow(()->new UserNotFoundException("User with id: %s does not exist in the database "+ userId));
+
+    MyProfileDto myProfileDto = new MyProfileDto();
+    myProfileDto.setUserRecipes(mapToRecipeDtos(user.getUserRecipes()));
+
+    return myProfileDto;
+  }
+
+  private List<MyProfileRecipeDto> mapToRecipeDtos(List<Recipe> recipes) {
+    if (recipes == null || recipes.isEmpty()) {
+      return new ArrayList<>(); // Better to return empty list than null ig
+    }
+    
+    return recipes.stream()
+      .map(this::mapToRecipeDto)
+      .toList();
+  }
+
+  private MyProfileRecipeDto mapToRecipeDto(Recipe recipe) {
+    MyProfileRecipeDto dto = new MyProfileRecipeDto();
+    dto.setId(recipe.getId());
+    dto.setImageUrl(recipe.getImages());
+    dto.setRecipeName(recipe.getRecipeName());
+    dto.setCategory(recipe.getCategory());
+    dto.setServings(recipe.getServings());
+    dto.setDifficulty(recipe.getDifficulty());
+    dto.setPrepareTime(recipe.getPrepareTime());
+    
+    List<Rating> ratings = recipe.getRatings();
+    if (ratings != null && !ratings.isEmpty()) {
+        double averageRating = ratings.stream()
+            .mapToInt(Rating::getValue)
+            .average()
+            .orElse(0.0);
+        dto.setAvgRating(Math.round(averageRating));
+    } else {
+        dto.setAvgRating(0L);
+    }
+    
+    return dto;
   }
 }

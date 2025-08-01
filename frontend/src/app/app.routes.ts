@@ -52,7 +52,11 @@ export const routes: Routes = [
     component: AddRecipePanelComponent,
     data: { title: 'Cibaria | Add Recipe' },
   },
-  { path: 'profile', component: ProfileComponent },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    data: { title: 'Cibaria | Your profile' },
+  },
 
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

@@ -7,9 +7,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.cibaria.dto.FavouriteRequest;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
+import com.kk.cibaria.dto.myProfile.MyProfileRecipeDto;
 import com.kk.cibaria.image.ImageService;
+import com.kk.cibaria.user.UserEntity;
+
 import jakarta.validation.constraints.Min;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,11 +38,11 @@ public class RecipeController {
           @RequestParam(required = false) List<String> category,
           @RequestParam(required = false) Integer difficulty,
           @RequestParam(required = false) String servings,
-          @RequestParam(required = false) String prepareTime
+          @RequestParam(required = false) String prepareTime,
+          @RequestParam(defaultValue = "true") Boolean isPublic
   )
   {
-
-    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime);
+    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime, isPublic);
   }
 
   @GetMapping("/{id}")
@@ -48,18 +52,19 @@ public class RecipeController {
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Recipe save(@RequestParam("recipe") String json,
+                     @RequestHeader("Authorization") String token,                   
                      @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
 
-     System.out.println("=== KONTROLER ===");
+    System.out.println("=== KONTROLER ===");
     System.out.println("JSON: " + json);
     System.out.println("Images count: " + (images != null ? images.size() : 0));
     
     ObjectMapper objectMapper = new ObjectMapper();
     RecipeAddDto recipe = objectMapper.readValue(json,RecipeAddDto.class);
     if(images!=null){
-     return recipeService.saveRecipeWithPhotos(recipe,images);
+     return recipeService.saveRecipeWithPhotos(recipe,images, token);
     }else{
-      return recipeService.saveRecipeWithoutPhoto(recipe);
+      return recipeService.saveRecipeWithoutPhoto(recipe, token);
     }
   }
 

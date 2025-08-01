@@ -3,6 +3,8 @@ package com.kk.cibaria.recipe;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
@@ -55,15 +57,15 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Recipe saveRecipeWithoutPhoto(RecipeAddDto recipe) throws IOException {
+  public Recipe saveRecipeWithoutPhoto(RecipeAddDto recipe, String token) throws IOException {
 
-    Recipe newRecipe = createRecipe(recipe);
+    Recipe newRecipe = createRecipe(recipe, token);
     return recipeRepository.save(newRecipe);
   }
 
   @Override
-  public Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images) {
-      Recipe newRecipe = createRecipe(recipe);
+  public Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images, String token) {
+      Recipe newRecipe = createRecipe(recipe, token);
       List<Image> imagesSaved = new ArrayList<>();
       images.forEach(image->{
         try {
@@ -79,10 +81,14 @@ public class RecipeServiceImpl implements RecipeService {
       return recipeRepository.save(newRecipe);
   }
 
-  private Recipe createRecipe(RecipeAddDto recipe){
+  private Recipe createRecipe(RecipeAddDto recipe, String token){
+    int id = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User was not found"));
+
     Recipe newRecipe = new Recipe();
     newRecipe.setRecipeName(recipe.getRecipeName());
     newRecipe.setDifficulty(recipe.getDifficulty());
+    newRecipe.setUser(user);
     List<Ingredient> newIngredients = recipe.getIngredients().stream().map(i -> {
       Ingredient ingredient = new Ingredient();
       ingredient.setRecipe(newRecipe);
@@ -103,6 +109,7 @@ public class RecipeServiceImpl implements RecipeService {
     newRecipe.setPrepareTime(recipe.getPrepareTime());
     newRecipe.setServings(recipe.getServings());
     newRecipe.setCategory(recipe.getCategory());
+    newRecipe.setIsPublic(recipe.getIsPublic());
 
     return newRecipe;
   }
@@ -124,6 +131,7 @@ public class RecipeServiceImpl implements RecipeService {
     recipeFound.setPrepareTime(recipe.getPrepareTime());
     recipeFound.setServings(recipe.getServings());
     recipeFound.setCategory(recipe.getCategory());
+    recipeFound.setIsPublic(recipe.getIsPublic());
 
     recipeFound.getRatings().clear();
     for (Rating rating : recipe.getRatings()) {
@@ -138,10 +146,17 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public RecipeRequestDto getRecipeByPage(int page, int size, List<String> category,
-                                          Integer difficulty, String servings, String prepareTime) {
+                                          Integer difficulty, String servings, String prepareTime, Boolean isPublic) {
     Pagination pagination = new Pagination();
     RecipeFilter filter = new RecipeFilter();
     List<Recipe> recipes = recipeRepository.findAll();
+
+    if(isPublic != null && isPublic){
+      recipes = recipes.stream()
+                .filter(recipe -> Boolean.TRUE.equals(recipe.getIsPublic()) == true)
+                .collect(Collectors.toList());
+    }
+
     List<Recipe> filteredRecipes = filter.filterByParams(category,difficulty,servings,prepareTime,recipes);
     List<Recipe> paginatedRecipes = pagination.paginate(page,size,filteredRecipes);
     RecipeRequestDto recipeRequestDto = new RecipeRequestDto();

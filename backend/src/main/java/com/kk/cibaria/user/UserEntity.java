@@ -40,6 +40,10 @@ public class UserEntity {
   @JsonManagedReference("user")
   private List<Rating> rating;
 
+ @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @JsonManagedReference("user-recipes")
+  private List<Recipe> userRecipes = new ArrayList<>();
+ 
   @ManyToMany
   @JoinTable(name = "favourite_recipes",
   joinColumns = @JoinColumn(name = "user_id"),

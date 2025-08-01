@@ -19,7 +19,7 @@ export class RecipeService {
       ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
       : undefined;
 
-    return this.http.post<any>(this.url, recipeData);
+    return this.http.post<any>(this.url, recipeData, { headers });
   }
 
   isFavourite(recipeId: number): Observable<boolean> {

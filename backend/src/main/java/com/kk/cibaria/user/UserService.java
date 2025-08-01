@@ -33,4 +33,8 @@ public interface UserService {
    UserEntity updateEmail(int id, UpdateEmailDto updateEmailDto, String token);
 
    UserEntity updatePassword(int id, UpdatePasswordDto updatePasswordDto, String token);
+
+   MyProfileDto getUserRecipes (String token);
+   MyProfileDto getFavouriteRecipes (String token);
+
 }

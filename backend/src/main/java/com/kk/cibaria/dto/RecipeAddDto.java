@@ -14,5 +14,6 @@ public class RecipeAddDto {
     private int prepareTime;
     private int servings;
     private String category;
+    private Boolean isPublic;
     private List<Step> steps;
 }

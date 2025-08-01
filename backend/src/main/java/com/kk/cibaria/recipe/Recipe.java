@@ -4,6 +4,9 @@ package com.kk.cibaria.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -47,6 +50,8 @@ public class Recipe {
   @Column(name = "category")
   private String category;
 
+  @Column(name = "isPublic")
+  private Boolean isPublic = false;
 
   @Column(name = "rating")
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
@@ -56,6 +61,11 @@ public class Recipe {
   @ManyToMany(mappedBy = "favouriteRecipes")
   @JsonIgnore
   private List<UserEntity> favouriteByUsers = new ArrayList<>()  ;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  @JsonBackReference("user-recipes")
+  private UserEntity user;
 
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
   @JsonManagedReference("recipe-images")

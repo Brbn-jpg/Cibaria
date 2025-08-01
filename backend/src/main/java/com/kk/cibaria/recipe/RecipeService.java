@@ -12,14 +12,14 @@ public interface RecipeService {
 
   Recipe getById(int id);
 
-  Recipe saveRecipeWithoutPhoto(RecipeAddDto recipe) throws IOException;
+  Recipe saveRecipeWithoutPhoto(RecipeAddDto recipe, String token) throws IOException;
 
-  Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images);
+  Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images, String token);
 
   Recipe update(int id, Recipe recipe);
 
   RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, String servings,
-                                   String prepareTime);
+                                   String prepareTime, Boolean isPublic);
 
   void addRecipeToFavourites(String token, int recipeId);
 

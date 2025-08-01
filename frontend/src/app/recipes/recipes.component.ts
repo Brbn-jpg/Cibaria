@@ -29,6 +29,7 @@ export interface recipesRequest {
   category: string;
   ratings: rating[];
   images: images[];
+  isPublic: boolean;
 }
 
 export interface images {
@@ -68,6 +69,7 @@ export class RecipesComponent implements OnInit {
   servingsFrom?: number;
   servingsTo?: number;
   category?: string;
+  isPublic?: boolean;
   totalPages: number = 1;
   images?: images[];
   query?: string;
@@ -116,7 +118,9 @@ export class RecipesComponent implements OnInit {
       .subscribe({
         next: (response) => {
           if (response && Array.isArray(response.content)) {
-            this.recipesArray = response.content;
+            this.recipesArray = response.content.filter(
+              (recipe) => recipe.isPublic == true
+            );
             this.totalPages = response.totalPages;
           } else {
             console.error(response);

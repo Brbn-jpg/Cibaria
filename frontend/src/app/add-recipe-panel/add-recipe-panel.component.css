@@ -101,7 +101,8 @@ button:hover {
   margin-bottom: 1.6rem;
 }
 
-.difficulty {
+.difficulty,
+.public {
   width: 100%;
 }
 

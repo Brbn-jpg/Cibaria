@@ -56,6 +56,16 @@ export class ProfileService {
     });
   }
 
+  getUserRecipes(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any>(`${this.baseUrl}/users/recipes`, { headers });
+  }
+
+  getUserFavourites(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any>(`${this.baseUrl}/users/favourites`, { headers });
+  }
+
   // Username and description only
   updateUserProfile(userId: number, userData: any): Observable<any> {
     const headers = this.getAuthHeaders();

@@ -80,9 +80,8 @@
     </div>
   </div>
 
-  <h3>Favourite recipes</h3>
-  <!-- FILTERS -->
-  @if (favouriteRecipes.length > 0) {
+  <!-- FILTERS  -->
+  @if (favouriteRecipes.length || userRecipe.length > 0) {
   <div class="filters">
     @if (Filtering) { @if (Open){
     <div class="close-btn">
@@ -97,6 +96,22 @@
     }
     <div class="settings">
       <div class="menu-overlay"></div>
+      <div class="tabs">
+        <button
+          (click)="setActiveTab('favourites')"
+          [class.selectedTab]="activeTab === 'favourites'"
+          class="switch"
+        >
+          Ulubione
+        </button>
+        <button
+          (click)="setActiveTab('userRecipes')"
+          [class.selectedTab]="activeTab === 'userRecipes'"
+          class="switch"
+        >
+          Moje przepisy
+        </button>
+      </div>
 
       <div class="filter-wrapper">
         <label class="settings-label">Filters</label>
@@ -190,6 +205,22 @@
       </div>
     </div>
     } @else {
+    <div class="tabs">
+      <button
+        (click)="setActiveTab('favourites')"
+        [class.selectedTab]="activeTab === 'favourites'"
+        class="switch"
+      >
+        Ulubione
+      </button>
+      <button
+        (click)="setActiveTab('userRecipes')"
+        [class.selectedTab]="activeTab === 'userRecipes'"
+        class="switch"
+      >
+        Moje przepisy
+      </button>
+    </div>
     <div class="search filter-wrapper">
       <label for="search">Search</label>
       <input
@@ -212,6 +243,22 @@
         <option value="1">Easy</option>
         <option value="2">Medium</option>
         <option value="3">Hard</option>
+      </select>
+    </div>
+    <div class="category filter-wrapper">
+      <label for="category">Category</label>
+      <select
+        name="category"
+        id="category"
+        class="filter"
+        (change)="onFilterChange('category', $event)"
+      >
+        <option selected value="">Choose category</option>
+        @for (category of categoriesArray; track $index){
+        <option [value]="category.categoryName">
+          {{ category.categoryName }}
+        </option>
+        }
       </select>
     </div>
     <div class="prepare-time filter-wrapper">
@@ -252,27 +299,13 @@
         />
       </div>
     </div>
-    <div class="category filter-wrapper">
-      <label for="category">Category</label>
-      <select
-        name="category"
-        id="category"
-        class="filter"
-        (change)="onFilterChange('category', $event)"
-      >
-        <option selected value="">Choose category</option>
-        @for (category of categoriesArray; track $index){
-        <option [value]="category.categoryName">
-          {{ category.categoryName }}
-        </option>
-        }
-      </select>
-    </div>
+
     }
   </div>
   <hr />
   }
   <!-- FAVOURITE RECIPES -->
+  @if(activeTab == 'favourites'){
   <div class="recipes grid-4-cols">
     @for (recipe of paginatedFavouriteRecipes; track $index) {
     <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
@@ -328,6 +361,64 @@
     <p class="no-recipes">You have no favourite recipes yet</p>
     }
   </div>
+  }
+  <!-- USER RECIPES -->
+  @if (activeTab == 'userRecipes'){
+  <div class="recipes grid-4-cols">
+    @for (recipe of paginatedUserRecipes; track $index) {
+    <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
+      ><figure class="recipe">
+        <div class="image-wrapper">
+          <img
+            class="recipe-image"
+            [src]="recipe?.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
+            alt="{{ recipe?.recipeName }}"
+          />
+        </div>
+        <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
+        <div class="recipe-desc">
+          <div class="recipe-rating recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/star-outline.svg"
+              alt="small star icon"
+            /><span>{{ getAverageRating(recipe.ratings) }}</span>
+          </div>
+          <div class="recipe-difficulty recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/bar-chart-outline.svg"
+              alt="chart icon"
+            /><span>{{ getDifficulty(recipe.difficulty) }}</span>
+          </div>
+          <div class="recipe-servings recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/restaurant-outline.svg"
+              alt="fork and knife icon"
+            /><span>{{ recipe.servings }} servings</span>
+          </div>
+          <div class="recipe-time recipe-desc-inner">
+            <img
+              class="icon"
+              src="images/icons/time-outline.svg"
+              alt="food icon"
+            /><span>{{ recipe.prepareTime }} minutes</span>
+          </div>
+          <div class="recipe-time recipe-desc-inner">
+            <img class="icon" src="images/icons/bowl-food.svg" alt="" />
+            <span>{{ recipe.category }}</span>
+          </div>
+        </div>
+      </figure></a
+    >
+    } @if (filteredUserRecipes.length === 0 && userRecipe.length > 0) {
+    <p class="no-recipes">No recipes found matching your filters</p>
+    } @if (userRecipe.length === 0) {
+    <p class="no-recipes">You have no recipes yet</p>
+    }
+  </div>
+  }
 
   <!-- PAGINATION & FOOTER -->
   @if (filteredFavouriteRecipes.length > 0) {
