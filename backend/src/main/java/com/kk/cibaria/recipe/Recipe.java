@@ -37,7 +37,7 @@ public class Recipe {
   private int difficulty;
 
   @Column(name = "ingredients")
-  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference("ingredient")
   private List<Ingredient> ingredients;
 
@@ -71,7 +71,7 @@ public class Recipe {
   @JsonManagedReference("recipe-images")
   private List<Image> images = new ArrayList<>();
 
-  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference("recipe-steps")
   private List<Step> steps;
 }

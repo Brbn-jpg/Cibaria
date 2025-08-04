@@ -1,26 +1,45 @@
 <main>
+  @if (!isMobile) {
   <app-navbar></app-navbar>
+  } @else {
+  <app-mobile-nav></app-mobile-nav>
+  }
   <article>
     <div class="grid-2-cols">
       <div class="recipe-details">
-        <div class="favourite">
-          <button class="favourite-btn" (click)="toggleFavourite()">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="favourite-icon icon"
-              viewBox="0 0 512 512"
-            >
-              <path
-                d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
-                fill="none"
-                stroke="white"
-                stroke-linejoin="round"
-                stroke-width="32"
-              />
-            </svg>
-          </button>
+        <div class="fav-edit">
+          @if (isLoggedIn){
+          <div class="favourite">
+            <button class="favourite-btn" (click)="toggleFavourite()">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="favourite-icon icon"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                  fill="none"
+                  stroke="white"
+                  stroke-linejoin="round"
+                  stroke-width="32"
+                />
+              </svg>
+            </button>
 
-          <p class="favourite-text">Add to favourite</p>
+            <p class="favourite-text">Add to favourite</p>
+          </div>
+          @if(isOwner){
+          <div class="edit">
+            <a class="edit-btn" [routerLink]="['/update-recipe', recipeId]">
+              <img
+                src="images/icons/edit-icon.svg"
+                alt="Edit recipe"
+                class="edit-icon icon"
+              />
+            </a>
+            <p class="edit-text">Edit recipe</p>
+          </div>
+          } }
         </div>
         <h1 class="recipe-title">{{ recipeDetails?.recipeName }}</h1>
         <div class="empty-div"></div>

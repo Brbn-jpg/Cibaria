@@ -3,7 +3,6 @@ package com.kk.cibaria.recipe;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.kk.cibaria.dto.RecipeAddDto;
@@ -17,7 +16,6 @@ import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.ingredient.Ingredient;
-import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.step.Step;
 import com.kk.cibaria.step.StepRepository;
@@ -25,7 +23,11 @@ import com.kk.cibaria.user.UserEntity;
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.RecipeNotFoundException;
+import com.kk.cibaria.exception.UnauthorizedException;
 import com.kk.cibaria.user.UserRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -53,7 +55,7 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   public Recipe getById(int id) {
     return recipeRepository.findById(id).orElseThrow(
-        () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
   }
 
   @Override
@@ -114,11 +116,81 @@ public class RecipeServiceImpl implements RecipeService {
     return newRecipe;
   }
 
+  @Transactional
   @Override
-  public Recipe update(int id, Recipe recipe) {
+  public Recipe updateRecipeWithPhotos(int id, Recipe recipe, List<MultipartFile> images, String token) {
     Recipe recipeFound = recipeRepository.findById(id).orElseThrow(
-        () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
-    recipeFound.setId(id);
+      () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
+   
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity currentUser = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+   
+
+    System.out.println("=== AUTORYZACJA DEBUG ===");
+    System.out.println("Recipe ID: " + id);
+    System.out.println("Recipe owner ID: " + recipeFound.getUser().getId());
+    System.out.println("Current user ID: " + currentUser.getId());
+    System.out.println("Are they equal? " + (recipeFound.getUser().getId() == currentUser.getId()));
+    System.out.println("Recipe owner ID type: " + recipeFound.getUser().getId());
+    System.out.println("Current user ID type: " + currentUser.getId());
+    if (recipeFound.getUser().getId() != currentUser.getId()) {
+       throw new UnauthorizedException("You can edit only your own recipes!");
+    }
+
+    recipeFound.setRecipeName(recipe.getRecipeName());
+    recipeFound.setDifficulty(recipe.getDifficulty());
+    recipeFound.setPrepareTime(recipe.getPrepareTime());
+    recipeFound.setServings(recipe.getServings());
+    recipeFound.setCategory(recipe.getCategory());
+    recipeFound.setIsPublic(recipe.getIsPublic());
+
+    recipeFound.getIngredients().clear();
+    for (Ingredient ingredient : recipe.getIngredients()) {
+       ingredient.setRecipe(recipeFound);
+       recipeFound.getIngredients().add(ingredient);
+    }
+
+    recipeFound.getSteps().clear();
+    for (Step step : recipe.getSteps()) {
+       step.setRecipe(recipeFound);
+       recipeFound.getSteps().add(step);
+    }
+
+    if (images != null && !images.isEmpty()) {
+      List<Image> newImages = new ArrayList<>();
+      images.forEach(image -> {
+          try {
+              newImages.add(imageService.createPhoto(image, ImageType.RECIPE));
+          } catch (IOException e) {
+              throw new ImageErrorException(e.getMessage());
+          }
+        });
+       
+        newImages.forEach(image -> {
+          image.setRecipe(recipeFound);
+        });
+       
+       recipeFound.getImages().clear();
+       recipeFound.setImages(newImages);
+       
+    }
+  return recipeRepository.save(recipeFound);
+  }
+
+  @Transactional
+  @Override
+  public Recipe updateRecipeWithoutPhotos(int id, Recipe recipe, String token) {
+    Recipe recipeFound = recipeRepository.findById(id).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
+
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity currentUser = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+
+    if (recipeFound.getUser().getId() != currentUser.getId()){
+      throw new UnauthorizedException("You can edit only your own recipes!");
+    }
     recipeFound.setRecipeName(recipe.getRecipeName());
     recipeFound.setDifficulty(recipe.getDifficulty());
 
@@ -128,20 +200,29 @@ public class RecipeServiceImpl implements RecipeService {
       recipeFound.getIngredients().add(ingredient);
     }
 
+    recipeFound.getSteps().clear();
+    for (Step step : recipe.getSteps()) {
+      step.setRecipe(recipeFound);
+      recipeFound.getSteps().add(step);
+    }
+
     recipeFound.setPrepareTime(recipe.getPrepareTime());
     recipeFound.setServings(recipe.getServings());
     recipeFound.setCategory(recipe.getCategory());
     recipeFound.setIsPublic(recipe.getIsPublic());
 
-    recipeFound.getRatings().clear();
-    for (Rating rating : recipe.getRatings()) {
-      UserEntity user = userRepository.findById(rating.getUser().getId()).orElse(null);
-      rating.setRecipe(recipeFound);
-      rating.setUser(user);
-      recipeFound.getRatings().add(rating);
-    }
-
     return recipeRepository.save(recipeFound);
+  }
+
+  @Override
+  public boolean isOwner(int id, String token){
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User was not found"));
+
+    Recipe recipe = recipeRepository.findById(id).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
+      "found"));
+
+    return recipe.getUser().getId() == user.getId();
   }
 
   @Override

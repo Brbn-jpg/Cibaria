@@ -57,12 +57,6 @@ public class UserController {
     return userService.getMyProfile(token);
   }
 
-  // @GetMapping("/my-favourite")
-  // public ResponseEntity<List<MyProfileRecipeDto>> getFavouriteRecipes(@RequestHeader("Authorization") String token){
-  //   List<MyProfileRecipeDto> myFavouriteRecipes = userService.getMyFavourite(token);
-  //   return ResponseEntity.ok(myFavouriteRecipes);
-  // }
-
   @GetMapping("/recipes")
   public MyProfileDto getUserRecipes(@RequestHeader("Authorization") String token){
     return userService.getUserRecipes(token);

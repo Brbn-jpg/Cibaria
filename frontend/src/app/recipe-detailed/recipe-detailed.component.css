@@ -12,9 +12,11 @@ main {
 
 /* Article styling  */
 
-.favourite {
+.favourite,
+.edit {
   display: flex;
   align-items: center;
+  height: 6rem;
   padding: 1rem;
   gap: 1.6rem;
   border: 1px solid #aaa;
@@ -40,12 +42,24 @@ main {
   stroke: #ffd700;
 }
 
+.fav-edit,
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+}
+
+.edit-icon {
+  filter: invert(1);
+}
+
 .active {
   fill: #ffd700;
   stroke: #ffd700;
 }
 
-.favourite-text {
+.favourite-text,
+.edit-text {
   font-size: 1.6rem;
 }
 
@@ -71,7 +85,6 @@ article {
 }
 
 .recipe-image {
-  aspect-ratio: 1/1;
   max-width: 100%;
   border-radius: 2rem;
   z-index: 2;

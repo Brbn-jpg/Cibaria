@@ -68,9 +68,25 @@ public class RecipeController {
     }
   }
 
-  @PutMapping("/{id}")
-  public Recipe update(@PathVariable int id, @RequestBody Recipe recipe) {
-    return recipeService.update(id, recipe);
+  @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public Recipe update(@PathVariable int id,
+                      @RequestParam("recipe") String json,
+                      @RequestHeader("Authorization") String token,
+                      @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
+      
+      System.out.println("=== UPDATE KONTROLER ===");
+      System.out.println("Recipe ID: " + id);
+      System.out.println("JSON: " + json);
+      System.out.println("Images count: " + (images != null ? images.size() : 0));
+      
+      ObjectMapper objectMapper = new ObjectMapper();
+      Recipe recipe = objectMapper.readValue(json, Recipe.class);
+      
+      if(images != null && !images.isEmpty()) {
+          return recipeService.updateRecipeWithPhotos(id, recipe, images, token);
+      } else {
+          return recipeService.updateRecipeWithoutPhotos(id, recipe, token);
+      }
   }
 
   @DeleteMapping("/{id}")
@@ -82,6 +98,11 @@ public class RecipeController {
   public boolean isRecipeFavourite(@RequestHeader("Authorization") String token,
                                    @RequestParam int recipeId) {
     return recipeService.isRecipeFavourite(token, recipeId);
+  }
+
+  @GetMapping("/{id}/isOwner")
+  public boolean isOwner(@PathVariable int id, @RequestHeader("Authorization") String token){
+    return recipeService.isOwner(id, token);
   }
 
   @PostMapping("/favourites/add")

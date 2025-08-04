@@ -1,0 +1,187 @@
+section {
+  background: rgb(23, 21, 21);
+  background: linear-gradient(
+    180deg,
+    rgba(23, 21, 21, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: 3.2rem;
+  font-weight: 200;
+  margin-bottom: 3.2rem;
+  margin-top: 4.8rem;
+}
+
+h2 {
+  font-size: 2.4rem;
+  font-weight: 200;
+  margin-bottom: 1.6rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin: 4.8rem auto;
+}
+
+hr {
+  margin: 2.4rem 0;
+}
+
+label {
+  font-size: 2.4rem;
+  font-weight: 200;
+}
+
+input {
+  font-size: 2.4rem;
+  padding: 0.8rem;
+  margin-bottom: 1.6rem;
+  max-width: 30rem;
+}
+
+select {
+  max-width: 30rem;
+  font-size: 2.4rem;
+  padding: 0.8rem;
+  margin-bottom: 1.6rem;
+  background-color: #fff;
+  border: none;
+  color: #000;
+}
+
+textarea {
+  font-size: 2.4rem;
+  padding: 0.8rem;
+  margin-bottom: 1.6rem;
+  width: 100%;
+  height: 12.8rem;
+  max-width: 100%;
+}
+
+button {
+  font-size: 2.4rem;
+  padding: 0.8rem;
+  margin-top: 1.6rem;
+  background-color: #fbe5b2;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  border-radius: 1rem;
+  transition: 0.3s all ease-in-out;
+}
+
+button:hover {
+  background-color: #f7d79c;
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ingredients {
+  display: flex;
+  gap: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
+.difficulty,
+.public {
+  width: 100%;
+}
+
+.image {
+  padding: 0;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  font-size: 2.4rem;
+  margin-top: 2.4rem;
+}
+
+.success {
+  text-align: center;
+  color: green;
+  font-size: 2.4rem;
+  margin-top: 2.4rem;
+}
+
+.ingredients-list {
+  list-style: none;
+}
+
+.ingredient {
+  font-size: 2.4rem;
+}
+
+.step-number {
+  font-size: 3.2rem;
+  font-weight: 200;
+  margin-top: 2.4rem;
+}
+
+.step-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.step-text {
+  font-size: 2.4rem;
+  font-weight: 200;
+  max-width: fit-content;
+}
+
+.remove-step-btn {
+  margin-top: 0 !important;
+  margin-left: 1.6rem;
+}
+
+/* 1200px */
+@media (max-width: 75em) {
+  .ingredient,
+  .quantity,
+  .unit {
+    width: 33%;
+  }
+}
+
+/* 930px */
+@media (max-width: 58em) {
+  .category,
+  .title,
+  .difficulty,
+  .servings,
+  .prepare-time {
+    width: 50%;
+  }
+}
+
+/* 800px */
+@media (max-width: 50em) {
+  .input-group {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  label {
+    margin-bottom: 0.8rem;
+    text-align: left;
+  }
+  form input,
+  form select {
+    min-width: 100%;
+  }
+}

@@ -1,44 +1,22 @@
 import { RecipeService } from '../services/recipe.service';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
-
-export interface Recipe {
-  category: string;
-  difficulty: number;
-  prepareTime: number;
-  recipeId: number;
-  recipeName: string;
-  servings: number;
-  ingredients: {
-    ingredientName: string;
-    quantity: number;
-    unit: string;
-  }[];
-  steps: step[];
-  images: images[];
-}
-
-export interface Ingredients {
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-export interface images {
-  imageUrl: string;
-  publicId: string;
-}
-
-export interface step {
-  content: string[];
-}
+import { Recipe } from '../Models/recipe';
+import { Ingredients } from '../Models/ingredients';
+import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-recipe-detailed',
   standalone: true,
-  imports: [FooterSectionComponent, NavbarComponent],
+  imports: [
+    FooterSectionComponent,
+    NavbarComponent,
+    RouterLink,
+    MobileNavComponent,
+  ],
   templateUrl: './recipe-detailed.component.html',
   styleUrl: './recipe-detailed.component.css',
 })
@@ -49,15 +27,18 @@ export class RecipeDetailedComponent implements OnInit {
   isFavourite: boolean = false;
   isMobile: boolean = false;
   isProcessing: boolean = false;
+  isLoggedIn: boolean = false;
+  isOwner: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
+    private authService: AuthService,
     private recipeService: RecipeService
   ) {}
 
   ngOnInit() {
     this.isMobile = window.innerWidth <= 800;
-
+    this.isLoggedIn = this.authService.isAuthenticated();
     this.route.params.subscribe((params) => {
       this.recipeId = +params['id'];
       console.log('Recipe ID from params:', this.recipeId);
@@ -70,6 +51,25 @@ export class RecipeDetailedComponent implements OnInit {
       }
     });
     this.setupIntersectionObserver();
+  }
+
+  private checkOwnership(): void {
+    if (!this.isLoggedIn || !this.recipeDetails) {
+      this.isOwner = false;
+      console.log(this.isOwner);
+      return;
+    }
+
+    this.recipeService.isOwner(this.recipeDetails.id).subscribe({
+      next: (isOwner) => {
+        this.isOwner = isOwner;
+        console.log('Is owner:', this.isOwner);
+      },
+      error: (err) => {
+        console.error('Error checking ownership:', err);
+        this.isOwner = false;
+      },
+    });
   }
 
   private checkIfFavourite(): void {
@@ -101,6 +101,7 @@ export class RecipeDetailedComponent implements OnInit {
           quantity: ingredient.quantity,
           unit: ingredient.unit,
         }));
+        this.checkOwnership();
       },
       error: (err) => {
         console.error('Error loading recipe details:', err);
@@ -165,7 +166,6 @@ export class RecipeDetailedComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    // Use this.isFavourite as the source of truth
     if (!this.isFavourite) {
       this.recipeService.addToFavourites(this.recipeId).subscribe({
         next: (response) => {

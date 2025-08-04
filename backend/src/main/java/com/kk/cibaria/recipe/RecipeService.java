@@ -16,7 +16,9 @@ public interface RecipeService {
 
   Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images, String token);
 
-  Recipe update(int id, Recipe recipe);
+  Recipe updateRecipeWithoutPhotos(int id, Recipe recipe, String token);
+
+  Recipe updateRecipeWithPhotos(int id, Recipe recipe, List<MultipartFile> images, String token);
 
   RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, String servings,
                                    String prepareTime, Boolean isPublic);
@@ -30,4 +32,6 @@ public interface RecipeService {
   List<Recipe> searchRecipes(String query);
 
   boolean isRecipeFavourite(String token, int recipeId);
+
+  boolean isOwner(int id, String token);
 }
