@@ -10,6 +10,8 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { RecipeService } from '../services/recipe.service';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-add-recipe-panel',
@@ -20,6 +22,7 @@ import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
     FormsModule,
     ReactiveFormsModule,
     MobileNavComponent,
+    ToastNotificationComponent,
   ],
   templateUrl: './add-recipe-panel.component.html',
   styleUrls: ['./add-recipe-panel.component.css'],
@@ -31,13 +34,12 @@ export class AddRecipePanelComponent {
   isPublic = false;
   newIngredient = { ingredientName: '', quantity: 0, unit: 'Choose a unit' };
   newStep = '';
-  fillAll = true;
-  alreadyExists = false;
-  fileSizeError = false;
-  FailedToAdd = false;
   success = false;
 
-  constructor(private recipeService: RecipeService) {}
+  constructor(
+    private recipeService: RecipeService,
+    private notificationService: NotificationService
+  ) {}
 
   recipeForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -75,7 +77,7 @@ export class AddRecipePanelComponent {
         this.newIngredient.ingredientName.toLowerCase()
     );
     if (ingredientExists) {
-      this.alreadyExists = true;
+      this.notificationService.warning('This ingredient already exists!', 5000);
       return;
     }
     if (
@@ -84,10 +86,12 @@ export class AddRecipePanelComponent {
       this.newIngredient.unit &&
       this.newIngredient.unit !== 'Choose a unit'
     ) {
-      this.fillAll = true;
       this.ingredients.push({ ...this.newIngredient });
     } else {
-      this.fillAll = false;
+      this.notificationService.warning(
+        'Fill all fields to add ingredient',
+        5000
+      );
     }
   }
 
@@ -96,7 +100,7 @@ export class AddRecipePanelComponent {
       this.steps.push({ content: this.newStep.trim() });
       this.newStep = '';
     } else {
-      alert('Please enter a step.');
+      this.notificationService.warning('Please enter a step', 5000);
     }
   }
 
@@ -112,23 +116,19 @@ export class AddRecipePanelComponent {
     const fileInput = document.querySelector('.image') as HTMLInputElement;
 
     if (fileInput.files && fileInput.files[0].size > 5242880) {
-      this.fileSizeError = true;
+      this.notificationService.warning('The file size exceeds 5MB!', 5000);
       fileInput.value = '';
-    } else {
-      this.fileSizeError = false;
     }
   }
 
   postRecipe() {
     if (!localStorage.getItem('token')) {
-      console.error('Użytkownik nie jest zalogowany!');
+      this.notificationService.error('User is not logged in!', 5000);
     }
 
     if (this.recipeForm.pristine || this.recipeForm.untouched) {
-      this.FailedToAdd = true;
+      this.notificationService.error('Failed to add the recipe!', 5000);
       return;
-    } else {
-      this.success = true;
     }
 
     const formData = new FormData();
@@ -157,16 +157,13 @@ export class AddRecipePanelComponent {
       images.readAsDataURL(file);
       formData.append('images', file);
     }
-    console.log(formData);
 
     this.recipeService.postRecipe(formData).subscribe({
       next: (response) => {
-        console.log('Przepis został dodany pomyślnie!', response);
-        this.success = true;
+        this.notificationService.success('Recipe has been created', 5000);
       },
       error: (err) => {
-        console.error('Wystąpił błąd podczas dodawania przepisu', err);
-        this.FailedToAdd = true;
+        this.notificationService.error('Failed to add the recipe!', 5000);
       },
     });
   }

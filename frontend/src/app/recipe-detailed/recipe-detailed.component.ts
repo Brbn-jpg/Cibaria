@@ -1,5 +1,10 @@
 import { RecipeService } from '../services/recipe.service';
-import { Component, HostListener, OnInit } from '@angular/core';
+import {
+  asNativeElements,
+  Component,
+  HostListener,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -7,6 +12,8 @@ import { Recipe } from '../Models/recipe';
 import { Ingredients } from '../Models/ingredients';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 import { AuthService } from '../services/auth.service';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-recipe-detailed',
@@ -16,6 +23,7 @@ import { AuthService } from '../services/auth.service';
     NavbarComponent,
     RouterLink,
     MobileNavComponent,
+    ToastNotificationComponent,
   ],
   templateUrl: './recipe-detailed.component.html',
   styleUrl: './recipe-detailed.component.css',
@@ -29,11 +37,13 @@ export class RecipeDetailedComponent implements OnInit {
   isProcessing: boolean = false;
   isLoggedIn: boolean = false;
   isOwner: boolean = false;
+  showConfirmation: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -182,7 +192,6 @@ export class RecipeDetailedComponent implements OnInit {
     } else {
       this.recipeService.removeFromFavourites(this.recipeId).subscribe({
         next: (response) => {
-          console.log('Successfully removed from favourites');
           this.isFavourite = false;
           this.updateFavouriteButton();
           this.isProcessing = false;
@@ -193,6 +202,27 @@ export class RecipeDetailedComponent implements OnInit {
         },
       });
     }
+  }
+
+  delete() {
+    this.showConfirmation = true;
+  }
+
+  cancelDelete() {
+    this.showConfirmation = false;
+  }
+
+  confirmDelete() {
+    this.recipeService.deleteRecipe(this.recipeId).subscribe({
+      next: (response) => {
+        this.notificationService.success('Recipe has been deleted', 5000);
+        this.notificationService.info('Refresh the site to see changes', 5000);
+      },
+      error: (err) => {
+        this.notificationService.error('Error during deletion', 5000);
+      },
+    });
+    this.cancelDelete();
   }
 
   @HostListener('window:resize', ['$event'])

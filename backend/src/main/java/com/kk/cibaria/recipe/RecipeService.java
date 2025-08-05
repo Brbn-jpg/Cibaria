@@ -27,7 +27,7 @@ public interface RecipeService {
 
   void deleteRiceFromFavourites(String token, int recipeId);
 
-  void delete(int id);
+  void delete(String token, int id);
 
   List<Recipe> searchRecipes(String query);
 

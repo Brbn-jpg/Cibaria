@@ -90,8 +90,8 @@ public class RecipeController {
   }
 
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable int id) {
-    recipeService.delete(id);
+  public void delete(@PathVariable int id, @RequestHeader("Authorization") String token) {
+    recipeService.delete(token, id);
   } 
 
   @GetMapping("/favourites/isFavourite")

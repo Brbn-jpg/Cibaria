@@ -33,6 +33,11 @@ export class RecipeService {
     });
   }
 
+  deleteRecipe(recipeId: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete<any>(`${this.url}/${recipeId}`, { headers });
+  }
+
   isOwner(recipeId: number): Observable<boolean> {
     const headers = this.getAuthHeaders();
     return this.http.get<boolean>(`${this.url}/${recipeId}/isOwner`, {

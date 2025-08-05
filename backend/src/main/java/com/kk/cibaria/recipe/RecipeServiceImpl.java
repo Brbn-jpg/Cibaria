@@ -126,14 +126,6 @@ public class RecipeServiceImpl implements RecipeService {
     UserEntity currentUser = userRepository.findById(userId).orElseThrow(
       () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
    
-
-    System.out.println("=== AUTORYZACJA DEBUG ===");
-    System.out.println("Recipe ID: " + id);
-    System.out.println("Recipe owner ID: " + recipeFound.getUser().getId());
-    System.out.println("Current user ID: " + currentUser.getId());
-    System.out.println("Are they equal? " + (recipeFound.getUser().getId() == currentUser.getId()));
-    System.out.println("Recipe owner ID type: " + recipeFound.getUser().getId());
-    System.out.println("Current user ID type: " + currentUser.getId());
     if (recipeFound.getUser().getId() != currentUser.getId()) {
        throw new UnauthorizedException("You can edit only your own recipes!");
     }
@@ -289,13 +281,16 @@ public class RecipeServiceImpl implements RecipeService {
     userRepository.save(user);
   }
 
+  @Transactional
   @Override
-  public void delete(int id) {
+  public void delete(String token, int id) {
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User was not found"));
     Recipe recipe = recipeRepository.findById(id).orElseThrow(
-        () -> new RecipeNotFoundException(String.format("User with id: %s does not exist in the database", id)));
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
 
-    if (recipe == null) {
-      return;
+    if (recipe.getUser() == null || recipe.getUser().getId() != user.getId()) {
+       throw new UnauthorizedException("You can delete only your own recipes!");
     }
 
     recipeRepository.delete(recipe);

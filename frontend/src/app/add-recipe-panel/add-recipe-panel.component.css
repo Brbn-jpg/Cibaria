@@ -110,20 +110,6 @@ button:hover {
   padding: 0;
 }
 
-.error {
-  text-align: center;
-  color: red;
-  font-size: 2.4rem;
-  margin-top: 2.4rem;
-}
-
-.success {
-  text-align: center;
-  color: green;
-  font-size: 2.4rem;
-  margin-top: 2.4rem;
-}
-
 .ingredients-list {
   list-style: none;
 }

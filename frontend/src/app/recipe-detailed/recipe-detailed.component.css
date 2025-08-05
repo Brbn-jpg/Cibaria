@@ -13,7 +13,8 @@ main {
 /* Article styling  */
 
 .favourite,
-.edit {
+.edit,
+.delete {
   display: flex;
   align-items: center;
   height: 6rem;
@@ -24,12 +25,10 @@ main {
   width: fit-content;
 }
 
-.favourite-btn {
+.favourite-btn,
+.delete-btn {
   background-color: transparent;
   border: none;
-}
-
-.favourite-btn:hover {
   cursor: pointer;
 }
 
@@ -43,7 +42,8 @@ main {
 }
 
 .fav-edit,
-.edit-btn {
+.edit-btn,
+.delete-btn {
   display: flex;
   align-items: center;
   gap: 2.4rem;
@@ -59,11 +59,13 @@ main {
 }
 
 .favourite-text,
-.edit-text {
+.edit-text,
+.delete-text {
   font-size: 1.6rem;
 }
 
 article {
+  position: relative;
   margin: 0 4.8rem 12rem 4.8rem;
 }
 
@@ -103,8 +105,8 @@ article {
   border-radius: 50%;
   background: radial-gradient(
     circle at center,
-    #fbe5b2 0%,
-    #b0a07d 20%,
+    #fbe5b2a4 0%,
+    #b0a07da1 20%,
     rgba(255, 255, 255, 0) 50%
   );
 }
@@ -218,6 +220,52 @@ article {
   }
 }
 
+.confirm-delete {
+  position: absolute;
+  background-color: #2d2d2d;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.2rem 2.4rem;
+  display: flex;
+  gap: 2.4rem;
+  border-radius: 2rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 40rem;
+  height: 20rem;
+  z-index: 999;
+  text-align: center;
+}
+
+.confirm-delete h2 {
+  font-size: 2.2rem;
+}
+
+.btns {
+  display: flex;
+  gap: 2.4rem;
+}
+
+.confirmation-btn {
+  margin-top: 1.2rem;
+  padding: 0.8rem 2rem;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.confirmation-btn:hover {
+  background-color: #d4ae6c;
+}
+
+.yes:hover {
+  background-color: #dc2626 !important;
+}
+
 /* Steps */
 
 .steps {
@@ -261,9 +309,81 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .end h2 {
   font-size: 4.8rem;
   font-weight: 200;
+}
+
+/* < 1050px */
+@media (max-width: 66em) {
+  .grid-2-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-image {
+    max-width: 85%;
+  }
+
+  .circle {
+    width: 100rem;
+    height: 100rem;
+  }
+
+  .title {
+    margin-top: 2.4rem;
+  }
+}
+
+/* < 650px */
+@media (max-width: 40.625em) {
+  article {
+    margin: 0 2.4rem;
+  }
+
+  .recipe-image {
+    max-width: 75%;
+  }
+
+  .circle {
+    width: 75rem;
+    height: 75rem;
+  }
+}
+
+/* < 460px */
+@media (max-width: 28.75em) {
+  article {
+    margin: 0 2.4rem;
+  }
+
+  .recipe-details {
+    text-align: center;
+  }
+
+  .title {
+    word-break: break-all;
+  }
+
+  .recipe-image {
+    max-width: 65%;
+  }
+
+  .fav-edit {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .favourite,
+  .edit,
+  .delete {
+    width: 100%;
+  }
+
+  .circle {
+    width: 65rem;
+    height: 65rem;
+  }
 }

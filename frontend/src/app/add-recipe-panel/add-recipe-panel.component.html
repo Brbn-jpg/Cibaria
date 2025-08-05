@@ -5,6 +5,7 @@
   <app-mobile-nav></app-mobile-nav>
   }
   <section>
+    <app-toast-notification></app-toast-notification>
     <h1>Add a new recipe</h1>
     <form [formGroup]="recipeForm" (submit)="postRecipe()">
       <div class="input-group">
@@ -128,11 +129,6 @@
         </li>
         }
       </ul>
-      @if (alreadyExists){
-      <p class="error">This ingredient already exists!</p>
-      } @if (!fillAll){
-      <p class="error">Please fill all the fields!</p>
-      }
       <button type="button" (click)="addIngredient()">Add ingredient</button>
       <hr />
       <h2>Steps</h2>
@@ -173,16 +169,8 @@
         accept="image/*"
         (change)="validateFileSize()"
       />
-      @if (fileSizeError){
-      <p class="error">The file size exceeds 5MB!</p>
-      }
       <hr />
       <button type="submit">Add recipe</button>
-      @if (FailedToAdd){
-      <p class="error">Failed to add the recipe!</p>
-      } @else if (success){
-      <p class="success">Recipe added successfully!</p>
-      }
     </form>
   </section>
 </main>

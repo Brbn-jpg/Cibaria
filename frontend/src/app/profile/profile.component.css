@@ -9,6 +9,7 @@ main {
   overflow: hidden;
   min-height: 100vh;
   padding-top: 12.2rem;
+  padding-bottom: 6.4rem;
 }
 
 /* background pic */
@@ -58,6 +59,7 @@ main {
 
 .profile-info {
   margin: 17.6rem 0 12rem 4.8rem;
+  position: relative;
   color: #fff;
 }
 
@@ -128,9 +130,8 @@ main {
 .profile-pic {
   position: absolute;
   cursor: pointer;
-  top: 45%;
+  top: calc(25vh + 12rem - 15rem);
   left: 4.8rem;
-  transform: translateY(-100%);
   height: 30rem;
   z-index: 22;
 }
@@ -299,14 +300,16 @@ select {
   width: 12rem;
 }
 
-.prepTime::placeholder {
-  color: #fff;
-}
-
-.prepTime::-webkit-outer-spin-button,
-.prepTime::-webkit-inner-spin-button {
+/* Chrome, Opera, Safari, Edge */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 h3 {
@@ -330,15 +333,15 @@ h3 {
 
 .recipe {
   border-radius: 1rem;
-  width: 48rem;
+  max-width: 48rem;
+  height: 86rem;
   box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.2);
 }
 
 .recipe-desc {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2.4rem;
-  margin-left: 2.4rem;
+  margin: 0 2.4rem 2.4rem 2.4rem;
 }
 
 .recipe-desc-inner {
@@ -366,8 +369,8 @@ h3 {
 
 .image-wrapper {
   overflow: hidden;
-  width: 48rem;
-  height: 48rem;
+  max-width: 48rem;
+  max-height: 48rem;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
@@ -428,6 +431,10 @@ h3 {
 .recipe-link {
   text-decoration: none;
   color: #fff;
+  width: 48rem;
+  height: 86rem;
+  justify-self: center;
+  align-self: center;
 }
 
 .search-input {
@@ -545,21 +552,86 @@ hr {
   margin: 0 4.8rem;
 }
 
-@media (max-width: 84.5em) {
-  .filters {
-    justify-content: start;
-    margin-left: 4.8rem;
+/* < 2175px */
+@media (max-width: 136em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 40rem;
+    height: 40rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 40rem;
+    height: 76rem;
+  }
+
+  .grid-4-cols {
+    gap: 2.4rem;
   }
 }
-/* > 1280px */
-@media (max-width: 80em) {
+
+/* < 1775px */
+@media (max-width: 111em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 36rem;
+    height: 36rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 36rem;
+    height: 70rem;
+  }
+}
+
+/* < 1615px */
+@media (max-width: 101em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 30rem;
+    height: 30rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 30rem;
+    height: 66rem;
+  }
+
+  .grid-4-cols {
+    gap: 2.4rem;
+  }
+}
+
+/* < 1352px */
+@media (max-width: 84.5em) {
   .grid-4-cols {
     grid-template-columns: repeat(3, 1fr);
   }
+  .filters {
+    display: flex;
+    justify-content: start;
+    margin: 0 4.8rem 2.4rem 4.8rem;
+  }
 
+  .image-wrapper,
+  .recipe-image {
+    width: 36rem;
+    height: 36rem;
+  }
+
+  .recipe,
+  .recipe-link {
+    width: 36rem;
+    height: 74rem;
+  }
+}
+
+/* < 1280px */
+@media (max-width: 80em) {
   .profile-pic {
     height: 25rem;
     width: 25rem;
+    top: calc(25vh + 12rem - 12.5rem);
   }
 
   .profile-picture {
@@ -570,38 +642,112 @@ hr {
   .profile-info {
     margin: 14rem 0 12rem 4.8rem;
   }
+
+  .image-wrapper,
+  .recipe-image {
+    width: 30rem;
+    height: 30rem;
+  }
+
+  .recipe,
+  .recipe-link {
+    width: 30rem;
+    height: 68rem;
+  }
 }
 
-@media (max-width: 50em) {
+/* < 1050px */
+@media (max-width: 66em) {
   .grid-4-cols {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .image-wrapper,
+  .recipe-image {
+    width: 40rem;
+    height: 40rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 40rem;
+    height: 76rem;
+  }
+}
+
+/* < 920px */
+@media (max-width: 57.5em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 36rem;
+    height: 36rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 36rem;
+    height: 70rem;
+  }
+}
+
+/* <840px */
+@media (max-width: 52.5em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 30rem;
+    height: 30rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 30rem;
+    height: 68rem;
+  }
+}
+
+/* < 800px */
+@media (max-width: 50em) {
   .edit-wrapper {
     grid-template-columns: repeat(1, 1fr);
     margin-right: 0;
   }
+}
 
-  .profile-pic {
-    height: 20rem;
-    width: 20rem;
+/* < 720px */
+@media (max-width: 45em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 26rem;
+    height: 26rem;
   }
-
-  .profile-picture {
-    height: 20rem;
-    width: 20rem;
+  .recipe,
+  .recipe-link {
+    width: 26rem;
+    height: 64rem;
   }
 }
 
-@media (max-width: 35em) {
-  .grid-4-cols {
-    grid-template-columns: repeat(1, 1fr);
+/* < 650px */
+@media (max-width: 40.625em) {
+  .settings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
-  .profile-pic {
-    height: 15rem;
-    width: 15rem;
-    top: 45%;
+  .image-wrapper,
+  .recipe-image {
+    width: 36rem;
+    height: 36rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 36rem;
+    height: 62rem;
+  }
+
+  .recipe-rating {
+    grid-column: 1 / span 2;
+  }
+
+  .grid-4-cols {
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .username {
@@ -612,18 +758,12 @@ hr {
     font-size: 1.8rem;
   }
 
-  .profile-picture {
-    height: 15rem;
-    width: 15rem;
-  }
-
   article {
     margin: 1.2rem;
   }
 
   .recipe-name {
-    margin-left: 1.2rem;
-    margin-right: 1.2rem;
+    margin: 2.4rem;
     height: auto;
   }
 
@@ -640,7 +780,18 @@ hr {
   }
 
   .profile-info {
-    margin: 9.6rem 4.8rem;
+    margin: 12rem 4.8rem 4.8rem 4.8rem;
+  }
+
+  .profile-pic {
+    height: 20rem;
+    width: 20rem;
+    top: calc(25vh + 12rem - 10rem);
+  }
+
+  .profile-picture {
+    height: 20rem;
+    width: 20rem;
   }
 
   .pagination {
@@ -652,5 +803,60 @@ hr {
   }
   .no-recipes {
     font-size: 3.6rem;
+  }
+}
+
+/* < 460px */
+@media (max-width: 28.75em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 30rem;
+    height: 30rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 30rem;
+    height: 58rem;
+  }
+
+  .switch {
+    width: 16rem;
+    justify-self: center;
+  }
+
+  .profile-pic {
+    height: 18rem;
+    width: 18rem;
+    top: calc(25vh + 12rem - 9rem);
+  }
+
+  .profile-picture {
+    height: 18rem;
+    width: 18rem;
+  }
+}
+
+/* < 376px */
+@media (max-width: 23.5em) {
+  .image-wrapper,
+  .recipe-image {
+    width: 26rem;
+    height: 26rem;
+  }
+  .recipe,
+  .recipe-link {
+    width: 26rem;
+    height: 54rem;
+  }
+
+  .profile-pic {
+    height: 16rem;
+    width: 16rem;
+    top: calc(25vh + 12rem - 8rem);
+  }
+
+  .profile-picture {
+    height: 16rem;
+    width: 16rem;
   }
 }
