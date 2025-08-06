@@ -7,15 +7,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.cibaria.dto.FavouriteRequest;
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
-import com.kk.cibaria.dto.myProfile.MyProfileRecipeDto;
 import com.kk.cibaria.image.ImageService;
-import com.kk.cibaria.user.UserEntity;
 
 import jakarta.validation.constraints.Min;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 
 
@@ -24,11 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class RecipeController {
 
   private final RecipeService recipeService;
-  private final ImageService imageService;
 
   public RecipeController(RecipeService recipeService, ImageService imageService) {
     this.recipeService = recipeService;
-      this.imageService = imageService;
   }
 
   @GetMapping
@@ -92,7 +94,22 @@ public class RecipeController {
   @DeleteMapping("/{id}")
   public void delete(@PathVariable int id, @RequestHeader("Authorization") String token) {
     recipeService.delete(token, id);
-  } 
+  }
+
+  @PostMapping("/{id}")
+  public void recipeRating(@PathVariable int id, @RequestHeader("Authorization") String token, @RequestBody int rating) {
+      recipeService.rating(id, token, rating);
+  }
+
+  @GetMapping("/{id}/rating")
+  public ResponseEntity<Integer> getUserRating(@PathVariable int id, @RequestHeader("Authorization") String token) {
+    try {
+      int userRating = recipeService.getUserRating(id, token);
+      return ResponseEntity.ok(userRating);
+    } catch (Exception e){
+      return ResponseEntity.ok(0);
+    }
+  }
 
   @GetMapping("/favourites/isFavourite")
   public boolean isRecipeFavourite(@RequestHeader("Authorization") String token,

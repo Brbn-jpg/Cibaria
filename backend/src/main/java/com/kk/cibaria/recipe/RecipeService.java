@@ -34,4 +34,8 @@ public interface RecipeService {
   boolean isRecipeFavourite(String token, int recipeId);
 
   boolean isOwner(int id, String token);
+
+  Recipe rating(int id, String token, int rating);
+
+  int getUserRating(int recipeId, String token);
 }

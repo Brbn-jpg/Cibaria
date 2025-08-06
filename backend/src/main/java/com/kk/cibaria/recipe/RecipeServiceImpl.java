@@ -3,6 +3,7 @@ package com.kk.cibaria.recipe;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.kk.cibaria.dto.RecipeAddDto;
@@ -16,6 +17,8 @@ import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.rating.Rating;
+import com.kk.cibaria.rating.RatingRepository;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.step.Step;
 import com.kk.cibaria.step.StepRepository;
@@ -33,18 +36,19 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
+    private final RatingRepository ratingRepository;
+
   private final RecipeRepository recipeRepository;
   private final UserRepository userRepository;
   private final JwtService jwtService;
   private final ImageService imageService;
-  private final StepRepository stepRepository;
 
-  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, StepRepository stepRepository) {
+  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, StepRepository stepRepository, RatingRepository ratingRepository) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
       this.jwtService = jwtService;
       this.imageService = imageService;
-      this.stepRepository = stepRepository;
+      this.ratingRepository = ratingRepository;
   }
 
   @Override
@@ -84,8 +88,9 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   private Recipe createRecipe(RecipeAddDto recipe, String token){
-    int id = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User was not found"));
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
 
     Recipe newRecipe = new Recipe();
     newRecipe.setRecipeName(recipe.getRecipeName());
@@ -209,10 +214,11 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   public boolean isOwner(int id, String token){
     int userId = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User was not found"));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
 
-    Recipe recipe = recipeRepository.findById(id).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
-      "found"));
+    Recipe recipe = recipeRepository.findById(id).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
 
     return recipe.getUser().getId() == user.getId();
   }
@@ -240,19 +246,23 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public boolean isRecipeFavourite(String token, int recipeId) {
-    int id = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User was not found"));
-    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new RecipeNotFoundException("Recipe was not found"));
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+
+    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", recipeId)));
 
     return user.getFavouriteRecipes().contains(recipe);
   }
 
   @Override
   public void addRecipeToFavourites(String token, int recipeId) {
-    int id = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));
-    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
-            "found"));
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", recipeId)));
 
     List<Recipe> favRecipes = user.getFavouriteRecipes();
 
@@ -266,10 +276,11 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public void deleteRiceFromFavourites(String token, int recipeId) {
-    int id = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User was not found"));
-    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(()->new RecipeNotFoundException("Recipe was not " +
-            "found"));
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+    Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", recipeId)));
 
     List<Recipe> favRecipes = user.getFavouriteRecipes();
 
@@ -285,7 +296,8 @@ public class RecipeServiceImpl implements RecipeService {
   @Override
   public void delete(String token, int id) {
     int userId = jwtService.extractId(token.substring(7));
-    UserEntity user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("User was not found"));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
     Recipe recipe = recipeRepository.findById(id).orElseThrow(
         () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
 
@@ -300,5 +312,44 @@ public class RecipeServiceImpl implements RecipeService {
   public List<Recipe> searchRecipes(String query) {
    return recipeRepository.findByRecipeNameQuery(query);
   }
+  
+  @Transactional
+  @Override
+  public Recipe rating(int id, String token, int rating){
+    if (rating < 1 || rating > 5){
+      throw new IllegalArgumentException("Rating has to be from 1 to 5");
+    }
+    int userId = jwtService.extractId(token.substring(7));
+    UserEntity user = userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
 
+    Recipe recipe = recipeRepository.findById(id).orElseThrow(
+        () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
+
+    Optional<Rating> existingRating = ratingRepository.findByRecipeIdAndUserId(id, userId);
+    
+    if (existingRating.isPresent()) {
+        Rating rating1 = existingRating.get();
+        rating1.setValue(rating);
+        ratingRepository.save(rating1);
+    } else {
+        Rating newRating = new Rating();
+        newRating.setRecipe(recipe);
+        newRating.setValue(rating);
+        newRating.setUser(user);
+        ratingRepository.save(newRating);
+    }
+    return recipe;
+  }
+
+  @Override
+  public int getUserRating(int recipeId, String token){
+    int userId = jwtService.extractId(token.substring(7));
+    userRepository.findById(userId).orElseThrow(
+      () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
+    
+    Optional<Rating> userRating = ratingRepository.findByRecipeIdAndUserId(recipeId, userId);
+
+    return userRating.map(Rating::getValue).orElse(0);
+  }
 }

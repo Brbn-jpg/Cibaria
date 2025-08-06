@@ -13,6 +13,7 @@ main {
 /* Article styling  */
 
 .favourite,
+.rating,
 .edit,
 .delete {
   display: flex;
@@ -26,7 +27,8 @@ main {
 }
 
 .favourite-btn,
-.delete-btn {
+.delete-btn,
+.star-btn {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -52,7 +54,6 @@ main {
 .edit-icon {
   filter: invert(1);
 }
-
 .active {
   fill: #ffd700;
   stroke: #ffd700;
@@ -60,7 +61,8 @@ main {
 
 .favourite-text,
 .edit-text,
-.delete-text {
+.delete-text,
+.rating-text {
   font-size: 1.6rem;
 }
 
@@ -87,7 +89,7 @@ article {
 }
 
 .recipe-image {
-  max-width: 100%;
+  max-width: 90%;
   border-radius: 2rem;
   z-index: 2;
 }

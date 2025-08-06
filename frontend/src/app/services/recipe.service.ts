@@ -38,6 +38,18 @@ export class RecipeService {
     return this.http.delete<any>(`${this.url}/${recipeId}`, { headers });
   }
 
+  rateRecipe(recipeId: number, rating: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<any>(`${this.url}/${recipeId}`, rating, {
+      headers,
+    });
+  }
+
+  getUserRating(recipeId: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<number>(`${this.url}/${recipeId}/rating`, { headers });
+  }
+
   isOwner(recipeId: number): Observable<boolean> {
     const headers = this.getAuthHeaders();
     return this.http.get<boolean>(`${this.url}/${recipeId}/isOwner`, {

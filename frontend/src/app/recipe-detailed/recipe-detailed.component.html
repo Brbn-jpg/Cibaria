@@ -50,7 +50,122 @@
             </button>
             <p class="delete-text">Delete recipe</p>
           </div>
-          } }
+          } } @if (isLoggedIn){
+          <div class="rating">
+            <p class="rating-text">Rate the recipe</p>
+            <div class="stars">
+              <button
+                class="star-btn"
+                (click)="onStarClick(1)"
+                (mouseenter)="onStarHover(1)"
+                id="star-1"
+                [disabled]="isRatingProcessing"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="star-icon icon"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    fill="none"
+                    stroke="white"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="star-btn"
+                (click)="onStarClick(2)"
+                (mouseenter)="onStarHover(2)"
+                id="star-2"
+                [disabled]="isRatingProcessing"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="star-icon icon"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    fill="none"
+                    stroke="white"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="star-btn"
+                (click)="onStarClick(3)"
+                (mouseenter)="onStarHover(3)"
+                id="star-3"
+                [disabled]="isRatingProcessing"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="star-icon icon"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    fill="none"
+                    stroke="white"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="star-btn"
+                (click)="onStarClick(4)"
+                (mouseenter)="onStarHover(4)"
+                id="star-4"
+                [disabled]="isRatingProcessing"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="star-icon icon"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    fill="none"
+                    stroke="white"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="star-btn"
+                (click)="onStarClick(5)"
+                (mouseenter)="onStarHover(5)"
+                id="star-5"
+                [disabled]="isRatingProcessing"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="star-icon icon"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M480 208H308L256 48l-52 160H32l140 96-54 160 138-100 138 100-54-160z"
+                    fill="none"
+                    stroke="white"
+                    stroke-linejoin="round"
+                    stroke-width="32"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          }
         </div>
         <div class="title">
           <h1 class="recipe-title">{{ recipeDetails?.recipeName }}</h1>
