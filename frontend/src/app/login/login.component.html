@@ -4,6 +4,7 @@
   } @else {
   <app-mobile-nav></app-mobile-nav>
   }
+  <app-toast-notification></app-toast-notification>
   <main>
     @if(login){
     <div @showSection class="login">
@@ -25,11 +26,16 @@
           [formControl]="password"
           [(ngModel)]="formPassword"
         />
-        <div>
+        <div class="remember-me-section">
           <span class="remember-me">{{
             "LOGIN_REGISTER.LOGIN.REMEMBER_ME" | translate
           }}</span>
-          <input id="checkbox" type="checkbox" />
+          <input
+            id="checkbox"
+            type="checkbox"
+            [(ngModel)]="rememberMe"
+            name="rememberMe"
+          />
         </div>
         <button type="button" class="button" (click)="onLogin()">
           {{ "LOGIN_REGISTER.LOGIN.SUBMIT_BUTTON" | translate }}
@@ -41,7 +47,6 @@
       <h2 class="catch-phrase">
         {{ "LOGIN_REGISTER.REGISTER.CATCH_PHRASE" | translate }}
       </h2>
-
       <form class="inputs">
         <input
           type="text"
@@ -68,7 +73,6 @@
           [formControl]="password"
           [(ngModel)]="formPassword"
         />
-
         <input
           type="password"
           [placeholder]="
@@ -81,7 +85,6 @@
         @if (!isEqual){
         <span class="wrong-pass">Passwords do not match</span>
         }
-
         <button type="button" class="button" (click)="onRegister()">
           {{ "LOGIN_REGISTER.REGISTER.SUBMIT_BUTTON" | translate }}
         </button>

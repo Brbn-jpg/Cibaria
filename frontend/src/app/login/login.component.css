@@ -61,6 +61,17 @@ input::placeholder {
   letter-spacing: 1.1px;
 }
 
+.remember-me-section {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+
+#checkbox {
+  margin-bottom: 0 !important;
+}
+
 .remember-me {
   font-size: 1.6rem;
 }

@@ -4,6 +4,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../services/language.service';
 import { ScrollLockService } from '../services/scroll-lock.service';
 import { filter } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 const mainUrl = 'http://localhost:4200/';
 
@@ -26,13 +27,11 @@ export class MobileNavComponent {
   Open = false;
 
   OnInit(): void {
-    this.getToken();
+    this.checkAuthStatus();
   }
 
-  getToken(): void {
-    if (localStorage.getItem('token')) {
-      this.isLoggedIn = true;
-    }
+  checkAuthStatus(): void {
+    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   language: string = 'en';
@@ -42,7 +41,8 @@ export class MobileNavComponent {
     private languageService: LanguageService,
     private el: ElementRef,
     private scrollLockService: ScrollLockService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.languageService.language$.subscribe((language) => {
       this.language = language;
@@ -70,7 +70,7 @@ export class MobileNavComponent {
   }
 
   logOut(): void {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.isLoggedIn = false;
   }
 

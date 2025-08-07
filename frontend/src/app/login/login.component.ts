@@ -1,12 +1,19 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { Router } from '@angular/router';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
+import { NotificationService } from '../services/notification.service';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +24,8 @@ import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
     NavbarComponent,
     TranslateModule,
     MobileNavComponent,
+    FormsModule,
+    ToastNotificationComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -34,11 +43,13 @@ export class LoginComponent implements OnInit {
   formRetypePassword = '';
   formPassword = '';
   formEmail = '';
+  rememberMe = false;
 
   constructor(
     private authService: AuthService,
     private router: Router,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private notificationService: NotificationService
   ) {
     this.translate.setDefaultLang('en');
   }
@@ -46,12 +57,15 @@ export class LoginComponent implements OnInit {
   onLogin(): void {
     this.authService.login(this.formEmail, this.formPassword).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.token);
+        if (this.rememberMe) {
+          localStorage.setItem('token', response.token);
+        } else {
+          sessionStorage.setItem('token', response.token);
+        }
         this.router.navigate(['/profile']);
-        console.log(response.token);
       },
       error: (err) => {
-        console.error(err);
+        this.notificationService.error('Username or password is incorrect');
       },
     });
   }
@@ -64,12 +78,14 @@ export class LoginComponent implements OnInit {
       .register(this.formUsername, this.formEmail, this.formPassword)
       .subscribe({
         next: (response) => {
-          localStorage.setItem('token', response.token);
+          sessionStorage.setItem('token', response.token);
           this.router.navigate(['/profile']);
           console.log(response.token);
         },
         error: (err) => {
-          console.error(err);
+          this.notificationService.error(
+            'Registration failed. Please try again.'
+          );
         },
       });
   }

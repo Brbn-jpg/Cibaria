@@ -1,22 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api';
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.checkInitialAuthState();
+  }
+
+  private checkInitialAuthState(): void {
+    const token = this.getToken();
+  }
 
   login(email: string, password: string): Observable<any> {
     const body = { email: email, password: password };
     return this.http.post(this.apiUrl + '/authenticate', body).pipe(
       tap((response: any) => {
         if (response && response.token) {
-          localStorage.setItem('token', response.token);
+          this.isLoggedInSubject.next(true);
         }
       })
     );
@@ -24,16 +33,32 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    this.isLoggedInSubject.next(false);
+    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    const token = this.getToken();
+    if (!token) {
+      this.isLoggedInSubject.next(false);
+      return false;
+    }
+    return true;
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
   }
 
   register(username: string, email: string, password: string): Observable<any> {
     const body = { username, email, password };
-    console.log(body);
-
-    return this.http.post(this.apiUrl + '/register', body);
+    return this.http.post(this.apiUrl + '/register', body).pipe(
+      tap((response: any) => {
+        if (response && response.token) {
+          this.isLoggedInSubject.next(true);
+        }
+      })
+    );
   }
 }

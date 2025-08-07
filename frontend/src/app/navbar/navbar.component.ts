@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../services/language.service';
+import { AuthService } from '../services/auth.service'; // Dodaj import
 
 const mainUrl = 'http://localhost:4200/';
 
@@ -20,28 +21,26 @@ export class NavbarComponent implements OnInit {
     login: mainUrl + '/login',
   };
 
-  ngOnInit(): void {
-    this.getToken();
-  }
-
   isLoggedIn = false;
-
-  getToken(): void {
-    if (localStorage.getItem('token')) {
-      this.isLoggedIn = true;
-    }
-  }
-
   language: string = 'en';
 
   constructor(
     private translate: TranslateService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private authService: AuthService
   ) {
     this.languageService.language$.subscribe((language) => {
       this.language = language;
     });
     this.translate.setDefaultLang(this.language);
+  }
+
+  ngOnInit(): void {
+    this.checkAuthStatus();
+  }
+
+  checkAuthStatus(): void {
+    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   changeLanguage(): void {
@@ -51,7 +50,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logOut(): void {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.isLoggedIn = false;
   }
 

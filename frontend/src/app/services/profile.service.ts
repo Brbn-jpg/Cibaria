@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export interface UpdateEmailDto {
   newEmail: string;
@@ -16,7 +17,7 @@ export interface UpdatePasswordDto {
   providedIn: 'root',
 })
 export class ProfileService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private editModeSubject = new BehaviorSubject<boolean>(false);
   editMode$ = this.editModeSubject.asObservable();
@@ -43,7 +44,7 @@ export class ProfileService {
   private baseUrl = 'http://localhost:8080/api';
 
   private getAuthHeaders(): HttpHeaders | undefined {
-    const token = localStorage.getItem('token');
+    const token = this.authService.getToken();
     return token
       ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
       : undefined;
