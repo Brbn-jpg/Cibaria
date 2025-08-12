@@ -4,8 +4,8 @@
   } @else {
   <app-mobile-nav></app-mobile-nav>
   }
+  <app-toast-notification></app-toast-notification>
   <section>
-    <app-toast-notification></app-toast-notification>
     <h1>Add a new recipe</h1>
     <form [formGroup]="recipeForm" (submit)="postRecipe()">
       <div class="input-group">
@@ -66,6 +66,18 @@
           formControlName="prepareTime"
           min="1"
         />
+      </div>
+      <div class="input-group">
+        <label for="language" class="language">Language</label>
+        <select
+          name="language"
+          class="language"
+          required
+          formControlName="language"
+        >
+          <option value="english">English</option>
+          <option value="polish">Polish</option>
+        </select>
       </div>
       <div class="input-group">
         <label for="public" class="public">Visibility</label>

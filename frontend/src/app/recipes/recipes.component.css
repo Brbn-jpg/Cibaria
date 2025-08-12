@@ -11,77 +11,6 @@ main {
   padding-bottom: 6.4rem;
 }
 
-/* Filters */
-
-.filter-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-label {
-  font-size: 3.2rem;
-  margin-bottom: 2.4rem;
-  font-weight: 200;
-}
-
-.filters {
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 4.8rem;
-}
-
-.filter {
-  padding: 1.2rem 2.4rem;
-  background-color: transparent;
-  color: #fff;
-  border: none;
-  border-radius: 1rem;
-}
-
-option {
-  background-color: #000;
-  border: none;
-}
-
-select {
-  border: none;
-  border-radius: 1rem;
-  font-size: 1.6rem;
-  letter-spacing: 1.02px;
-}
-
-.inputs {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 2.4rem;
-}
-
-.prepTime {
-  padding: 1.2rem 1.6rem;
-  font-size: 1.6rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  color: #fff;
-  transition: border-color 0.2s ease-in-out;
-  width: 12rem;
-}
-
-/* Chrome, Opera, Safari, Edge */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
 /* Recipes */
 
 article {
@@ -143,13 +72,24 @@ article {
   border-top-right-radius: 1rem;
 }
 
+.recipe-info {
+  display: flex;
+  flex-direction: column;
+  height: 10.4rem;
+}
+
 .recipe-name {
   margin-top: 1.2rem;
   margin-left: 2.4rem;
-  margin-bottom: 1.2rem;
-  height: 10.4rem;
   font-size: 3.2rem;
   font-weight: 200;
+}
+
+.recipe-language {
+  margin-left: 2.4rem;
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: #ccc;
 }
 
 .icon {
@@ -183,20 +123,6 @@ article {
   transition: all 450ms ease-in-out;
 }
 
-.settings-btn,
-.close {
-  color: #fff;
-  background-color: transparent;
-  border: none;
-}
-
-.close {
-  position: absolute;
-  top: 3.6rem;
-  left: 3.6rem;
-  z-index: 1000;
-}
-
 .btn:hover {
   order: none;
   box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.102),
@@ -225,99 +151,12 @@ article {
   color: #fff;
 }
 
-.search-input {
-  padding: 1.2rem 1.6rem;
-  font-size: 1.6rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  color: #fff;
-  transition: border-color 0.2s ease-in-out;
-}
-
 .no-recipes {
   display: flex;
   justify-content: center;
   align-self: center;
   font-size: 4.6rem;
   margin: 12rem auto 64rem auto;
-}
-
-.settings {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s ease-in;
-  gap: 2.4rem;
-}
-
-.menu {
-  position: absolute;
-  gap: 3.6rem;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  visibility: hidden;
-  z-index: 900;
-  overflow: hidden;
-}
-
-.servings-input {
-  padding: 1.2rem 1.6rem;
-  font-size: 1.6rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  color: #fff;
-  transition: border-color 0.2s ease-in-out;
-  width: 12rem;
-}
-
-.settings-icon {
-  height: 4rem;
-  width: 4rem;
-  cursor: pointer;
-  color: #fff;
-}
-
-.active {
-  position: fixed;
-  visibility: visible;
-  z-index: 1000;
-  opacity: 1;
-  pointer-events: auto;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.menu-overlay {
-  position: fixed;
-  content: "";
-  top: 0;
-  left: 0;
-  transform: translate(0%, 0%);
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  z-index: 999;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-}
-
-.menu-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 /* < 2175px */
@@ -374,11 +213,6 @@ article {
 @media (max-width: 84.5em) {
   .grid-4-cols {
     grid-template-columns: repeat(3, 1fr);
-  }
-  .filters {
-    display: flex;
-    justify-content: start;
-    margin: 0 4.8rem 2.4rem 4.8rem;
   }
 
   .image-wrapper,
@@ -483,7 +317,7 @@ article {
   .recipe,
   .recipe-link {
     width: 36rem;
-    height: 60rem;
+    height: 62rem;
   }
 
   .recipe-rating {
@@ -496,6 +330,7 @@ article {
 
   .recipe-name {
     margin: 2.4rem;
+    margin-bottom: 0;
     height: auto;
   }
 
@@ -547,6 +382,6 @@ article {
   .recipe,
   .recipe-link {
     width: 26rem;
-    height: 52rem;
+    height: 54rem;
   }
 }

@@ -80,9 +80,9 @@
   </div>
 
   <!-- FILTERS  -->
-  @if (favouriteRecipes.length || userRecipe.length > 0) {
+  @if (favouriteRecipes.length || userRecipes.length > 0) {
   <div class="filters">
-    @if (Filtering) { @if (Open){
+    @if (isFiltering) { @if (isMenuOpen){
     <div class="close-btn">
       <button class="close" (click)="closeMenu()">
         <img
@@ -123,6 +123,23 @@
         </button>
       </div>
       <div class="menu">
+        <div class="language filter-wrapper">
+          <label for="Language">Language</label>
+          <select
+            name="recipeLanguage"
+            id="recipeLanguage"
+            class="filter"
+            [ngModel]="filters.recipeLanguage"
+            (change)="onFilterChange('recipeLanguage', $event)"
+          >
+            <option value="">Choose language</option>
+            @for (language of languagesArray; track language.languageName) {
+            <option [value]="language.languageName">
+              {{ language.languageName }}
+            </option>
+            }
+          </select>
+        </div>
         <div class="search filter-wrapper">
           <label for="search">Search</label>
           <input
@@ -195,8 +212,8 @@
           >
             <option selected value="">Choose category</option>
             @for (category of categoriesArray; track $index){
-            <option [value]="category.categoryName">
-              {{ category.categoryName }}
+            <option [value]="category">
+              {{ category }}
             </option>
             }
           </select>
@@ -220,16 +237,24 @@
         Moje przepisy
       </button>
     </div>
-    <div class="search filter-wrapper">
-      <label for="search">Search</label>
-      <input
-        type="text"
-        id="search"
-        class="search-input"
-        (input)="onSearchChange($event)"
-        placeholder="Search for recipes"
-      />
+    <div class="language filter-wrapper">
+      <label for="Language">Language</label>
+      <select
+        name="recipeLanguage"
+        id="recipeLanguage"
+        class="filter"
+        [ngModel]="filters.recipeLanguage"
+        (change)="onFilterChange('recipeLanguage', $event)"
+      >
+        <option value="">Choose language</option>
+        @for (language of languagesArray; track language.languageName) {
+        <option [value]="language.languageName">
+          {{ language.languageName }}
+        </option>
+        }
+      </select>
     </div>
+
     <div class="difficulty filter-wrapper">
       <label for="difficulty">Difficulty</label>
       <select
@@ -254,11 +279,21 @@
       >
         <option selected value="">Choose category</option>
         @for (category of categoriesArray; track $index){
-        <option [value]="category.categoryName">
-          {{ category.categoryName }}
+        <option [value]="category">
+          {{ category }}
         </option>
         }
       </select>
+    </div>
+    <div class="search filter-wrapper">
+      <label for="search">Search</label>
+      <input
+        type="text"
+        id="search"
+        class="search-input"
+        (input)="onSearchChange($event)"
+        placeholder="Search for recipes"
+      />
     </div>
     <div class="prepare-time filter-wrapper">
       <label for="prepare-time">Prepare time</label>
@@ -298,7 +333,6 @@
         />
       </div>
     </div>
-
     }
   </div>
   <hr />
@@ -312,11 +346,14 @@
         <div class="image-wrapper">
           <img
             class="recipe-image"
-            [src]="recipe?.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
+            [src]="recipe?.images?.[0]?.imageUrl || 'images/Cibaria.png'"
             alt="{{ recipe?.recipeName }}"
           />
         </div>
-        <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
+        <div class="recipe-info">
+          <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
+          <p class="recipe-language">{{ recipe.language }}</p>
+        </div>
         <div class="recipe-desc">
           <div class="recipe-rating recipe-desc-inner">
             <img
@@ -370,11 +407,14 @@
         <div class="image-wrapper">
           <img
             class="recipe-image"
-            [src]="recipe?.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
+            [src]="recipe?.images?.[0]?.imageUrl || 'images/Cibaria.png'"
             alt="{{ recipe?.recipeName }}"
           />
         </div>
-        <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
+        <div class="recipe-info">
+          <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
+          <p class="recipe-language">{{ recipe.language }}</p>
+        </div>
         <div class="recipe-desc">
           <div class="recipe-rating recipe-desc-inner">
             <img
@@ -411,9 +451,9 @@
         </div>
       </figure></a
     >
-    } @if (filteredUserRecipes.length === 0 && userRecipe.length > 0) {
+    } @if (filteredUserRecipes.length === 0 && userRecipes.length > 0) {
     <p class="no-recipes">No recipes found matching your filters</p>
-    } @if (userRecipe.length === 0) {
+    } @if (userRecipes.length === 0) {
     <p class="no-recipes">You have no recipes yet</p>
     }
   </div>

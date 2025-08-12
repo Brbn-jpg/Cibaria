@@ -1,3 +1,4 @@
+import { Rating } from './rating';
 import { RecipeImage } from './recipe-image';
 import { Step } from './step';
 
@@ -17,4 +18,6 @@ export interface Recipe {
   }[];
   steps: Step[];
   images: RecipeImage[];
+  language: string;
+  ratings: Rating[];
 }

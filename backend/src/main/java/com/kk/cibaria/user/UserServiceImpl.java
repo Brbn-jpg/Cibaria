@@ -338,6 +338,7 @@ public class UserServiceImpl implements UserService {
     dto.setServings(recipe.getServings());
     dto.setDifficulty(recipe.getDifficulty());
     dto.setPrepareTime(recipe.getPrepareTime());
+    dto.setLanguage(recipe.getLanguage());
     
     List<Rating> ratings = recipe.getRatings();
     if (ratings != null && !ratings.isEmpty()) {

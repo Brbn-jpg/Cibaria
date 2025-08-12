@@ -1,0 +1,144 @@
+<div class="filters">
+  @if (isMobileFiltering) { @if (isMenuOpen) {
+  <div class="close-btn">
+    <button class="close" (click)="closeMenu()">
+      <img
+        src="images/mobile-menu/menu-close.svg"
+        alt="close menu"
+        class="settings-icon"
+      />
+    </button>
+  </div>
+  }
+  <div class="settings">
+    <div class="menu-overlay" (click)="closeMenu()"></div>
+    <div class="filter-wrapper">
+      <label class="settings-label">Filters</label>
+      <button class="settings-btn" (click)="openMenu()">
+        <img
+          src="images/mobile-menu/menu-open.svg"
+          alt="open menu"
+          class="settings-icon"
+        />
+      </button>
+    </div>
+    <div class="menu" [class.active]="isMenuOpen">
+      <ng-container *ngTemplateOutlet="filtersContent"></ng-container>
+    </div>
+  </div>
+  } @else {
+  <ng-container *ngTemplateOutlet="filtersContent"></ng-container>
+  }
+</div>
+
+<ng-template #filtersContent>
+  <div class="search filter-wrapper">
+    <label for="search">Search</label>
+    <input
+      type="text"
+      id="search"
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (input)="onSearchChange()"
+      placeholder="Search for recipes"
+    />
+  </div>
+
+  <div class="prepare-time filter-wrapper">
+    <label for="prepare-time">Prepare time</label>
+    <div class="inputs">
+      <input
+        type="number"
+        class="prepTime from"
+        [(ngModel)]="prepTimeFrom"
+        (change)="onFilterChange()"
+        placeholder="from"
+        min="0"
+      />
+      <span> &mdash; </span>
+      <input
+        type="number"
+        class="prepTime to"
+        [(ngModel)]="prepTimeTo"
+        (change)="onFilterChange()"
+        placeholder="to"
+        min="0"
+      />
+    </div>
+  </div>
+
+  <div class="servings filter-wrapper">
+    <label for="servings">Servings</label>
+    <div class="inputs">
+      <input
+        id="servings-from"
+        type="number"
+        [(ngModel)]="servingsFrom"
+        (input)="onFilterChange()"
+        class="servings-input from"
+        placeholder="from"
+        min="1"
+      />
+      <span> &mdash; </span>
+      <input
+        id="servings-to"
+        type="number"
+        [(ngModel)]="servingsTo"
+        (input)="onFilterChange()"
+        class="servings-input to"
+        placeholder="to"
+        min="1"
+      />
+    </div>
+  </div>
+
+  <div class="category filter-wrapper">
+    <label for="category">Category</label>
+    <select
+      name="category"
+      id="category"
+      class="filter"
+      [(ngModel)]="selectedCategory"
+      (change)="onFilterChange()"
+    >
+      <option value="">Choose category</option>
+      @for (category of categoriesArray; track category) {
+      <option [value]="category">{{ category }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="difficulty filter-wrapper">
+    <label for="difficulty">Difficulty</label>
+    <select
+      name="difficulty"
+      id="difficulty"
+      class="filter"
+      [(ngModel)]="selectedDifficulty"
+      (change)="onFilterChange()"
+    >
+      <option selected value="">Choose difficulty</option>
+      <option value="1">Easy</option>
+      <option value="2">Medium</option>
+      <option value="3">Hard</option>
+    </select>
+  </div>
+
+  <div class="language filter-wrapper">
+    <label for="Language">Language</label>
+    <select
+      name="language"
+      id="language"
+      class="filter"
+      [(ngModel)]="selectedLanguage"
+      (change)="onFilterChange()"
+    >
+      <option value="">Choose language</option>
+      @for (language of languagesArray; track language.languageName) {
+      <option [value]="language.languageName">
+        {{ language.languageName }}
+      </option>
+      }
+    </select>
+  </div>
+</ng-template>

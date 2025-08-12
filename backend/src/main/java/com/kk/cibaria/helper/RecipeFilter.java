@@ -8,8 +8,8 @@ public class RecipeFilter {
 
     public List<Recipe> filterByParams(List<String> category, Integer difficulty,
                                        String servings, String prepareTime,
-                                       List<Recipe> recipes)
-    {
+                                       List<Recipe> recipes, String language) {
+    
         List<Recipe> filteredRecipes = recipes;
         if (category != null) {
             filteredRecipes = filteredRecipes.stream()
@@ -42,8 +42,13 @@ public class RecipeFilter {
                     .filter(recipe -> recipe.getPrepareTime()>=from && recipe.getPrepareTime()<=to).toList();
         }
 
-        return filteredRecipes;
+        if (language != null && !language.isEmpty()) {
+            filteredRecipes = filteredRecipes.stream()
+                    .filter(recipe -> recipe.getLanguage().equalsIgnoreCase(language))
+                    .toList();
+        }
 
+        return filteredRecipes;
 
     }
 }

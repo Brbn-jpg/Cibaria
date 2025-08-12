@@ -31,6 +31,7 @@ export class AddRecipePanelComponent {
   ingredients: { ingredientName: string; quantity: number; unit: string }[] =
     [];
   steps: { content: string }[] = [];
+  recipeLanguage = 'english';
   isPublic = false;
   newIngredient = { ingredientName: '', quantity: 0, unit: 'Choose a unit' };
   newStep = '';
@@ -54,6 +55,7 @@ export class AddRecipePanelComponent {
     steps: new FormControl(this.steps, [Validators.required]),
     ingredients: new FormControl(this.ingredients, [Validators.required]),
     isPublic: new FormControl(this.isPublic, [Validators.required]),
+    language: new FormControl(this.recipeLanguage, [Validators.required]),
   });
 
   ngOnInit(): void {
@@ -143,6 +145,7 @@ export class AddRecipePanelComponent {
         ingredients: this.ingredients,
         steps: this.steps,
         isPublic: this.recipeForm.value.isPublic,
+        language: this.recipeForm.value.language,
       })
     );
 

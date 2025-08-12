@@ -10,6 +10,7 @@ import com.kk.cibaria.dto.RecipeRequestDto;
 import com.kk.cibaria.image.ImageService;
 
 import jakarta.validation.constraints.Min;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +42,11 @@ public class RecipeController {
           @RequestParam(required = false) Integer difficulty,
           @RequestParam(required = false) String servings,
           @RequestParam(required = false) String prepareTime,
-          @RequestParam(defaultValue = "true") Boolean isPublic
+          @RequestParam(defaultValue = "true") Boolean isPublic,
+          @RequestParam(required = false) String language
   )
   {
-    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime, isPublic);
+    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime, isPublic, language);
   }
 
   @GetMapping("/{id}")
@@ -135,7 +137,7 @@ public class RecipeController {
   }
 
   @GetMapping("/searchRecipes")
-  public List<Recipe> searchRecipes(@RequestParam String query){
+  public List<Recipe> searchRecipes(@RequestParam String query) {
     return recipeService.searchRecipes(query);
   }
 }

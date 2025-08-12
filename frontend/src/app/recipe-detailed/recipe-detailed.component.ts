@@ -8,8 +8,8 @@ import {
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { Recipe } from '../Models/recipe';
-import { Ingredients } from '../Models/ingredients';
+import { Recipe } from '../Interface/recipe';
+import { Ingredients } from '../Interface/ingredients';
 import { MobileNavComponent } from '../mobile-nav/mobile-nav.component';
 import { AuthService } from '../services/auth.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';

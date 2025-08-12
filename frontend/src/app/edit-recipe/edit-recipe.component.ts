@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Recipe } from '../Models/recipe';
-import { Ingredients } from '../Models/ingredients';
+import { Recipe } from '../Interface/recipe';
+import { Ingredients } from '../Interface/ingredients';
 import {
   FormControl,
   FormGroup,

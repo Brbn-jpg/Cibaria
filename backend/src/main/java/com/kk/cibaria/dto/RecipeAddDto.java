@@ -16,4 +16,5 @@ public class RecipeAddDto {
     private String category;
     private Boolean isPublic;
     private List<Step> steps;
+    private String language;
 }

@@ -53,6 +53,9 @@ public class Recipe {
   @Column(name = "isPublic")
   private Boolean isPublic = false;
 
+  @Column(name = "language")
+  private String language;
+
   @Column(name = "rating")
   @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
   @JsonManagedReference("rating")

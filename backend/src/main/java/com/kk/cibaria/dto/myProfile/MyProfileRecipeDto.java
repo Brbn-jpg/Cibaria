@@ -16,4 +16,5 @@ public class MyProfileRecipeDto {
     private int prepareTime;
     private String category;
     private Long avgRating;
+    private String language;
 }

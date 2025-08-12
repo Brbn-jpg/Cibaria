@@ -23,6 +23,7 @@ import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.step.Step;
 import com.kk.cibaria.step.StepRepository;
 import com.kk.cibaria.user.UserEntity;
+
 import org.springframework.stereotype.Service;
 
 import com.kk.cibaria.exception.RecipeNotFoundException;
@@ -117,6 +118,7 @@ public class RecipeServiceImpl implements RecipeService {
     newRecipe.setServings(recipe.getServings());
     newRecipe.setCategory(recipe.getCategory());
     newRecipe.setIsPublic(recipe.getIsPublic());
+    newRecipe.setLanguage(recipe.getLanguage());
 
     return newRecipe;
   }
@@ -141,6 +143,7 @@ public class RecipeServiceImpl implements RecipeService {
     recipeFound.setServings(recipe.getServings());
     recipeFound.setCategory(recipe.getCategory());
     recipeFound.setIsPublic(recipe.getIsPublic());
+    recipeFound.setLanguage(recipe.getLanguage());
 
     recipeFound.getIngredients().clear();
     for (Ingredient ingredient : recipe.getIngredients()) {
@@ -207,6 +210,7 @@ public class RecipeServiceImpl implements RecipeService {
     recipeFound.setServings(recipe.getServings());
     recipeFound.setCategory(recipe.getCategory());
     recipeFound.setIsPublic(recipe.getIsPublic());
+    recipeFound.setLanguage(recipe.getLanguage());
 
     return recipeRepository.save(recipeFound);
   }
@@ -225,7 +229,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public RecipeRequestDto getRecipeByPage(int page, int size, List<String> category,
-                                          Integer difficulty, String servings, String prepareTime, Boolean isPublic) {
+                                          Integer difficulty, String servings, String prepareTime, Boolean isPublic, String language) {
     Pagination pagination = new Pagination();
     RecipeFilter filter = new RecipeFilter();
     List<Recipe> recipes = recipeRepository.findAll();
@@ -236,7 +240,7 @@ public class RecipeServiceImpl implements RecipeService {
                 .collect(Collectors.toList());
     }
 
-    List<Recipe> filteredRecipes = filter.filterByParams(category,difficulty,servings,prepareTime,recipes);
+    List<Recipe> filteredRecipes = filter.filterByParams(category,difficulty,servings,prepareTime,recipes, language);
     List<Recipe> paginatedRecipes = pagination.paginate(page,size,filteredRecipes);
     RecipeRequestDto recipeRequestDto = new RecipeRequestDto();
     recipeRequestDto.setContent(paginatedRecipes);

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.kk.cibaria.dto.RecipeAddDto;
 import com.kk.cibaria.dto.RecipeRequestDto;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public interface RecipeService {
@@ -21,7 +22,7 @@ public interface RecipeService {
   Recipe updateRecipeWithPhotos(int id, Recipe recipe, List<MultipartFile> images, String token);
 
   RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, String servings,
-                                   String prepareTime, Boolean isPublic);
+                                   String prepareTime, Boolean isPublic, String language);
 
   void addRecipeToFavourites(String token, int recipeId);
 
