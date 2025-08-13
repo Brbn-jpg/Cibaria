@@ -24,8 +24,8 @@ import { RecipeFiltersComponent } from '../recipe-filters/recipe-filters.compone
 
 import { Language } from '../Interface/language';
 import { FilterState } from '../Interface/filter-state';
-import { Recipe } from '../Interface/recipe';
 import { Rating } from '../Interface/rating';
+import { ProfileRecipe } from '../Interface/profile-recipe';
 
 // Local interfaces
 export interface UserProfileResponse {
@@ -37,11 +37,11 @@ export interface UserProfileResponse {
 }
 
 export interface UserFavouritesResponse {
-  favourites: Recipe[];
+  favourites: ProfileRecipe[];
 }
 
 export interface UserRecipesResponse {
-  userRecipes: Recipe[];
+  userRecipes: ProfileRecipe[];
 }
 
 type ActiveTab = 'favourites' | 'userRecipes';
@@ -77,10 +77,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   description?: string;
 
   // Recipe data
-  favouriteRecipes: Recipe[] = [];
-  filteredFavouriteRecipes: Recipe[] = [];
-  userRecipes: Recipe[] = [];
-  filteredUserRecipes: Recipe[] = [];
+  favouriteRecipes: ProfileRecipe[] = [];
+  filteredFavouriteRecipes: ProfileRecipe[] = [];
+  userRecipes: ProfileRecipe[] = [];
+  filteredUserRecipes: ProfileRecipe[] = [];
 
   // Filter data
   categoriesArray: string[] = [];
@@ -208,11 +208,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   // Getters for pagination
-  get paginatedFavouriteRecipes(): Recipe[] {
+  get paginatedFavouriteRecipes(): ProfileRecipe[] {
     return this.getPaginatedItems(this.filteredFavouriteRecipes);
   }
 
-  get paginatedUserRecipes(): Recipe[] {
+  get paginatedUserRecipes(): ProfileRecipe[] {
     return this.getPaginatedItems(this.filteredUserRecipes);
   }
 
@@ -360,7 +360,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getActiveRecipeSource(): Recipe[] {
+  private getActiveRecipeSource(): ProfileRecipe[] {
     return this.activeTab === 'favourites'
       ? this.favouriteRecipes
       : this.userRecipes;
@@ -369,7 +369,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     const source = [...this.getActiveRecipeSource()];
 
-    let filtered: Recipe[] = [...source];
+    let filtered: ProfileRecipe[] = [...source];
     filtered = this.applyAllFilters(filtered);
 
     if (this.activeTab === 'favourites') {
@@ -385,7 +385,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  private applyAllFilters(recipes: Recipe[]): Recipe[] {
+  private applyAllFilters(recipes: ProfileRecipe[]): ProfileRecipe[] {
     let filtered = [...recipes];
 
     if (this.filters.difficulty) {

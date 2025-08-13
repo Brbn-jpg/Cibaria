@@ -1,4 +1,11 @@
-import { Component, HostListener } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  NgZone,
+} from '@angular/core';
 import {
   FormsModule,
   FormGroup,
@@ -6,6 +13,7 @@ import {
   ReactiveFormsModule,
   FormControl,
 } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { RecipeService } from '../services/recipe.service';
@@ -17,6 +25,7 @@ import { NotificationService } from '../services/notification.service';
   selector: 'app-add-recipe-panel',
   standalone: true,
   imports: [
+    CommonModule,
     NavbarComponent,
     FooterSectionComponent,
     FormsModule,
@@ -27,31 +36,39 @@ import { NotificationService } from '../services/notification.service';
   templateUrl: './add-recipe-panel.component.html',
   styleUrls: ['./add-recipe-panel.component.css'],
 })
-export class AddRecipePanelComponent {
+export class AddRecipePanelComponent implements OnInit {
   ingredients: { ingredientName: string; quantity: number; unit: string }[] =
     [];
   steps: { content: string }[] = [];
   recipeLanguage = 'english';
   isPublic = false;
-  newIngredient = { ingredientName: '', quantity: 0, unit: 'Choose a unit' };
+  newIngredient = { ingredientName: '', quantity: 0, unit: 'Choose unit' };
   newStep = '';
   success = false;
+  isDragging = false;
+  imagePreview: string | null = null;
+
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private recipeService: RecipeService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private ngZone: NgZone
   ) {}
 
   recipeForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     category: new FormControl('', [Validators.required]),
-    servings: new FormControl(1, [Validators.required, Validators.min(1)]),
-    prepareTime: new FormControl(1, [Validators.required, Validators.min(1)]),
+    servings: new FormControl(null, [Validators.required, Validators.min(1)]),
+    prepareTime: new FormControl(null, [
+      Validators.required,
+      Validators.min(1),
+    ]),
     quantity: new FormControl(this.ingredients, [Validators.required]),
     unit: new FormControl(this.ingredients, [Validators.required]),
-    difficulty: new FormControl(1, [Validators.required]),
-    images: new FormControl(null, [Validators.required]),
+    difficulty: new FormControl(null, [Validators.required]),
+    images: new FormControl<File | null>(null, [Validators.required]),
     steps: new FormControl(this.steps, [Validators.required]),
     ingredients: new FormControl(this.ingredients, [Validators.required]),
     isPublic: new FormControl(this.isPublic, [Validators.required]),
@@ -114,13 +131,117 @@ export class AddRecipePanelComponent {
     this.steps.splice(index, 1);
   }
 
-  validateFileSize() {
-    const fileInput = document.querySelector('.image') as HTMLInputElement;
+  triggerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
 
-    if (fileInput.files && fileInput.files[0].size > 5242880) {
-      this.notificationService.warning('The file size exceeds 5MB!', 5000);
-      fileInput.value = '';
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.processFile(input.files[0]);
     }
+  }
+
+  processFile(file: File) {
+    if (file.size > 5242880) {
+      this.notificationService.warning('The file size exceeds 5MB!', 5000);
+      this.resetFile();
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      this.notificationService.warning('Please upload an image file!', 5000);
+      this.resetFile();
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      this.imagePreview = result;
+
+      this.recipeForm.patchValue({
+        // update the form with the selected file
+        images: file,
+      });
+    };
+
+    reader.onerror = () => {
+      this.notificationService.warning('Error reading file', 5000);
+    };
+
+    try {
+      reader.readAsDataURL(file);
+    } catch (error) {
+      this.notificationService.warning('Error processing file', 5000);
+      return;
+    }
+
+    this.notificationService.success(
+      `Image "${file.name}" has been selected`,
+      5000
+    );
+  }
+
+  @HostListener('dragenter', ['$event'])
+  @HostListener('dragover', ['$event'])
+  onDragOver(event: DragEvent) {
+    const target = event.target as HTMLElement;
+    const dropzone = target.closest('.dropzone');
+
+    if (dropzone) {
+      event.preventDefault();
+      event.stopPropagation(); // stops the event from bubbling up
+      this.isDragging = true;
+    }
+  }
+
+  @HostListener('dragleave', ['$event'])
+  onDragLeave(event: DragEvent) {
+    const target = event.target as HTMLElement;
+    const dropzone = target.closest('.dropzone');
+
+    if (dropzone && !dropzone.contains(event.relatedTarget as Node)) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isDragging = false;
+    }
+  }
+
+  @HostListener('drop', ['$event'])
+  onDrop(event: DragEvent) {
+    const target = event.target as HTMLElement;
+    const dropzone = target.closest('.dropzone');
+
+    if (dropzone) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isDragging = false;
+
+      const files = event.dataTransfer?.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        this.fileInput.nativeElement.files = dataTransfer.files;
+
+        this.processFile(file);
+      }
+    }
+  }
+
+  resetFile(event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    this.fileInput.nativeElement.value = '';
+    this.recipeForm.patchValue({
+      images: null,
+    });
+    this.imagePreview = null;
   }
 
   postRecipe() {
@@ -149,15 +270,11 @@ export class AddRecipePanelComponent {
       })
     );
 
-    const imageInput = document.querySelector('.image') as HTMLInputElement;
-    const images = new FileReader();
-    if (imageInput.files && imageInput.files.length > 0) {
-      const file = imageInput.files[0];
-      let imageFile = null;
-      images.onload = (e: any) => {
-        imageFile = e.target.result;
-      };
-      images.readAsDataURL(file);
+    if (
+      this.fileInput.nativeElement.files &&
+      this.fileInput.nativeElement.files.length > 0
+    ) {
+      const file = this.fileInput.nativeElement.files[0];
       formData.append('images', file);
     }
 

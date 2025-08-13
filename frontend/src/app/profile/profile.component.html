@@ -103,7 +103,7 @@
         <div class="image-wrapper">
           <img
             class="recipe-image"
-            [src]="recipe.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+[src]="recipe.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
             alt="{{ recipe?.recipeName }}"
           />
         </div>
@@ -165,7 +165,7 @@
         <div class="image-wrapper">
           <img
             class="recipe-image"
-            [src]="recipe?.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+            [src]="recipe.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
             alt="{{ recipe?.recipeName }}"
           />
         </div>

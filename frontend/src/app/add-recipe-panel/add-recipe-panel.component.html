@@ -120,7 +120,7 @@
           [(ngModel)]="newIngredient.unit"
           required
         >
-          <option disabled>Choose a unit</option>
+          <option disabled>Choose unit</option>
           <option value="tsp">tsp</option>
           <option value="tbsp">tbsp</option>
           <option value="pcs">pcs</option>
@@ -172,15 +172,24 @@
       }
       <hr />
       <h2>Add image</h2>
-      <input
-        formControlName="images"
-        type="file"
-        name="image"
-        class="image"
-        required
-        accept="image/*"
-        (change)="validateFileSize()"
-      />
+      <div class="dropzone" [class.has-preview]="imagePreview" (click)="triggerFileInput()">
+        <input
+          #fileInput
+          formControlName="images"
+          type="file"
+          name="image"
+          class="image"
+          required
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          style="display: none;"
+        />
+        <div *ngIf="imagePreview" class="image-preview">
+          <img [src]="imagePreview" alt="Recipe preview" />
+          <button type="button" class="remove-image-btn" (click)="resetFile($event)">✕</button>
+        </div>
+        <p *ngIf="!imagePreview">📁 Click or drag an image here</p>
+      </div>
       <hr />
       <button type="submit">Add recipe</button>
     </form>

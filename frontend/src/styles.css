@@ -7,6 +7,17 @@
 html {
   font-size: 62.5%;
   font-family: sans-serif;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
 }
 
 .overflow-h {
@@ -15,3 +26,4 @@ html {
   width: 100% !important;
   height: 100% !important;
 }
+

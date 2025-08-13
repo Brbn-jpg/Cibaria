@@ -47,27 +47,131 @@ label {
 }
 
 input {
-  font-size: 2.4rem;
-  padding: 0.8rem;
-  margin-bottom: 1.6rem;
+  padding: 1.2rem 1.6rem;
+  font-size: 1.6rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  color: #fff;
+  transition: border-color 0.2s ease-in-out;
+  width: 100%;
   max-width: 30rem;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.dropzone:hover {
+  border-color: #999;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dropzone.dragover {
+  border-color: #4caf50;
+  background-color: rgba(76, 175, 80, 0.1);
+  transform: scale(1.02);
+}
+
+.dropzone.has-preview {
+  padding: 20px;
+  border: 2px solid #4caf50;
+  background-color: rgba(76, 175, 80, 0.05);
+}
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.image-preview img {
+  max-width: 300px;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.remove-image-btn:hover {
+  background-color: #cc0000;
+}
+
+.dropzone input[type="file"] {
+  display: none !important;
+}
+
+.dropzone p {
+  margin: 0;
+  pointer-events: none;
+  color: #666;
+  font-size: 16px;
+}
+
+.dropzone.dragover p {
+  color: #4caf50;
+  font-weight: bold;
 }
 
 select {
   max-width: 30rem;
   font-size: 2.4rem;
   padding: 0.8rem;
-  margin-bottom: 1.6rem;
   background-color: #fff;
   border: none;
   color: #000;
 }
 
 textarea {
-  font-size: 2.4rem;
-  padding: 0.8rem;
-  margin-bottom: 1.6rem;
-  height: 12.8rem;
+  padding: 1.2rem 1.6rem;
+  font-size: 1.6rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  color: #fff;
+  transition: border-color 0.2s ease-in-out;
   width: 100%;
   height: 30rem;
   resize: vertical;
@@ -102,10 +206,48 @@ button:hover {
   margin-bottom: 1.6rem;
 }
 
-.difficulty,
-.public,
-.language {
+select {
+  padding: 1.2rem 1.2rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 1rem;
+  font-size: 1.6rem;
+  letter-spacing: 1.02px;
+  appearance: none; /* Removes default arrow */
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
   width: 100%;
+  white-space: nowrap;
+}
+
+select:hover,
+select:focus,
+input:hover,
+input:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+select option {
+  background-color: #111;
+  color: #fff;
+  font-size: 1.4rem;
+  padding: 1rem;
+}
+
+select option:hover {
+  background-color: #222;
+}
+
+/* Arrow */
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1.6rem center;
+  background-size: 1.6rem;
+  padding-right: 4rem;
 }
 
 .image {
@@ -114,10 +256,6 @@ button:hover {
 
 .ingredients-list {
   list-style: none;
-}
-
-.ingredient {
-  font-size: 2.4rem;
 }
 
 .step-number {
