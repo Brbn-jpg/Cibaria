@@ -1,5 +1,22 @@
 <div class="filters">
-  @if (isMobileFiltering) { @if (isMenuOpen) {
+  @if (showTabs) {
+  <div class="tabs">
+    <button
+      (click)="onTabChange('favourites')"
+      [class.selectedTab]="activeTab === 'favourites'"
+      class="switch"
+    >
+      Ulubione
+    </button>
+    <button
+      (click)="onTabChange('userRecipes')"
+      [class.selectedTab]="activeTab === 'userRecipes'"
+      class="switch"
+    >
+      Moje przepisy
+    </button>
+  </div>
+  } @if (isMobileFiltering) { @if (isMenuOpen) {
   <div class="close-btn">
     <button class="close" (click)="closeMenu()">
       <img
@@ -43,7 +60,6 @@
       placeholder="Search for recipes"
     />
   </div>
-
   <div class="prepare-time filter-wrapper">
     <label for="prepare-time">Prepare time</label>
     <div class="inputs">
@@ -66,7 +82,6 @@
       />
     </div>
   </div>
-
   <div class="servings filter-wrapper">
     <label for="servings">Servings</label>
     <div class="inputs">
@@ -91,7 +106,6 @@
       />
     </div>
   </div>
-
   <div class="category filter-wrapper">
     <label for="category">Category</label>
     <select
@@ -107,7 +121,6 @@
       }
     </select>
   </div>
-
   <div class="difficulty filter-wrapper">
     <label for="difficulty">Difficulty</label>
     <select
@@ -123,7 +136,6 @@
       <option value="3">Hard</option>
     </select>
   </div>
-
   <div class="language filter-wrapper">
     <label for="Language">Language</label>
     <select

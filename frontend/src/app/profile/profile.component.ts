@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   OnDestroy,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -19,6 +20,7 @@ import { ProfileService } from '../services/profile.service';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 import { SettingsProfileComponent } from '../settings-profile/settings-profile.component';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { RecipeFiltersComponent } from '../recipe-filters/recipe-filters.component';
 
 import { Language } from '../Interface/language';
 import { FilterState } from '../Interface/filter-state';
@@ -56,11 +58,14 @@ type ActiveTab = 'favourites' | 'userRecipes';
     EditProfileComponent,
     SettingsProfileComponent,
     ToastNotificationComponent,
+    RecipeFiltersComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  @ViewChild(RecipeFiltersComponent) filtersComponent!: RecipeFiltersComponent;
+
   private readonly destroy$ = new Subject<void>();
   private readonly el: ElementRef = inject(ElementRef);
 
@@ -137,18 +142,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
-  onFilterChange(filterName: string, event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.updateFilter(filterName, value, event);
-    this.currentPage = 1;
-    this.applyFilters();
+  onFiltersChanged(): void {
+    if (this.filtersComponent) {
+      this.filters = this.filtersComponent.getCurrentFilters();
+      this.currentPage = 1;
+      this.applyFilters();
+    }
   }
 
-  onSearchChange(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.filters.query = value.trim();
-    this.currentPage = 1;
-    this.applyFilters();
+  onTabChanged(tab: ActiveTab): void {
+    this.setActiveTab(tab);
   }
 
   onPageChange(page: number): void {
@@ -330,17 +333,30 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private loadLanguages(): void {
     const source = this.getActiveRecipeSource();
-    source.map((recipe) => recipe.language);
+
+    console.log('=== DEBUGGING LANGUAGES ===');
+    console.log('Active tab:', this.activeTab);
+    console.log('Source recipes count:', source.length);
+    console.log(
+      'All languages in source:',
+      source.map((r) => r.language)
+    );
+
     if (source.length > 0) {
       const uniqueLanguages = Array.from(
         new Set(source.map((recipe) => recipe.language))
       ).sort();
 
+      console.log('Unique languages found:', uniqueLanguages);
+
       this.languagesArray = uniqueLanguages.map((languageName) => ({
         languageName,
       }));
+
+      console.log('Final languagesArray:', this.languagesArray);
     } else {
       this.languagesArray = [];
+      console.log('No recipes found, languages array empty');
     }
   }
 
@@ -423,36 +439,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     return filtered;
-  }
-
-  private updateFilter(filterName: string, value: string, event: Event): void {
-    const inputClass = (event.target as HTMLInputElement).classList;
-
-    switch (filterName) {
-      case 'prepTime':
-        if (inputClass.contains('from')) {
-          this.filters.prepTimeFrom = value ? Number(value) : undefined;
-        } else if (inputClass.contains('to')) {
-          this.filters.prepTimeTo = value ? Number(value) : undefined;
-        }
-        break;
-      case 'servings':
-        if (inputClass.contains('from')) {
-          this.filters.servingsFrom = value ? Number(value) : undefined;
-        } else if (inputClass.contains('to')) {
-          this.filters.servingsTo = value ? Number(value) : undefined;
-        }
-        break;
-      case 'difficulty':
-        this.filters.difficulty = Number(value);
-        break;
-      case 'category':
-        this.filters.category = value;
-        break;
-      case 'recipeLanguage':
-        this.filters.recipeLanguage = value;
-        break;
-    }
   }
 
   private toggleMenu(open: boolean): void {

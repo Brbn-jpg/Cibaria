@@ -79,264 +79,21 @@
     </div>
   </div>
 
-  <!-- FILTERS  -->
+  <!-- FILTERS -->
   @if (favouriteRecipes.length || userRecipes.length > 0) {
-  <div class="filters">
-    @if (isFiltering) { @if (isMenuOpen){
-    <div class="close-btn">
-      <button class="close" (click)="closeMenu()">
-        <img
-          src="images/mobile-menu/menu-close.svg"
-          alt="close menu"
-          class="settings-icon"
-        />
-      </button>
-    </div>
-    }
-    <div class="settings">
-      <div class="menu-overlay"></div>
-      <div class="tabs">
-        <button
-          (click)="setActiveTab('favourites')"
-          [class.selectedTab]="activeTab === 'favourites'"
-          class="switch"
-        >
-          Ulubione
-        </button>
-        <button
-          (click)="setActiveTab('userRecipes')"
-          [class.selectedTab]="activeTab === 'userRecipes'"
-          class="switch"
-        >
-          Moje przepisy
-        </button>
-      </div>
-
-      <div class="filter-wrapper">
-        <label class="settings-label">Filters</label>
-        <button class="settings-btn" (click)="openMenu()">
-          <img
-            src="images/mobile-menu/menu-open.svg"
-            alt="open menu"
-            class="settings-icon"
-          />
-        </button>
-      </div>
-      <div class="menu">
-        <div class="language filter-wrapper">
-          <label for="Language">Language</label>
-          <select
-            name="recipeLanguage"
-            id="recipeLanguage"
-            class="filter"
-            [ngModel]="filters.recipeLanguage"
-            (change)="onFilterChange('recipeLanguage', $event)"
-          >
-            <option value="">Choose language</option>
-            @for (language of languagesArray; track language.languageName) {
-            <option [value]="language.languageName">
-              {{ language.languageName }}
-            </option>
-            }
-          </select>
-        </div>
-        <div class="search filter-wrapper">
-          <label for="search">Search</label>
-          <input
-            type="text"
-            id="search"
-            class="search-input"
-            (input)="onSearchChange($event)"
-            placeholder="Search for recipes"
-          />
-        </div>
-        <div class="difficulty filter-wrapper">
-          <label for="difficulty">Difficulty</label>
-          <select
-            name="difficulty"
-            id="difficulty"
-            class="filter"
-            (change)="onFilterChange('difficulty', $event)"
-          >
-            <option selected value="0">Choose difficulty</option>
-            <option value="1">Easy</option>
-            <option value="2">Medium</option>
-            <option value="3">Hard</option>
-          </select>
-        </div>
-        <div class="prepare-time filter-wrapper">
-          <label for="prepare-time">Prepare time</label>
-          <div class="inputs">
-            <input
-              type="number"
-              class="prepTime from"
-              (change)="onFilterChange('prepTime', $event)"
-              placeholder="from"
-            />
-            <span> &mdash; </span>
-            <input
-              type="number"
-              class="prepTime to"
-              (change)="onFilterChange('prepTime', $event)"
-              placeholder="to"
-            />
-          </div>
-        </div>
-        <div class="servings filter-wrapper">
-          <label for="servings">Servings</label>
-          <div class="inputs">
-            <input
-              id="servings-from"
-              type="number"
-              (input)="onFilterChange('servings', $event)"
-              class="servings-input from"
-              placeholder="from"
-            />
-            <span> &mdash; </span>
-            <input
-              id="servings-to"
-              type="number"
-              (input)="onFilterChange('servings', $event)"
-              class="servings-input to"
-              placeholder="to"
-            />
-          </div>
-        </div>
-        <div class="category filter-wrapper">
-          <label for="category">Category</label>
-          <select
-            name="category"
-            id="category"
-            class="filter"
-            (change)="onFilterChange('category', $event)"
-          >
-            <option selected value="">Choose category</option>
-            @for (category of categoriesArray; track $index){
-            <option [value]="category">
-              {{ category }}
-            </option>
-            }
-          </select>
-        </div>
-      </div>
-    </div>
-    } @else {
-    <div class="tabs">
-      <button
-        (click)="setActiveTab('favourites')"
-        [class.selectedTab]="activeTab === 'favourites'"
-        class="switch"
-      >
-        Ulubione
-      </button>
-      <button
-        (click)="setActiveTab('userRecipes')"
-        [class.selectedTab]="activeTab === 'userRecipes'"
-        class="switch"
-      >
-        Moje przepisy
-      </button>
-    </div>
-    <div class="language filter-wrapper">
-      <label for="Language">Language</label>
-      <select
-        name="recipeLanguage"
-        id="recipeLanguage"
-        class="filter"
-        [ngModel]="filters.recipeLanguage"
-        (change)="onFilterChange('recipeLanguage', $event)"
-      >
-        <option value="">Choose language</option>
-        @for (language of languagesArray; track language.languageName) {
-        <option [value]="language.languageName">
-          {{ language.languageName }}
-        </option>
-        }
-      </select>
-    </div>
-
-    <div class="difficulty filter-wrapper">
-      <label for="difficulty">Difficulty</label>
-      <select
-        name="difficulty"
-        id="difficulty"
-        class="filter"
-        (change)="onFilterChange('difficulty', $event)"
-      >
-        <option selected value="0">Choose difficulty</option>
-        <option value="1">Easy</option>
-        <option value="2">Medium</option>
-        <option value="3">Hard</option>
-      </select>
-    </div>
-    <div class="category filter-wrapper">
-      <label for="category">Category</label>
-      <select
-        name="category"
-        id="category"
-        class="filter"
-        (change)="onFilterChange('category', $event)"
-      >
-        <option selected value="">Choose category</option>
-        @for (category of categoriesArray; track $index){
-        <option [value]="category">
-          {{ category }}
-        </option>
-        }
-      </select>
-    </div>
-    <div class="search filter-wrapper">
-      <label for="search">Search</label>
-      <input
-        type="text"
-        id="search"
-        class="search-input"
-        (input)="onSearchChange($event)"
-        placeholder="Search for recipes"
-      />
-    </div>
-    <div class="prepare-time filter-wrapper">
-      <label for="prepare-time">Prepare time</label>
-      <div class="inputs">
-        <input
-          type="number"
-          class="prepTime from"
-          (change)="onFilterChange('prepTime', $event)"
-          placeholder="from"
-        />
-        <span> &mdash; </span>
-        <input
-          type="number"
-          class="prepTime to"
-          (change)="onFilterChange('prepTime', $event)"
-          placeholder="to"
-        />
-      </div>
-    </div>
-    <div class="servings filter-wrapper">
-      <label for="servings">Servings</label>
-      <div class="inputs">
-        <input
-          id="servings-from"
-          type="number"
-          (input)="onFilterChange('servings', $event)"
-          class="servings-input from"
-          placeholder="from"
-        />
-        <span> &mdash; </span>
-        <input
-          id="servings-to"
-          type="number"
-          (input)="onFilterChange('servings', $event)"
-          class="servings-input to"
-          placeholder="to"
-        />
-      </div>
-    </div>
-    }
-  </div>
+  <app-recipe-filters
+    [isMobileFiltering]="isFiltering"
+    [showTabs]="true"
+    [activeTab]="activeTab"
+    [customCategories]="categoriesArray"
+    [customLanguages]="languagesArray"
+    [useCustomData]="true"
+    (filtersChanged)="onFiltersChanged()"
+    (tabChanged)="onTabChanged($event)"
+  ></app-recipe-filters>
   <hr />
   }
+
   <!-- FAVOURITE RECIPES -->
   @if(activeTab == 'favourites'){
   <div class="recipes grid-4-cols">
@@ -346,7 +103,7 @@
         <div class="image-wrapper">
           <img
             class="recipe-image"
-            [src]="recipe?.images?.[0]?.imageUrl || 'images/Cibaria.png'"
+            [src]="recipe.images?.[0]?.imageUrl || 'images/Cibaria.png'"
             alt="{{ recipe?.recipeName }}"
           />
         </div>
@@ -398,6 +155,7 @@
     }
   </div>
   }
+
   <!-- USER RECIPES -->
   @if (activeTab == 'userRecipes'){
   <div class="recipes grid-4-cols">
@@ -460,7 +218,7 @@
   }
 
   <!-- PAGINATION & FOOTER -->
-  @if (filteredFavouriteRecipes.length > 0) {
+  @if (filteredFavouriteRecipes.length > 0 || filteredUserRecipes.length > 0) {
   <div class="pagination">
     <button
       class="btn"

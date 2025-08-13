@@ -1,12 +1,15 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
   inject,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { Language } from '../Interface/language';
@@ -24,9 +27,15 @@ import { NgTemplateOutlet } from '@angular/common';
   templateUrl: './recipe-filters.component.html',
   styleUrl: './recipe-filters.component.css',
 })
-export class RecipeFiltersComponent implements OnInit, OnDestroy {
+export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   @Input() isMobileFiltering = false;
+  @Input() showTabs = false; // input for showing tabs
+  @Input() activeTab: 'favourites' | 'userRecipes' | null = null; // input for active tab
+  @Input() customCategories: string[] = []; //  input for custom categories
+  @Input() customLanguages: Language[] = []; //  input for custom languages
+  @Input() useCustomData = false; //  input to determine data source
   @Output() filtersChanged = new EventEmitter<void>();
+  @Output() tabChanged = new EventEmitter<'favourites' | 'userRecipes'>(); // output for tab changes
 
   private destroy$ = new Subject<void>();
   private el: ElementRef = inject(ElementRef);
@@ -48,18 +57,37 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy {
   constructor(
     private filterService: FilterService,
     private notificationService: NotificationService,
-    private scrollLockService: ScrollLockService
+    private scrollLockService: ScrollLockService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
-    this.loadLanguages();
-    this.loadCurrentFilters();
+    if (this.useCustomData) {
+      this.categoriesArray = this.customCategories;
+      this.languagesArray = this.customLanguages;
+      this.loadCurrentFiltersFromCustom();
+    } else {
+      this.loadCategories();
+      this.loadLanguages();
+      this.loadCurrentFilters();
+    }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['customLanguages'] && this.customLanguages) {
+      this, (this.languagesArray = this.customLanguages);
+      this.cdr.detectChanges();
+    }
+
+    if (changes['customCategories'] && this.customCategories) {
+      this.categoriesArray = this.customCategories;
+      this.cdr.detectChanges();
+    }
   }
 
   private loadCategories(): void {
@@ -105,6 +133,48 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy {
     this.selectedLanguage = currentFilters.recipeLanguage || '';
   }
 
+  private loadCurrentFiltersFromCustom(): void {
+    // Reset filters when using custom data
+    this.searchQuery = '';
+    this.prepTimeFrom = undefined;
+    this.prepTimeTo = undefined;
+    this.servingsFrom = undefined;
+    this.servingsTo = undefined;
+    this.selectedCategory = '';
+    this.selectedDifficulty = '';
+    this.selectedLanguage = '';
+  }
+
+  // Method to update filters from parent component (for custom usage)
+  updateFiltersFromParent(filters: Partial<FilterState>): void {
+    this.searchQuery = filters.query || '';
+    this.prepTimeFrom = filters.prepTimeFrom;
+    this.prepTimeTo = filters.prepTimeTo;
+    this.servingsFrom = filters.servingsFrom;
+    this.servingsTo = filters.servingsTo;
+    this.selectedCategory = filters.category || '';
+    this.selectedDifficulty = filters.difficulty
+      ? filters.difficulty.toString()
+      : '';
+    this.selectedLanguage = filters.recipeLanguage || '';
+  }
+
+  // Method to get current filters (for custom usage)
+  getCurrentFilters(): Partial<FilterState> {
+    return {
+      query: this.searchQuery,
+      prepTimeFrom: this.prepTimeFrom,
+      prepTimeTo: this.prepTimeTo,
+      servingsFrom: this.servingsFrom,
+      servingsTo: this.servingsTo,
+      category: this.selectedCategory || undefined,
+      difficulty:
+        this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty,
+      recipeLanguage: this.selectedLanguage || undefined,
+      currentPage: 1,
+    };
+  }
+
   onSearchChange(): void {
     this.updateFilters();
   }
@@ -113,22 +183,37 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy {
     this.updateFilters();
   }
 
-  private updateFilters(): void {
-    const filters: Partial<FilterState> = {
-      query: this.searchQuery,
-      prepTimeFrom: this.prepTimeFrom,
-      prepTimeTo: this.prepTimeTo,
-      servingsFrom: this.servingsFrom,
-      servingsTo: this.servingsTo,
-      category: this.selectedCategory || undefined,
-      difficulty:
-        this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty, // Convert to number if not empty
-      recipeLanguage: this.selectedLanguage || undefined,
-      currentPage: 1,
-    };
+  onTabChange(tab: 'favourites' | 'userRecipes'): void {
+    console.log('Tab changed to:', tab);
+    console.log('Current language filter:', this.selectedLanguage);
+    console.log('Available languages:', this.languagesArray);
 
-    this.filterService.updateFilters(filters);
-    this.filtersChanged.emit();
+    this.activeTab = tab;
+    this.tabChanged.emit(tab);
+  }
+
+  private updateFilters(): void {
+    if (this.useCustomData) {
+      // For custom usage, just emit the change
+      this.filtersChanged.emit();
+    } else {
+      // For FilterService usage
+      const filters: Partial<FilterState> = {
+        query: this.searchQuery,
+        prepTimeFrom: this.prepTimeFrom,
+        prepTimeTo: this.prepTimeTo,
+        servingsFrom: this.servingsFrom,
+        servingsTo: this.servingsTo,
+        category: this.selectedCategory || undefined,
+        difficulty:
+          this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty,
+        recipeLanguage: this.selectedLanguage || undefined,
+        currentPage: 1,
+      };
+
+      this.filterService.updateFilters(filters);
+      this.filtersChanged.emit();
+    }
   }
 
   openMenu(): void {

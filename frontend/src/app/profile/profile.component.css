@@ -58,7 +58,7 @@ main {
 /* Profile info */
 
 .profile-info {
-  margin: 17.6rem 0 12rem 4.8rem;
+  margin: 17.6rem 0 4.8rem 4.8rem;
   position: relative;
   color: #fff;
 }
@@ -238,33 +238,6 @@ label {
   color: #fff;
   border: none;
   border-radius: 1rem;
-}
-
-.tabs {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.4rem;
-  grid-row: 1 / span 2;
-}
-
-.selectedTab {
-  background-color: #d4ae6c;
-}
-
-.switch {
-  font-size: 2.4rem;
-  padding: 0.8rem 2rem;
-  border: none;
-  border-radius: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  width: 24rem;
-}
-
-.switch:hover {
-  background-color: #f7d79c;
 }
 
 option {
@@ -693,7 +666,7 @@ hr {
   }
 
   .profile-info {
-    margin: 14rem 0 12rem 4.8rem;
+    margin: 14rem 0 4.8rem 4.8rem;
   }
 
   .image-wrapper,
@@ -816,8 +789,12 @@ hr {
   }
 
   .recipe-name {
-    margin: 2.4rem;
+    margin: 1.2rem 2.4rem 0 2.4rem;
     height: auto;
+  }
+
+  .recipe-language {
+    margin-bottom: 1.2rem;
   }
 
   .recipe-desc {
