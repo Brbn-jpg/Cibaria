@@ -3,12 +3,13 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { FilterState } from '../Interface/filter-state';
 import { HttpClient } from '@angular/common/http';
 import { RecipesResponse } from '../Interface/recipe-response';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FilterService {
-  private readonly url = 'http://localhost:8080/api/recipes';
+  private readonly url = `${environment.apiUrl}/recipes`;
 
   private filterState$ = new BehaviorSubject<FilterState>({
     currentPage: 1,

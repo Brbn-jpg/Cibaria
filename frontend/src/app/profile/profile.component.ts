@@ -24,8 +24,8 @@ import { RecipeFiltersComponent } from '../recipe-filters/recipe-filters.compone
 
 import { Language } from '../Interface/language';
 import { FilterState } from '../Interface/filter-state';
-import { Rating } from '../Interface/rating';
 import { ProfileRecipe } from '../Interface/profile-recipe';
+import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 
 // Local interfaces
 export interface UserProfileResponse {
@@ -59,6 +59,7 @@ type ActiveTab = 'favourites' | 'userRecipes';
     SettingsProfileComponent,
     ToastNotificationComponent,
     RecipeFiltersComponent,
+    RecipeCardComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -187,25 +188,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   // Utility methods
-  getAverageRating(ratings: Rating[]): number {
-    if (!ratings || ratings.length === 0) {
-      return 0;
-    }
-
-    const sum = ratings.reduce((acc, rating) => acc + rating.value, 0);
-    return Math.round((sum / ratings.length) * 10) / 10; // Round to 1 decimal place
-  }
-
-  getDifficulty(difficulty: number): string {
-    const difficultyMap = {
-      1: 'easy',
-      2: 'medium',
-      3: 'hard',
-    };
-    return (
-      difficultyMap[difficulty as keyof typeof difficultyMap] || 'no value'
-    );
-  }
 
   // Getters for pagination
   get paginatedFavouriteRecipes(): ProfileRecipe[] {

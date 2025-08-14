@@ -98,55 +98,7 @@
   @if(activeTab == 'favourites'){
   <div class="recipes grid-4-cols">
     @for (recipe of paginatedFavouriteRecipes; track $index) {
-    <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
-      ><figure class="recipe">
-        <div class="image-wrapper">
-          <img
-            class="recipe-image"
-[src]="recipe.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
-            alt="{{ recipe?.recipeName }}"
-          />
-        </div>
-        <div class="recipe-info">
-          <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
-          <p class="recipe-language">{{ recipe.language }}</p>
-        </div>
-        <div class="recipe-desc">
-          <div class="recipe-rating recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/star-outline.svg"
-              alt="small star icon"
-            /><span>{{ getAverageRating(recipe.ratings) }}</span>
-          </div>
-          <div class="recipe-difficulty recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/bar-chart-outline.svg"
-              alt="chart icon"
-            /><span>{{ getDifficulty(recipe.difficulty) }}</span>
-          </div>
-          <div class="recipe-servings recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/restaurant-outline.svg"
-              alt="fork and knife icon"
-            /><span>{{ recipe.servings }} servings</span>
-          </div>
-          <div class="recipe-time recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/time-outline.svg"
-              alt="food icon"
-            /><span>{{ recipe.prepareTime }} minutes</span>
-          </div>
-          <div class="recipe-time recipe-desc-inner">
-            <img class="icon" src="images/icons/bowl-food.svg" alt="" />
-            <span>{{ recipe.category }}</span>
-          </div>
-        </div>
-      </figure></a
-    >
+    <app-recipe-card [recipe]="recipe"></app-recipe-card>
     } @if (filteredFavouriteRecipes.length === 0 && favouriteRecipes.length > 0)
     {
     <p class="no-recipes">No recipes found matching your filters</p>
@@ -160,55 +112,7 @@
   @if (activeTab == 'userRecipes'){
   <div class="recipes grid-4-cols">
     @for (recipe of paginatedUserRecipes; track $index) {
-    <a class="recipe-link" [routerLink]="['/recipes', recipe.id]"
-      ><figure class="recipe">
-        <div class="image-wrapper">
-          <img
-            class="recipe-image"
-            [src]="recipe.imageUrl?.[0]?.imageUrl || 'images/Cibaria.png'"
-            alt="{{ recipe?.recipeName }}"
-          />
-        </div>
-        <div class="recipe-info">
-          <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
-          <p class="recipe-language">{{ recipe.language }}</p>
-        </div>
-        <div class="recipe-desc">
-          <div class="recipe-rating recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/star-outline.svg"
-              alt="small star icon"
-            /><span>{{ getAverageRating(recipe.ratings) }}</span>
-          </div>
-          <div class="recipe-difficulty recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/bar-chart-outline.svg"
-              alt="chart icon"
-            /><span>{{ getDifficulty(recipe.difficulty) }}</span>
-          </div>
-          <div class="recipe-servings recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/restaurant-outline.svg"
-              alt="fork and knife icon"
-            /><span>{{ recipe.servings }} servings</span>
-          </div>
-          <div class="recipe-time recipe-desc-inner">
-            <img
-              class="icon"
-              src="images/icons/time-outline.svg"
-              alt="food icon"
-            /><span>{{ recipe.prepareTime }} minutes</span>
-          </div>
-          <div class="recipe-time recipe-desc-inner">
-            <img class="icon" src="images/icons/bowl-food.svg" alt="" />
-            <span>{{ recipe.category }}</span>
-          </div>
-        </div>
-      </figure></a
-    >
+    <app-recipe-card [recipe]="recipe"></app-recipe-card>
     } @if (filteredUserRecipes.length === 0 && userRecipes.length > 0) {
     <p class="no-recipes">No recipes found matching your filters</p>
     } @if (userRecipes.length === 0) {

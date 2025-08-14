@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 export interface UpdateEmailDto {
   newEmail: string;
@@ -41,7 +42,7 @@ export class ProfileService {
     return this.settingsModeSubject.getValue();
   }
 
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.apiUrl;
 
   private getAuthHeaders(): HttpHeaders | undefined {
     const token = this.authService.getToken();
@@ -52,7 +53,7 @@ export class ProfileService {
 
   getUserProfile(): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.get<any>('http://localhost:8080/api/users/aboutme', {
+    return this.http.get<any>(`${environment.apiUrl}/users/aboutme`, {
       headers,
     });
   }
@@ -71,7 +72,7 @@ export class ProfileService {
   updateUserProfile(userId: number, userData: any): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.put<any>(
-      `http://localhost:8080/api/users/${userId}/profile`,
+      `${environment.apiUrl}/users/${userId}/profile`,
       userData,
       {
         headers,
@@ -165,7 +166,7 @@ export class ProfileService {
     formData.append('file', file);
     const headers = this.getAuthHeaders();
     return this.http.put(
-      `http://localhost:8080/api/users/${userId}/profile-picture`,
+      `${environment.apiUrl}/users/${userId}/profile-picture`,
       formData,
       {
         headers,
@@ -182,7 +183,7 @@ export class ProfileService {
     formData.append('file', file);
     const headers = this.getAuthHeaders();
     return this.http.put(
-      `http://localhost:8080/api/users/${userId}/background-picture`,
+      `${environment.apiUrl}/users/${userId}/background-picture`,
       formData,
       {
         headers,

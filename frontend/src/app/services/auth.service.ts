@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = environment.apiUrl;
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
@@ -18,6 +19,11 @@ export class AuthService {
 
   private checkInitialAuthState(): void {
     const token = this.getToken();
+    if (token) {
+      this.isLoggedInSubject.next(true);
+    } else {
+      this.isLoggedInSubject.next(false);
+    }
   }
 
   login(email: string, password: string): Observable<any> {

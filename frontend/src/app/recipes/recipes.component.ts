@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -12,17 +12,17 @@ import { NotificationService } from '../services/notification.service';
 import { RecipeFiltersComponent } from '../recipe-filters/recipe-filters.component';
 import { FilterService } from '../services/filter.service';
 import { Recipe } from '../Interface/recipe';
-import { Rating } from '../Interface/rating';
+import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
   imports: [
-    RouterLink,
     FooterSectionComponent,
     NavbarComponent,
     MobileNavComponent,
     RecipeFiltersComponent,
+    RecipeCardComponent,
   ],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
@@ -113,26 +113,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  getAverageRating(ratings: Rating[]): number {
-    if (!ratings || ratings.length === 0) {
-      return 0;
-    }
-    const sum = ratings.reduce((acc, rating) => acc + rating.value, 0);
-    return Math.round((sum / ratings.length) * 10) / 10;
-  }
-
-  getDifficulty(difficulty: number): string {
-    switch (difficulty) {
-      case 1:
-        return 'easy';
-      case 2:
-        return 'medium';
-      case 3:
-        return 'hard';
-      default:
-        return 'no value';
-    }
-  }
 
   private updateViewport(): void {
     this.isMobile = window.innerWidth <= 800;

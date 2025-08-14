@@ -21,11 +21,17 @@ export class TestimonialsSectionComponent implements AfterViewInit {
       } else {
         track.dataset['mouseDownAt'] = e.touches[0].clientX.toString();
       }
+      // Block vertical scrolling while dragging
+      document.body.style.overflowY = 'hidden';
+      document.body.style.touchAction = 'pan-x';
     };
 
     const handleOnUp = () => {
       track.dataset['mouseDownAt'] = '0';
       track.dataset['prevPercentage'] = track.dataset['percentage'];
+      // Restore vertical scrolling when drag ends
+      document.body.style.overflowY = '';
+      document.body.style.touchAction = '';
     };
 
     const handleOnMove = (e: MouseEvent | TouchEvent) => {

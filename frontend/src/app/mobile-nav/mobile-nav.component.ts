@@ -1,9 +1,9 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../services/language.service';
 import { ScrollLockService } from '../services/scroll-lock.service';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 const mainUrl = 'http://localhost:4200/';
@@ -15,7 +15,7 @@ const mainUrl = 'http://localhost:4200/';
   templateUrl: './mobile-nav.component.html',
   styleUrl: './mobile-nav.component.css',
 })
-export class MobileNavComponent {
+export class MobileNavComponent implements OnInit, OnDestroy {
   params = {
     home: mainUrl + '/',
     about: mainUrl + '/about-us',
@@ -25,9 +25,21 @@ export class MobileNavComponent {
 
   isLoggedIn = false;
   Open = false;
+  private authSubscription!: Subscription;
 
-  OnInit(): void {
+  ngOnInit(): void {
     this.checkAuthStatus();
+    this.authSubscription = this.authService.isLoggedIn$.subscribe(
+      (isLoggedIn: boolean) => {
+        this.isLoggedIn = isLoggedIn;
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   checkAuthStatus(): void {
@@ -56,7 +68,7 @@ export class MobileNavComponent {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  onResize() {
     const mobileBreakpoint = 800;
     if (window.innerWidth > mobileBreakpoint && this.Open) {
       this.closeMenu();

@@ -343,6 +343,7 @@ select.filter {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 4.8rem;
+  justify-items: center;
 }
 
 .recipe {
