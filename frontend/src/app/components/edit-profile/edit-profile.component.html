@@ -1,9 +1,9 @@
 <div class="edit-section">
   <div class="edit-field">
-    <label class="edit-label">Username</label>
+    <label class="edit-label">{{ 'EDIT_PROFILE.USERNAME' | translate }}</label>
     <input
       id="username-id"
-      placeholder="Enter new username"
+      placeholder="{{ 'EDIT_PROFILE.USERNAME_PLACEHOLDER' | translate }}"
       #usernameInput
       [(ngModel)]="username"
       maxlength="16"
@@ -13,10 +13,10 @@
   </div>
 
   <div class="edit-field">
-    <label class="edit-label">Description</label>
+    <label class="edit-label">{{ 'EDIT_PROFILE.DESCRIPTION' | translate }}</label>
     <textarea
       id="description-id"
-      placeholder="Enter new description"
+      placeholder="{{ 'EDIT_PROFILE.DESCRIPTION_PLACEHOLDER' | translate }}"
       #descriptionInput
       [(ngModel)]="description"
       maxlength="255"
@@ -27,8 +27,8 @@
       >{{ descriptionInput.value?.length || 0 }}/255</small
     >
     <div>
-      <button class="save-btn" (click)="save()">Save</button>
-      <button class="cancel-btn" (click)="cancelEdit()">Cancel</button>
+      <button class="save-btn" (click)="save()">{{ 'EDIT_PROFILE.SAVE' | translate }}</button>
+      <button class="cancel-btn" (click)="cancelEdit()">{{ 'EDIT_PROFILE.CANCEL' | translate }}</button>
     </div>
   </div>
 </div>

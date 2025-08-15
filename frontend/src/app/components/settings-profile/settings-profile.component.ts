@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
 
 export interface UserProfileResponse {
@@ -10,7 +11,7 @@ export interface UserProfileResponse {
 @Component({
   selector: 'app-settings-profile',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './settings-profile.component.html',
   styleUrl: './settings-profile.component.css',
 })

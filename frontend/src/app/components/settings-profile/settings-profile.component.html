@@ -1,9 +1,9 @@
 <div class="edit-section">
   <div class="edit-field">
-    <label class="edit-label">Email</label>
+    <label class="edit-label">{{ 'SETTINGS_PROFILE.EMAIL' | translate }}</label>
     <input
       id="email-id"
-      placeholder="Enter new email"
+      placeholder="{{ 'SETTINGS_PROFILE.EMAIL_PLACEHOLDER' | translate }}"
       #emailInput
       [(ngModel)]="email"
       type="email"
@@ -12,23 +12,23 @@
     <small class="small-input">{{ emailInput.value?.length || 0 }}/64</small>
     <input
       id="password-id"
-      placeholder="Enter your password"
+      placeholder="{{ 'SETTINGS_PROFILE.PASSWORD_PLACEHOLDER' | translate }}"
       type="password"
       class="edit-input"
       placeholer="Current password to confirm"
     />
   </div>
   <div class="edit-field">
-    <label class="edit-label">Password</label>
+    <label class="edit-label">{{ 'SETTINGS_PROFILE.PASSWORD' | translate }}</label>
     <input
       id="current-password-id"
       type="password"
-      placeholder="Current password to confirm"
+      placeholder="{{ 'SETTINGS_PROFILE.CURRENT_PASSWORD_PLACEHOLDER' | translate }}"
       class="edit-input"
     />
     <input
       id="new-password-id"
-      placeholder="Enter new password"
+      placeholder="{{ 'SETTINGS_PROFILE.NEW_PASSWORD_PLACEHOLDER' | translate }}"
       #newPasswordRef
       [(ngModel)]="newPasswordInput"
       type="password"
@@ -37,8 +37,8 @@
     />
     <small class="small-textarea">{{ newPasswordInput.length || 0 }}/64</small>
     <div>
-      <button class="save-btn" (click)="save()">Save</button>
-      <button class="cancel-btn" (click)="cancelSettings()">Cancel</button>
+      <button class="save-btn" (click)="save()">{{ 'SETTINGS_PROFILE.SAVE' | translate }}</button>
+      <button class="cancel-btn" (click)="cancelSettings()">{{ 'SETTINGS_PROFILE.CANCEL' | translate }}</button>
     </div>
   </div>
 </div>

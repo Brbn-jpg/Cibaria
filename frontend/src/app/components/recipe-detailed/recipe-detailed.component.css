@@ -13,7 +13,6 @@ main {
 /* Article styling  */
 
 .favourite,
-.rating,
 .edit,
 .delete {
   display: flex;
@@ -23,7 +22,19 @@ main {
   gap: 1.6rem;
   border: 1px solid #aaa;
   border-radius: 1rem;
-  width: fit-content;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  height: 6rem;
+  padding: 1rem;
+  gap: 1.6rem;
+  border: 1px solid #aaa;
+  border-radius: 1rem;
+
+  grid-column: 1 / span 3;
+  justify-self: start;
 }
 
 .favourite-btn,
@@ -43,7 +54,13 @@ main {
   stroke: #ffd700;
 }
 
-.fav-edit,
+.fav-edit {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+  /* place-items: center; */
+}
+
 .edit-btn,
 .delete-btn {
   display: flex;
@@ -380,8 +397,20 @@ article {
 
   .favourite,
   .edit,
-  .delete {
+  .delete,
+  .rating {
     width: 100%;
+  }
+
+  .stars {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+  }
+
+  .star-icon {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 
   .circle {

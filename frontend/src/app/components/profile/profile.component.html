@@ -96,9 +96,9 @@
     <app-recipe-card [recipe]="recipe"></app-recipe-card>
     } @if (filteredFavouriteRecipes.length === 0 && favouriteRecipes.length > 0)
     {
-    <p class="no-recipes">No recipes found matching your filters</p>
+    <p class="no-recipes">{{ 'PROFILE.NO_RECIPES_FOUND' | translate }}</p>
     } @if (favouriteRecipes.length === 0) {
-    <p class="no-recipes">You have no favourite recipes yet</p>
+    <p class="no-recipes">{{ 'PROFILE.NO_FAVOURITE_RECIPES' | translate }}</p>
     }
   </div>
   }
@@ -109,9 +109,9 @@
     @for (recipe of paginatedUserRecipes; track $index) {
     <app-recipe-card [recipe]="recipe"></app-recipe-card>
     } @if (filteredUserRecipes.length === 0 && userRecipes.length > 0) {
-    <p class="no-recipes">No recipes found matching your filters</p>
+    <p class="no-recipes">{{ 'PROFILE.NO_RECIPES_FOUND' | translate }}</p>
     } @if (userRecipes.length === 0) {
-    <p class="no-recipes">You have no recipes yet</p>
+    <p class="no-recipes">{{ 'PROFILE.NO_USER_RECIPES' | translate }}</p>
     }
   </div>
   }
@@ -124,15 +124,15 @@
       [disabled]="currentPage === 1"
       (click)="onPageChange(currentPage - 1)"
     >
-      Previous
+      {{ 'PROFILE.PREVIOUS' | translate }}
     </button>
-    <span class="pages">page {{ currentPage }} of {{ totalPages }}</span>
+    <span class="pages">{{ 'PROFILE.PAGE_OF' | translate: {currentPage: currentPage, totalPages: totalPages} }}</span>
     <button
       class="btn"
       [disabled]="currentPage === totalPages"
       (click)="onPageChange(currentPage + 1)"
     >
-      Next
+      {{ 'PROFILE.NEXT' | translate }}
     </button>
   </div>
   }

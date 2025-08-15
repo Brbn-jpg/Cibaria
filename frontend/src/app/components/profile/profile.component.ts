@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
 import { ScrollLockService } from '../../services/scroll-lock.service';
@@ -49,6 +49,7 @@ type ActiveTab = 'favourites' | 'userRecipes';
   imports: [
     RouterLink,
     FormsModule,
+    TranslateModule,
     EditProfileComponent,
     SettingsProfileComponent,
     ToastNotificationComponent,

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Recipe } from '../../Interface/recipe';
 import { ProfileRecipe } from '../../Interface/profile-recipe';
 import { Rating } from '../../Interface/rating';
@@ -9,7 +10,7 @@ type RecipeCardData = Recipe | ProfileRecipe;
 @Component({
   selector: 'app-recipe-card',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TranslateModule],
   templateUrl: './recipe-card.component.html',
   styleUrl: './recipe-card.component.css',
 })

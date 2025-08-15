@@ -19,11 +19,12 @@ import { FilterService } from '../../services/filter.service';
 import { FilterState } from '../../Interface/filter-state';
 import { FormsModule } from '@angular/forms';
 import { NgTemplateOutlet } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-recipe-filters',
   standalone: true,
-  imports: [FormsModule, NgTemplateOutlet],
+  imports: [FormsModule, NgTemplateOutlet, TranslateModule],
   templateUrl: './recipe-filters.component.html',
   styleUrl: './recipe-filters.component.css',
 })

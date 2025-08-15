@@ -11,11 +11,12 @@ import { Ingredients } from '../../Interface/ingredients';
 import { AuthService } from '../../services/auth.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-recipe-detailed',
   standalone: true,
-  imports: [RouterLink, ToastNotificationComponent],
+  imports: [RouterLink, ToastNotificationComponent, TranslateModule],
   templateUrl: './recipe-detailed.component.html',
   styleUrl: './recipe-detailed.component.css',
 })
@@ -36,11 +37,13 @@ export class RecipeDetailedComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private recipeService: RecipeService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isAuthenticated();
+    this.scrollToTop();
     this.route.params.subscribe((params) => {
       this.recipeId = +params['id'];
       console.log('Recipe ID from params:', this.recipeId);
@@ -282,5 +285,27 @@ export class RecipeDetailedComponent implements OnInit {
         }
       }
     }
+  }
+
+  private scrollToTop(): void {
+    window.scrollTo({ top: 0 });
+  }
+
+  translateUnit(unit: string): string {
+    const unitMap: { [key: string]: string } = {
+      'tsp': 'ADD_RECIPE.UNITS.TSP',
+      'tbsp': 'ADD_RECIPE.UNITS.TBSP',
+      'pcs': 'ADD_RECIPE.UNITS.PCS',
+      'g': 'ADD_RECIPE.UNITS.G',
+      'kg': 'ADD_RECIPE.UNITS.KG',
+      'ml': 'ADD_RECIPE.UNITS.ML',
+      'L': 'ADD_RECIPE.UNITS.L'
+    };
+
+    const translationKey = unitMap[unit];
+    if (translationKey) {
+      return this.translateService.instant(translationKey);
+    }
+    return unit; // fallback to original unit if not found
   }
 }

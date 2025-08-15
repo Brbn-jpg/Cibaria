@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
 
 export interface UserProfile {
@@ -12,7 +13,7 @@ export interface UserProfile {
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, TranslateModule],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css',
 })

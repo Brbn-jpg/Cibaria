@@ -18,11 +18,12 @@ import { ActivatedRoute } from '@angular/router';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-recipe',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, ToastNotificationComponent],
+  imports: [FormsModule, ReactiveFormsModule, TranslateModule, ToastNotificationComponent],
   templateUrl: './edit-recipe.component.html',
   styleUrl: './edit-recipe.component.css',
 })

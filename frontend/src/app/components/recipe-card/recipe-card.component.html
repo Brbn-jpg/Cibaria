@@ -31,14 +31,14 @@
           class="icon"
           src="images/icons/restaurant-outline.svg"
           alt="fork and knife icon"
-        /><span>{{ recipe.servings }} servings</span>
+        /><span>{{ recipe.servings }} {{ 'RECIPE_CARD.SERVINGS' | translate }}</span>
       </div>
       <div class="recipe-time recipe-desc-inner">
         <img
           class="icon"
           src="images/icons/time-outline.svg"
           alt="food icon"
-        /><span>{{ recipe.prepareTime }} minutes</span>
+        /><span>{{ recipe.prepareTime }} {{ 'RECIPE_CARD.MINUTES' | translate }}</span>
       </div>
       <div class="recipe-time recipe-desc-inner">
         <img class="icon" src="images/icons/bowl-food.svg" alt="" />

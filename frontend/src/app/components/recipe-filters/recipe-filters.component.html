@@ -6,14 +6,14 @@
       [class.selectedTab]="activeTab === 'favourites'"
       class="switch"
     >
-      Ulubione
+      {{ 'RECIPE_FILTERS.FAVOURITES' | translate }}
     </button>
     <button
       (click)="onTabChange('userRecipes')"
       [class.selectedTab]="activeTab === 'userRecipes'"
       class="switch"
     >
-      Moje przepisy
+      {{ 'RECIPE_FILTERS.MY_RECIPES' | translate }}
     </button>
   </div>
   } @if (isMobileFiltering) { @if (isMenuOpen) {
@@ -30,7 +30,7 @@
   <div class="settings">
     <div class="menu-overlay" (click)="closeMenu()"></div>
     <div class="filter-wrapper">
-      <label class="settings-label">Filters</label>
+      <label class="settings-label">{{ 'RECIPE_FILTERS.FILTERS' | translate }}</label>
       <button class="settings-btn" (click)="openMenu()">
         <img
           src="images/mobile-menu/menu-open.svg"
@@ -50,25 +50,25 @@
 
 <ng-template #filtersContent>
   <div class="search filter-wrapper">
-    <label for="search">Search</label>
+    <label for="search">{{ 'RECIPE_FILTERS.SEARCH' | translate }}</label>
     <input
       type="text"
       id="search"
       class="search-input"
       [(ngModel)]="searchQuery"
       (input)="onSearchChange()"
-      placeholder="Search for recipes"
+      placeholder="{{ 'RECIPE_FILTERS.SEARCH_PLACEHOLDER' | translate }}"
     />
   </div>
   <div class="prepare-time filter-wrapper">
-    <label for="prepare-time">Prepare time</label>
+    <label for="prepare-time">{{ 'RECIPE_FILTERS.PREPARE_TIME' | translate }}</label>
     <div class="inputs">
       <input
         type="number"
         class="prepTime from"
         [(ngModel)]="prepTimeFrom"
         (change)="onFilterChange()"
-        placeholder="from"
+        placeholder="{{ 'RECIPE_FILTERS.FROM' | translate }}"
         min="0"
       />
       <span> &mdash; </span>
@@ -77,13 +77,13 @@
         class="prepTime to"
         [(ngModel)]="prepTimeTo"
         (change)="onFilterChange()"
-        placeholder="to"
+        placeholder="{{ 'RECIPE_FILTERS.TO' | translate }}"
         min="0"
       />
     </div>
   </div>
   <div class="servings filter-wrapper">
-    <label for="servings">Servings</label>
+    <label for="servings">{{ 'RECIPE_FILTERS.SERVINGS' | translate }}</label>
     <div class="inputs">
       <input
         id="servings-from"
@@ -91,7 +91,7 @@
         [(ngModel)]="servingsFrom"
         (input)="onFilterChange()"
         class="servings-input from"
-        placeholder="from"
+        placeholder="{{ 'RECIPE_FILTERS.FROM' | translate }}"
         min="1"
       />
       <span> &mdash; </span>
@@ -101,13 +101,13 @@
         [(ngModel)]="servingsTo"
         (input)="onFilterChange()"
         class="servings-input to"
-        placeholder="to"
+        placeholder="{{ 'RECIPE_FILTERS.TO' | translate }}"
         min="1"
       />
     </div>
   </div>
   <div class="category filter-wrapper">
-    <label for="category">Category</label>
+    <label for="category">{{ 'RECIPE_FILTERS.CATEGORY' | translate }}</label>
     <select
       name="category"
       id="category"
@@ -115,14 +115,14 @@
       [(ngModel)]="selectedCategory"
       (change)="onFilterChange()"
     >
-      <option value="">Choose category</option>
+      <option value="">{{ 'RECIPE_FILTERS.CHOOSE_CATEGORY' | translate }}</option>
       @for (category of categoriesArray; track category) {
       <option [value]="category">{{ category }}</option>
       }
     </select>
   </div>
   <div class="difficulty filter-wrapper">
-    <label for="difficulty">Difficulty</label>
+    <label for="difficulty">{{ 'RECIPE_FILTERS.DIFFICULTY' | translate }}</label>
     <select
       name="difficulty"
       id="difficulty"
@@ -130,14 +130,14 @@
       [(ngModel)]="selectedDifficulty"
       (change)="onFilterChange()"
     >
-      <option selected value="">Choose difficulty</option>
-      <option value="1">Easy</option>
-      <option value="2">Medium</option>
-      <option value="3">Hard</option>
+      <option selected value="">{{ 'RECIPE_FILTERS.CHOOSE_DIFFICULTY' | translate }}</option>
+      <option value="1">{{ 'RECIPE_FILTERS.EASY' | translate }}</option>
+      <option value="2">{{ 'RECIPE_FILTERS.MEDIUM' | translate }}</option>
+      <option value="3">{{ 'RECIPE_FILTERS.HARD' | translate }}</option>
     </select>
   </div>
   <div class="language filter-wrapper">
-    <label for="Language">Language</label>
+    <label for="Language">{{ 'RECIPE_FILTERS.LANGUAGE' | translate }}</label>
     <select
       name="language"
       id="language"
@@ -145,7 +145,7 @@
       [(ngModel)]="selectedLanguage"
       (change)="onFilterChange()"
     >
-      <option value="">Choose language</option>
+      <option value="">{{ 'RECIPE_FILTERS.CHOOSE_LANGUAGE' | translate }}</option>
       @for (language of languagesArray; track language.languageName) {
       <option [value]="language.languageName">
         {{ language.languageName }}

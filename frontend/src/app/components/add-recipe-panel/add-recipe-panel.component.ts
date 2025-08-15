@@ -4,7 +4,6 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  NgZone,
 } from '@angular/core';
 import {
   FormsModule,
@@ -14,6 +13,7 @@ import {
   FormControl,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
@@ -25,6 +25,7 @@ import { NotificationService } from '../../services/notification.service';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    TranslateModule,
     ToastNotificationComponent,
   ],
   templateUrl: './add-recipe-panel.component.html',
@@ -36,7 +37,7 @@ export class AddRecipePanelComponent implements OnInit {
   steps: { content: string }[] = [];
   recipeLanguage = 'english';
   isPublic = false;
-  newIngredient = { ingredientName: '', quantity: 0, unit: 'Choose unit' };
+  newIngredient = { ingredientName: '', quantity: 0, unit: '' };
   newStep = '';
   success = false;
   isDragging = false;
@@ -46,8 +47,7 @@ export class AddRecipePanelComponent implements OnInit {
 
   constructor(
     private recipeService: RecipeService,
-    private notificationService: NotificationService,
-    private ngZone: NgZone
+    private notificationService: NotificationService
   ) {}
 
   recipeForm = new FormGroup({
@@ -271,10 +271,10 @@ export class AddRecipePanelComponent implements OnInit {
     }
 
     this.recipeService.postRecipe(formData).subscribe({
-      next: (response) => {
+      next: () => {
         this.notificationService.success('Recipe has been created', 5000);
       },
-      error: (err) => {
+      error: () => {
         this.notificationService.error('Failed to add the recipe!', 5000);
       },
     });

@@ -1,99 +1,195 @@
-# Cibaria
+# 🍽️ Cibaria
 
-Cibaria is a full-stack web application designed to help users discover, save, and manage recipes effortlessly. The project consists of a **frontend** built with Angular and a **backend** powered by Spring Boot, providing a seamless experience for culinary enthusiasts.
+**Cibaria** is a modern, full-stack recipe management application that brings culinary creativity to life. Built with Angular and Spring Boot, it provides a seamless platform for discovering, sharing, and managing recipes with friends and fellow food enthusiasts.
 
----
-
-## Features
-
-- **Recipe Management**: Add, view, update, and delete recipes.
-- **User Authentication**: Secure login and role-based access.
-- **Dynamic Filtering**: Search recipes by difficulty, category, servings, and preparation time.
-- **Responsive Design**: Optimized for desktop and mobile devices.
-- **RESTful API**: Backend services for managing recipes, users, and ratings.
+![Cibaria Banner](frontend/public/images/Cibaria.png)
 
 ---
 
-## Project Structure
+## ✨ Features
 
-### Frontend
-- **Framework**: Angular 18.2.7
-- **Location**: `frontend/`
-- **Key Features**:
-  - Dynamic recipe pages.
-  - User-friendly forms for adding and editing recipes.
-  - Integration with backend APIs for data fetching and submission.
+### 🔐 User Management
+- **Secure Authentication**: Register and login with JWT-based security
+- **User Profiles**: Personalized profiles with avatar and background images
+- **Profile Settings**: Update username, description, email, and password
 
-### Backend
-- **Framework**: Spring Boot 3.4.1
-- **Location**: `backend/`
-- **Key Features**:
-  - RESTful API endpoints for recipes, users, and ratings.
-  - PostgreSQL database integration.
-  - Secure authentication and authorization using Spring Security.
+### 📖 Recipe Management
+- **Create & Edit**: Rich recipe creation with ingredients, steps, and images
+- **Image Upload**: Drag-and-drop image support with preview
+- **Recipe Details**: Comprehensive recipe views with nutrition info
+- **Recipe Rating**: 5-star rating system for community feedback
+- **Favorites**: Save and organize your favorite recipes
+
+### 🔍 Advanced Search & Filtering
+- **Smart Filters**: Filter by difficulty, category, servings, and prep time
+- **Search Functionality**: Find recipes by name or ingredients
+- **Language Support**: Multi-language recipe content
+- **Responsive Filters**: Mobile-optimized filter interface
+
+### 🌍 Internationalization
+- **Bilingual Support**: Complete English and Polish translations
+- **Localized Units**: Smart unit translation (tsp → łyżeczka, etc.)
+- **Dynamic Language Switching**: Seamless language changes
+
+### 📱 Modern UI/UX
+- **Responsive Design**: Optimized for desktop, tablet, and mobile
+- **Toast Notifications**: Real-time feedback for user actions
+- **Progressive Enhancement**: Smooth animations and transitions
+- **Dark Theme**: Elegant dark color scheme
 
 ---
 
-## Prerequisites
+## 🏗️ Architecture
 
-- **Frontend**:
-  - Node.js (v18 or higher)
-  - Angular CLI
+### Frontend (Angular 18.2.7)
+```
+frontend/
+├── src/app/
+│   ├── components/          # Reusable UI components
+│   ├── services/           # API services and business logic
+│   └── Interface/          # TypeScript interfaces
+├── public/
+│   ├── i18n/              # Translation files
+│   └── images/            # Static assets
+└── styles.css             # Global styles
+```
 
-- **Backend**:
-  - Java 17 or higher
-  - Maven
-  - PostgreSQL database
+### Backend (Spring Boot 3.4.1)
+```
+backend/
+├── src/main/java/com/kk/cibaria/
+│   ├── recipe/            # Recipe domain logic
+│   ├── user/              # User management
+│   ├── rating/            # Rating system
+│   ├── auth/              # Authentication
+│   └── config/            # Security & CORS config
+└── resources/
+    └── application.yml
+```
 
 ---
 
-## Setup Instructions
+## 🚀 Quick Start
 
-### Backend
-1. Navigate to the `backend/` directory.
-2. Configure the database connection in `src/main/resources/application.properties`.
-3. Run the following commands:
+### Prerequisites
+- **Node.js** 18+ and npm
+- **Docker** and Docker Compose
+
+### Backend Setup (Docker)
+1. **Clone and navigate:**
    ```bash
-   mvn clean install
-   mvn spring-boot:run
+   git clone <repository-url>
+   cd Cibaria
    ```
 
-### Frontend
-
-1. Navigate to the frontend/ directory.
-2. Install dependencies:
+2. **Build and run with Docker:**
    ```bash
+   docker compose build
+   docker compose up
+   ```
+   Backend will start on `http://localhost:8080`
+
+### Frontend Setup
+1. **Navigate and install:**
+   ```bash
+   cd frontend
    npm install
    ```
-3. Start the development server:
+
+2. **Start development server:**
    ```bash
    ng serve
    ```
-4. Open the application in your browser at http://localhost:4200
+   Frontend will start on `http://localhost:4200`
 
-## API Endpoints
+---
+
+## 🔧 API Documentation
+
+### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | User registration |
+| POST | `/api/auth/login` | User login |
 
 ### Recipes
-  - `GET /api/recipes`: Fetch all recipes with optional filters.
-  - `GET /api/recipes/{id}`: Fetch a recipe by ID.
-  - `POST /api/recipes`: Add a new recipe.
-  - `PUT /api/recipes/{id}`: Update an exisiting recipe.
-  - `DELETE /api/recipes/{id}`: Delete a recipe.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/recipes` | Get all recipes (with filters) |
+| GET | `/api/recipes/{id}` | Get recipe by ID |
+| POST | `/api/recipes` | Create new recipe |
+| PUT | `/api/recipes/{id}` | Update recipe |
+| DELETE | `/api/recipes/{id}` | Delete recipe |
 
 ### Users
- - `POST /api/auth/login`: User login.
- - `POST /api/auth/register`: User registration.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/users/profile` | Get user profile |
+| PUT | `/api/users/profile` | Update profile |
+| POST | `/api/users/favourites/{recipeId}` | Add to favorites |
+| DELETE | `/api/users/favourites/{recipeId}` | Remove from favorites |
 
-## Development Notes
-- Frontend:
-  - Use `ng generate` to scaffold new components, services, or modules.
-  - Run `ng test` to execute unit tests.
-- Backend:
-  - Use `mvn test` to run unit tests.
-  - Ensure the database is running before starting the backend.
+### Ratings
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/ratings` | Rate a recipe |
+| GET | `/api/ratings/{recipeId}` | Get recipe ratings |
 
- ## Future Enhancemenets
-   - Add support for image uploads in recipe
-   - Implement responsive web design
-   - Enhance user profile management
-   - Implement option to add recipes to favourites
+---
+
+## 🛠️ Development
+
+### Frontend Commands
+```bash
+# Development server
+ng serve
+
+# Build for production
+ng build
+
+# Generate component
+ng generate component component-name
+```
+
+### Database Access
+```bash
+# Access database container
+docker exec -it cibaria_database -h <REMOTE_HOST> -p <REMOTE_PORT> -U <DB_USER> <DB_NAME>
+```
+
+---
+
+## 🌐 Internationalization
+
+### Adding New Languages
+1. Create new translation file: `frontend/public/i18n/{lang}.json`
+2. Add language option in components
+3. Update language service configuration
+
+### Translation Structure
+```json
+{
+  "NAV": {
+    "HOME": "Home",
+    "RECIPES": "Recipes"
+  },
+  "ADD_RECIPE": {
+    "TITLE": "Add a new recipe",
+    "UNITS": {
+      "TSP": "tsp",
+      "TBSP": "tbsp"
+    }
+  }
+}
+```
+
+---
+
+## 📱 Responsive Breakpoints
+
+| Breakpoint | Width | Description |
+|------------|-------|-------------|
+| Mobile | < 460px | Small mobile devices |
+| Mobile Large | 460px - 650px | Large mobile devices |
+| Tablet | 650px - 1050px | Tablets and small laptops |
+| Desktop | > 1050px | Desktop and large screens |
