@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { AboutUsComponent } from './about-us/about-us.component';
-import { LandingPageComponent } from './landing-page/landing-page.component';
-import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
-import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
-import { ContactComponent } from './contact/contact.component';
-import { LoginComponent } from './login/login.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { RecipeDetailedComponent } from './recipe-detailed/recipe-detailed.component';
-import { ProfileComponent } from './profile/profile.component';
-import { AddRecipePanelComponent } from './add-recipe-panel/add-recipe-panel.component';
-import { EditRecipeComponent } from './edit-recipe/edit-recipe.component';
+import { AboutUsComponent } from './components/about-us/about-us.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './components/terms-of-service/terms-of-service.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { LoginComponent } from './components/login/login.component';
+import { RecipesComponent } from './components/recipes/recipes.component';
+import { RecipeDetailedComponent } from './components/recipe-detailed/recipe-detailed.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { AddRecipePanelComponent } from './components/add-recipe-panel/add-recipe-panel.component';
+import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
 
 export const routes: Routes = [
   {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,15 +10,27 @@ import {
   NavigationEnd,
   ActivatedRoute,
 } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { MobileNavComponent } from './components/mobile-nav/mobile-nav.component';
+import { FooterSectionComponent } from './components/footer-section/footer-section.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, TranslateModule],
+  imports: [
+    RouterOutlet,
+    RouterModule,
+    TranslateModule,
+    NavbarComponent,
+    MobileNavComponent,
+    FooterSectionComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  isMobile = false;
+
   constructor(
     private router: Router,
     private titleService: Title,
@@ -27,6 +39,16 @@ export class AppComponent {
     this.translate.addLangs(['pl', 'en']);
     this.translate.setDefaultLang('en');
     this.translate.use('en');
+    this.checkMobile();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkMobile();
+  }
+
+  private checkMobile() {
+    this.isMobile = window.innerWidth <= 800;
   }
 
   ngOnInit() {

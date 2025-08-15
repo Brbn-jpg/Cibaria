@@ -15,10 +15,10 @@ html {
 body {
   overflow-x: hidden;
   overscroll-behavior: none;
-  overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
   position: relative;
 }
+
 
 /* Prevent iOS Safari zoom on input focus */
 input,
