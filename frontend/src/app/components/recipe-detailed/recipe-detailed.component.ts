@@ -147,7 +147,6 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
 
   private updateFavouriteButton(): void {
     const favButton = document.querySelector('path') as SVGPathElement;
-    console.log('Updating favourite button, isFavourite:', this.isFavourite);
     if (favButton) {
       if (this.isFavourite) {
         favButton.classList.add('active');
@@ -371,5 +370,4 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
     }
     return unit; // fallback to original unit if not found
   }
-
 }
