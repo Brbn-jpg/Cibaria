@@ -30,6 +30,7 @@ import { FooterSectionComponent } from './components/footer-section/footer-secti
 })
 export class AppComponent implements OnInit {
   isMobile = false;
+  isLoggedIn = false;
 
   constructor(
     private router: Router,

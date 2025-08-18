@@ -27,7 +27,13 @@
       >{{ descriptionInput.value?.length || 0 }}/255</small
     >
     <div>
-      <button class="save-btn" (click)="save()">{{ 'EDIT_PROFILE.SAVE' | translate }}</button>
+      <button class="save-btn" (click)="save()" [disabled]="isUpdatingUsername || isUpdatingDescription">
+        @if (!isUpdatingUsername && !isUpdatingDescription) {
+          {{ 'EDIT_PROFILE.SAVE' | translate }}
+        } @else {
+          Saving...
+        }
+      </button>
       <button class="cancel-btn" (click)="cancelEdit()">{{ 'EDIT_PROFILE.CANCEL' | translate }}</button>
     </div>
   </div>

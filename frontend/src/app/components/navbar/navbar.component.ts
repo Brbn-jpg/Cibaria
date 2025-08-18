@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
-import { AuthService } from '../../services/auth.service'; // Dodaj import
+import { AuthService } from '../../services/auth.service';
 
 const mainUrl = 'http://localhost:4200/';
 
@@ -36,11 +36,9 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkAuthStatus();
-  }
-
-  checkAuthStatus(): void {
-    this.isLoggedIn = this.authService.isAuthenticated();
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
   }
 
   changeLanguage(): void {

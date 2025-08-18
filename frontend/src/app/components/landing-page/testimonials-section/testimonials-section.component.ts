@@ -75,9 +75,10 @@ export class TestimonialsSectionComponent implements AfterViewInit {
       for (const image of Array.from(
         track.querySelectorAll('.testimonial-gallery-img')
       )) {
+        const objectPositionX = Math.max(0, Math.min(100, 100 + nextPercentage / 3));
         image.animate(
           {
-            objectPosition: `${100 + nextPercentage / 3}% center`,
+            objectPosition: `${objectPositionX}% center`,
           },
           { duration: 1200, fill: 'forwards' }
         );

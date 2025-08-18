@@ -32,8 +32,12 @@
             name="rememberMe"
           />
         </div>
-        <button type="button" class="button" (click)="onLogin()">
-          {{ "LOGIN_REGISTER.LOGIN.SUBMIT_BUTTON" | translate }}
+        <button type="button" class="button" (click)="onLogin()" [disabled]="isLoginLoading">
+          @if (!isLoginLoading) {
+            {{ "LOGIN_REGISTER.LOGIN.SUBMIT_BUTTON" | translate }}
+          } @else {
+            Loading...
+          }
         </button>
       </form>
     </div>
@@ -80,8 +84,12 @@
         @if (!isEqual){
         <span class="wrong-pass">Passwords do not match</span>
         }
-        <button type="button" class="button" (click)="onRegister()">
-          {{ "LOGIN_REGISTER.REGISTER.SUBMIT_BUTTON" | translate }}
+        <button type="button" class="button" (click)="onRegister()" [disabled]="isRegisterLoading">
+          @if (!isRegisterLoading) {
+            {{ "LOGIN_REGISTER.REGISTER.SUBMIT_BUTTON" | translate }}
+          } @else {
+            Loading...
+          }
         </button>
       </form>
     </div>

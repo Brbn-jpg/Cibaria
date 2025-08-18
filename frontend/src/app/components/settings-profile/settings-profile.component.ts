@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 export interface UserProfileResponse {
   id: number;
@@ -15,7 +16,16 @@ export interface UserProfileResponse {
   templateUrl: './settings-profile.component.html',
   styleUrl: './settings-profile.component.css',
 })
-export class SettingsProfileComponent implements OnInit {
+export class SettingsProfileComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private emailUpdateAttempts$ = new Subject<void>();
+  private passwordUpdateAttempts$ = new Subject<void>();
+  
+  isUpdatingEmail = false;
+  isUpdatingPassword = false;
+  private lastEmailUpdate = 0;
+  private lastPasswordUpdate = 0;
+  private readonly minTimeBetweenUpdates = 3000; // 3 seconds
   userId!: number;
   email: string = '';
   newPasswordInput: string = '';
@@ -26,13 +36,57 @@ export class SettingsProfileComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    // Setup debounced email update attempts
+    this.emailUpdateAttempts$
+      .pipe(
+        debounceTime(1000),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeEmailUpdate();
+      });
+    
+    // Setup debounced password update attempts
+    this.passwordUpdateAttempts$
+      .pipe(
+        debounceTime(1000),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executePasswordUpdate();
+      });
+  }
 
   ngOnInit() {
     this.loadUserData();
   }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   saveEmail() {
+    if (this.isUpdatingEmail) {
+      this.notificationService.warning('Please wait, updating email...');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastEmailUpdate < this.minTimeBetweenUpdates) {
+      this.notificationService.warning('Please wait before updating again');
+      return;
+    }
+    
+    this.emailUpdateAttempts$.next();
+  }
+  
+  private executeEmailUpdate() {
+    if (this.isUpdatingEmail) {
+      return;
+    }
+    
     const passwordInput = document.getElementById(
       'password-id'
     ) as HTMLInputElement;
@@ -62,7 +116,9 @@ export class SettingsProfileComponent implements OnInit {
       this.notificationService.error('Invalid email format');
       return;
     }
-
+    
+    this.isUpdatingEmail = true;
+    this.lastEmailUpdate = Date.now();
     console.log('Updating email...');
 
     const updateEmailDto = {
@@ -80,6 +136,7 @@ export class SettingsProfileComponent implements OnInit {
 
         // Show success notification
         this.notificationService.success('Email updated successfully!');
+        this.isUpdatingEmail = false;
 
         setTimeout(() => {
           this.saveEmailIcon = false;
@@ -88,10 +145,30 @@ export class SettingsProfileComponent implements OnInit {
       error: (error) => {
         console.error('Failed to update Email:', error);
         this.handleApiError(error, 'Failed to update Email. Please try again.');
+        this.isUpdatingEmail = false;
       },
     });
   }
   savePassword() {
+    if (this.isUpdatingPassword) {
+      this.notificationService.warning('Please wait, updating password...');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastPasswordUpdate < this.minTimeBetweenUpdates) {
+      this.notificationService.warning('Please wait before updating again');
+      return;
+    }
+    
+    this.passwordUpdateAttempts$.next();
+  }
+  
+  private executePasswordUpdate() {
+    if (this.isUpdatingPassword) {
+      return;
+    }
+    
     const currentPasswordInput = document.getElementById(
       'current-password-id'
     ) as HTMLInputElement;
@@ -102,13 +179,13 @@ export class SettingsProfileComponent implements OnInit {
       !currentPasswordInput.value ||
       currentPasswordInput.value.trim() === ''
     ) {
-      alert('Current password cannot be empty');
+      this.notificationService.error('Current password cannot be empty');
       return;
     }
 
     // Validate new password using Angular binding
     if (!this.newPasswordInput || this.newPasswordInput.trim() === '') {
-      alert('New password cannot be empty');
+      this.notificationService.error('New password cannot be empty');
       return;
     }
 
@@ -117,32 +194,34 @@ export class SettingsProfileComponent implements OnInit {
 
     // Validate password length (zgodnie z backendem)
     if (newPassword.length < 8) {
-      alert('Password must be at least 8 characters long');
+      this.notificationService.error('Password must be at least 8 characters long');
       return;
     }
 
     if (newPassword.length > 64) {
-      alert('Password cannot be longer than 64 characters');
+      this.notificationService.error('Password cannot be longer than 64 characters');
       return;
     }
 
     // Validate password complexity (digit and uppercase letter)
     if (!/.*\d.*/.test(newPassword)) {
-      alert('Password must contain at least one digit');
+      this.notificationService.error('Password must contain at least one digit');
       return;
     }
 
     if (!/.*[A-Z].*/.test(newPassword)) {
-      alert('Password must contain at least one uppercase letter');
+      this.notificationService.error('Password must contain at least one uppercase letter');
       return;
     }
 
     // Check if new password is different from current
     if (currentPassword === newPassword) {
-      alert('New password must be different from the current password');
+      this.notificationService.error('New password must be different from the current password');
       return;
     }
-
+    
+    this.isUpdatingPassword = true;
+    this.lastPasswordUpdate = Date.now();
     console.log('Updating password...');
 
     const updatePasswordDto = {
@@ -162,6 +241,7 @@ export class SettingsProfileComponent implements OnInit {
 
           // Show success notification
           this.notificationService.success('Password updated successfully!');
+          this.isUpdatingPassword = false;
 
           setTimeout(() => {
             this.savePasswordIcon = false;
@@ -173,6 +253,7 @@ export class SettingsProfileComponent implements OnInit {
             error,
             'Failed to update password. Please try again.'
           );
+          this.isUpdatingPassword = false;
         },
       });
   }
@@ -188,6 +269,11 @@ export class SettingsProfileComponent implements OnInit {
   }
 
   save() {
+    if (this.isUpdatingEmail || this.isUpdatingPassword) {
+      this.notificationService.warning('Please wait, update in progress...');
+      return;
+    }
+    
     if (this.email != '') {
       this.saveEmail();
     }

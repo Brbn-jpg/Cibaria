@@ -167,3 +167,21 @@ option:hover {
     margin: 0;
   }
 }
+
+@media (max-width: 35.1em) {
+  .cibaria-header {
+    font-size: 1.6rem;
+  }
+
+  .cibaria-subheader {
+    font-size: 3.6rem;
+  }
+
+  .cibaria-text {
+    font-size: 2rem;
+  }
+
+  .cta-inputs label {
+    font-size: 2rem;
+  }
+}

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProfileService } from '../../services/profile.service';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 export interface UserProfile {
   id: number;
@@ -17,7 +18,16 @@ export interface UserProfile {
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css',
 })
-export class EditProfileComponent {
+export class EditProfileComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private usernameUpdateAttempts$ = new Subject<void>();
+  private descriptionUpdateAttempts$ = new Subject<void>();
+  
+  isUpdatingUsername = false;
+  isUpdatingDescription = false;
+  private lastUsernameUpdate = 0;
+  private lastDescriptionUpdate = 0;
+  private readonly minTimeBetweenUpdates = 2000; // 2 seconds
   userId: number = 0;
   saveUsernameIcon: boolean = false;
   saveDescriptionIcon: boolean = false;
@@ -32,10 +42,56 @@ export class EditProfileComponent {
     private profileService: ProfileService,
     private notificationService: NotificationService
   ) {
+    // Setup debounced username update attempts
+    this.usernameUpdateAttempts$
+      .pipe(
+        debounceTime(800),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeUsernameUpdate();
+      });
+    
+    // Setup debounced description update attempts
+    this.descriptionUpdateAttempts$
+      .pipe(
+        debounceTime(800),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeDescriptionUpdate();
+      });
+  }
+  
+  ngOnInit(): void {
     this.loadUserData();
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   saveUsername() {
+    if (this.isUpdatingUsername) {
+      this.notificationService.warning('Please wait, updating username...');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastUsernameUpdate < this.minTimeBetweenUpdates) {
+      this.notificationService.warning('Please wait before updating again');
+      return;
+    }
+    
+    this.usernameUpdateAttempts$.next();
+  }
+  
+  private executeUsernameUpdate() {
+    if (this.isUpdatingUsername) {
+      return;
+    }
+    
     const usernameTextarea = document.getElementById(
       'username-id'
     ) as HTMLInputElement;
@@ -45,11 +101,19 @@ export class EditProfileComponent {
       !usernameTextarea.value ||
       usernameTextarea.value.trim() === ''
     ) {
-      alert('Username cannot be empty');
+      this.notificationService.error('Username cannot be empty');
       return;
     }
 
     const newUsername = usernameTextarea.value.trim();
+    
+    if (newUsername === this.username) {
+      this.notificationService.info('Username is already up to date');
+      return;
+    }
+    
+    this.isUpdatingUsername = true;
+    this.lastUsernameUpdate = Date.now();
 
     const profileData = {
       username: newUsername,
@@ -65,6 +129,7 @@ export class EditProfileComponent {
         this.loadUserData(); // Reload user data to reflect changes
         this.notificationService.success('Username updated successfully');
         this.notificationService.info('Refresh site to update changes');
+        this.isUpdatingUsername = false;
         setTimeout(() => {
           this.saveUsernameIcon = false;
         }, 5000);
@@ -75,11 +140,31 @@ export class EditProfileComponent {
           error,
           'Failed to update username. Please try again.'
         );
+        this.isUpdatingUsername = false;
       },
     });
   }
 
   saveDescription() {
+    if (this.isUpdatingDescription) {
+      this.notificationService.warning('Please wait, updating description...');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastDescriptionUpdate < this.minTimeBetweenUpdates) {
+      this.notificationService.warning('Please wait before updating again');
+      return;
+    }
+    
+    this.descriptionUpdateAttempts$.next();
+  }
+  
+  private executeDescriptionUpdate() {
+    if (this.isUpdatingDescription) {
+      return;
+    }
+    
     const descriptionTextarea = document.getElementById(
       'description-id'
     ) as HTMLTextAreaElement;
@@ -87,6 +172,15 @@ export class EditProfileComponent {
     const newDescription = descriptionTextarea
       ? descriptionTextarea.value.trim()
       : '';
+      
+    if (newDescription === this.description) {
+      this.notificationService.info('Description is already up to date');
+      return;
+    }
+    
+    this.isUpdatingDescription = true;
+    this.lastDescriptionUpdate = Date.now();
+    
     console.log('New description:', newDescription);
     const profileData = {
       username: this.username,
@@ -99,12 +193,18 @@ export class EditProfileComponent {
         this.description = newDescription;
         this.newDescription = newDescription;
         this.loadUserData(); // Reload user data to reflect changes
+        this.notificationService.success('Description updated successfully');
+        this.isUpdatingDescription = false;
         setTimeout(() => {
           this.saveDescriptionIcon = false;
         }, 5000);
       },
       error: (error) => {
-        alert('Failed to update description. Please try again.');
+        this.handleApiError(
+          error,
+          'Failed to update description. Please try again.'
+        );
+        this.isUpdatingDescription = false;
       },
     });
   }
@@ -135,11 +235,28 @@ export class EditProfileComponent {
   }
 
   save() {
-    if (this.username != '') {
-      this.saveUsername();
+    if (this.isUpdatingUsername || this.isUpdatingDescription) {
+      this.notificationService.warning('Please wait, update in progress...');
+      return;
     }
-    if (this.description != '') {
+    
+    const usernameTextarea = document.getElementById('username-id') as HTMLInputElement;
+    const descriptionTextarea = document.getElementById('description-id') as HTMLTextAreaElement;
+    
+    let hasChanges = false;
+    
+    if (usernameTextarea && usernameTextarea.value.trim() !== this.username) {
+      this.saveUsername();
+      hasChanges = true;
+    }
+    
+    if (descriptionTextarea && descriptionTextarea.value.trim() !== this.description) {
       this.saveDescription();
+      hasChanges = true;
+    }
+    
+    if (!hasChanges) {
+      this.notificationService.info('No changes to save');
     }
   }
 

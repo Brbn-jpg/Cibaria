@@ -1,5 +1,6 @@
 .toast-container {
   position: fixed;
+  margin: 0 4.8rem;
   top: 4rem;
   right: 4rem;
   z-index: 9999;
@@ -140,6 +141,13 @@
   }
   .toast {
     max-width: 20rem;
+  }
+}
+
+/* < 561px */
+@media (max-width: 35em) {
+  .toast-container {
+    margin: 0 2.4rem;
   }
 }
 

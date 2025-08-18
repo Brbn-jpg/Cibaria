@@ -51,14 +51,25 @@ main {
 }
 
 input {
+  padding: 1.2rem 1.6rem;
+  font-size: 1.6rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
-  padding: 1.6rem;
+  color: #fff;
+  transition: border-color 0.2s ease-in-out;
   margin-bottom: 3.2rem;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4caf50;
 }
 
 input::placeholder {
   font-weight: 200;
   letter-spacing: 1.1px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .remember-me-section {
@@ -70,6 +81,40 @@ input::placeholder {
 
 #checkbox {
   margin-bottom: 0 !important;
+  width: 1.8rem;
+  height: 1.8rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  appearance: none;
+  position: relative;
+}
+
+#checkbox:checked {
+  border-color: #4caf50;
+}
+
+#checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.8rem;
+  border: solid white;
+  border-width: 0 0.15rem 0.15rem 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+}
+
+#checkbox:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+#checkbox:focus {
+  outline: none;
+  border-color: #4caf50;
 }
 
 .remember-me {
@@ -135,7 +180,7 @@ input::placeholder {
 }
 
 .ng-touched.ng-invalid {
-  border: 2px solid red;
+  border: 1px solid red;
 }
 
 .wrong-pass {

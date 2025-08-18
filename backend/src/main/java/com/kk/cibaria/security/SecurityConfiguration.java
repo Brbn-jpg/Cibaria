@@ -39,6 +39,7 @@ public class SecurityConfiguration {
     http.authorizeHttpRequests(req -> {
       req.requestMatchers("/authenticate", "/register").permitAll();
       req.requestMatchers("/recipes/**", "/image/**").permitAll();
+      req.requestMatchers("/api/recipes/**", "/api/image/**").permitAll();
       req.requestMatchers("/users/**").authenticated();
       req.anyRequest().authenticated();
     });

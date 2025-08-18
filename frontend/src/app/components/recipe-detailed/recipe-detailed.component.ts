@@ -4,6 +4,7 @@ import {
   Component,
   HostListener,
   OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Recipe } from '../../Interface/recipe';
@@ -12,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-detailed',
@@ -20,7 +22,14 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   templateUrl: './recipe-detailed.component.html',
   styleUrl: './recipe-detailed.component.css',
 })
-export class RecipeDetailedComponent implements OnInit {
+export class RecipeDetailedComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private favouriteToggleAttempts$ = new Subject<void>();
+  private ratingAttempts$ = new Subject<number>();
+  
+  private lastFavouriteToggle = 0;
+  private lastRatingSubmit = 0;
+  private readonly minTimeBetweenActions = 1000; // 1 second
   recipeId!: number;
   recipeDetails!: Recipe;
   ingredients: Ingredients[] = [];
@@ -39,7 +48,27 @@ export class RecipeDetailedComponent implements OnInit {
     private recipeService: RecipeService,
     private notificationService: NotificationService,
     private translateService: TranslateService
-  ) {}
+  ) {
+    // Setup debounced favourite toggle attempts
+    this.favouriteToggleAttempts$
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeFavouriteToggle();
+      });
+    
+    // Setup debounced rating attempts
+    this.ratingAttempts$
+      .pipe(
+        debounceTime(500),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((rating) => {
+        this.executeRating(rating);
+      });
+  }
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isAuthenticated();
@@ -59,6 +88,11 @@ export class RecipeDetailedComponent implements OnInit {
       }
     });
     this.setupIntersectionObserver();
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private checkOwnership(): void {
@@ -181,12 +215,31 @@ export class RecipeDetailedComponent implements OnInit {
   }
 
   toggleFavourite() {
-    // Block further clicks while processing
+    if (this.isProcessing) {
+      return;
+    }
+    
+    if (!this.isLoggedIn) {
+      this.notificationService.warning('Please log in to add favourites');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastFavouriteToggle < this.minTimeBetweenActions) {
+      return; // Silently ignore rapid clicks
+    }
+    
+    this.favouriteToggleAttempts$.next();
+  }
+  
+  private executeFavouriteToggle() {
     if (this.isProcessing) {
       return;
     }
 
     this.isProcessing = true;
+    this.lastFavouriteToggle = Date.now();
+    
     if (!this.isFavourite) {
       this.recipeService.addToFavourites(this.recipeId).subscribe({
         next: (response) => {
@@ -197,6 +250,7 @@ export class RecipeDetailedComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error adding recipe to favourites:', err);
+          this.notificationService.error('Failed to add to favourites');
           this.isProcessing = false;
         },
       });
@@ -209,6 +263,7 @@ export class RecipeDetailedComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error removing recipe from favourites:', err);
+          this.notificationService.error('Failed to remove from favourites');
           this.isProcessing = false;
         },
       });
@@ -249,11 +304,36 @@ export class RecipeDetailedComponent implements OnInit {
   }
 
   onStarClick(rating: number): void {
-    if (this.isRatingProcessing || !this.isLoggedIn) {
+    if (this.isRatingProcessing) {
+      return;
+    }
+    
+    if (!this.isLoggedIn) {
+      this.notificationService.warning('Please log in to rate recipes');
+      return;
+    }
+    
+    // Check if user is trying to give the same rating they already gave
+    if (this.currentRating === rating) {
+      this.notificationService.info(`Recipe is already rated with ${rating} stars`);
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastRatingSubmit < this.minTimeBetweenActions) {
+      return; // Silently ignore rapid clicks
+    }
+    
+    this.ratingAttempts$.next(rating);
+  }
+  
+  private executeRating(rating: number): void {
+    if (this.isRatingProcessing) {
       return;
     }
 
     this.isRatingProcessing = true;
+    this.lastRatingSubmit = Date.now();
 
     this.recipeService.rateRecipe(this.recipeId, rating).subscribe({
       next: (response) => {

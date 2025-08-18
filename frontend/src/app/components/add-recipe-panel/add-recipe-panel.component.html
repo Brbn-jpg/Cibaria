@@ -198,7 +198,13 @@
         <p *ngIf="!imagePreview">{{ 'ADD_RECIPE.CLICK_OR_DRAG' | translate }}</p>
       </div>
       <hr />
-      <button type="submit">{{ 'ADD_RECIPE.ADD_RECIPE_BUTTON' | translate }}</button>
+      <button type="submit" [disabled]="isSubmitting">
+        @if (!isSubmitting) {
+          {{ 'ADD_RECIPE.ADD_RECIPE_BUTTON' | translate }}
+        } @else {
+          Submitting...
+        }
+      </button>
     </form>
   </section>
 </main>

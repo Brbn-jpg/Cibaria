@@ -44,8 +44,9 @@ public class RecipeFilter {
 
         if (language != null && !language.isEmpty()) {
             filteredRecipes = filteredRecipes.stream()
-                    .filter(recipe -> recipe.getLanguage().equalsIgnoreCase(language))
-                    .toList();
+              .filter(recipe -> recipe.getLanguage() != null &&
+            recipe.getLanguage().equalsIgnoreCase(language))
+              .toList();
         }
 
         return filteredRecipes;

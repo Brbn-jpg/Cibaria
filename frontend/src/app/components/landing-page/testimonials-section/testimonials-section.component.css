@@ -73,14 +73,11 @@
 .gallery {
   display: flex;
   gap: 4vmin;
-  margin: 4.8rem auto;
-  padding-bottom: 4.8rem;
+  margin: 4.8rem;
   user-select: none;
   position: relative;
   left: 0;
   transform: translateX(0);
-  margin-left: 4.8rem;
-  margin-right: 4.8rem;
 }
 
 .testimonial-gallery-img {

@@ -2,6 +2,7 @@
   @if (showTabs) {
   <div class="tabs">
     <button
+      type="button"
       (click)="onTabChange('favourites')"
       [class.selectedTab]="activeTab === 'favourites'"
       class="switch"
@@ -9,6 +10,7 @@
       {{ 'RECIPE_FILTERS.FAVOURITES' | translate }}
     </button>
     <button
+      type="button"
       (click)="onTabChange('userRecipes')"
       [class.selectedTab]="activeTab === 'userRecipes'"
       class="switch"
@@ -18,7 +20,7 @@
   </div>
   } @if (isMobileFiltering) { @if (isMenuOpen) {
   <div class="close-btn">
-    <button class="close" (click)="closeMenu()">
+    <button type="button" class="close" (click)="closeMenu()">
       <img
         src="images/mobile-menu/menu-close.svg"
         alt="close menu"
@@ -28,10 +30,9 @@
   </div>
   }
   <div class="settings">
-    <div class="menu-overlay" (click)="closeMenu()"></div>
     <div class="filter-wrapper">
       <label class="settings-label">{{ 'RECIPE_FILTERS.FILTERS' | translate }}</label>
-      <button class="settings-btn" (click)="openMenu()">
+      <button type="button" class="settings-btn" (click)="openMenu()">
         <img
           src="images/mobile-menu/menu-open.svg"
           alt="open menu"
@@ -39,8 +40,10 @@
         />
       </button>
     </div>
-    <div class="menu" [class.active]="isMenuOpen">
-      <ng-container *ngTemplateOutlet="filtersContent"></ng-container>
+    <div class="menu" [class.active]="isMenuOpen" (click)="closeMenu()">
+      <div class="menu-content" (click)="$event.stopPropagation()">
+        <ng-container *ngTemplateOutlet="filtersContent"></ng-container>
+      </div>
     </div>
   </div>
   } @else {

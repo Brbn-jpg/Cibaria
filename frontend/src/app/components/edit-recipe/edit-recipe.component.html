@@ -197,7 +197,13 @@
         }
       </div>
       <hr />
-      <button type="submit">{{ 'EDIT_RECIPE.UPDATE_RECIPE_BUTTON' | translate }}</button>
+      <button type="submit" [disabled]="isUpdating">
+        @if (!isUpdating) {
+          {{ 'EDIT_RECIPE.UPDATE_RECIPE_BUTTON' | translate }}
+        } @else {
+          Updating...
+        }
+      </button>
     </form>
   </section>
 </main>

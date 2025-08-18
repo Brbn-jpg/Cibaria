@@ -11,7 +11,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { Language } from '../../Interface/language';
 import { NotificationService } from '../../services/notification.service';
 import { ScrollLockService } from '../../services/scroll-lock.service';
@@ -40,6 +40,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
 
   private destroy$ = new Subject<void>();
   private el: ElementRef = inject(ElementRef);
+  private filterChange$ = new Subject<void>();
 
   searchQuery = '';
   prepTimeFrom?: number;
@@ -63,6 +64,16 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    // Setup debounced filter updates
+    this.filterChange$
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeFilterUpdate();
+      });
+
     if (this.useCustomData) {
       this.categoriesArray = this.customCategories;
       this.languagesArray = this.customLanguages;
@@ -158,6 +169,9 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       ? filters.difficulty.toString()
       : '';
     this.selectedLanguage = filters.recipeLanguage || '';
+    
+    // Trigger debounced update
+    this.updateFilters();
   }
 
   // Method to get current filters (for custom usage)
@@ -177,11 +191,11 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onSearchChange(): void {
-    this.updateFilters();
+    this.filterChange$.next();
   }
 
   onFilterChange(): void {
-    this.updateFilters();
+    this.filterChange$.next();
   }
 
   onTabChange(tab: 'favourites' | 'userRecipes'): void {
@@ -189,7 +203,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     this.tabChanged.emit(tab);
   }
 
-  private updateFilters(): void {
+  private executeFilterUpdate(): void {
     if (this.useCustomData) {
       // For custom usage, just emit the change
       this.filtersChanged.emit();
@@ -213,31 +227,17 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  openMenu(): void {
-    const menu = this.el.nativeElement.querySelector('.menu');
-    const menuOverlay = this.el.nativeElement.querySelector('.menu-overlay');
+  private updateFilters(): void {
+    this.filterChange$.next();
+  }
 
-    if (menuOverlay) {
-      menuOverlay.classList.add('active');
-    }
-    if (menu) {
-      menu.classList.add('active');
-      this.scrollLockService.lockScroll();
-      this.isMenuOpen = true;
-    }
+  openMenu(): void {
+    this.scrollLockService.lockScroll();
+    this.isMenuOpen = true;
   }
 
   closeMenu(): void {
-    const menu = this.el.nativeElement.querySelector('.menu');
-    const menuOverlay = this.el.nativeElement.querySelector('.menu-overlay');
-
-    if (menuOverlay) {
-      menuOverlay.classList.remove('active');
-    }
-    if (menu) {
-      menu.classList.remove('active');
-      this.scrollLockService.unlockScroll();
-      this.isMenuOpen = false;
-    }
+    this.scrollLockService.unlockScroll();
+    this.isMenuOpen = false;
   }
 }

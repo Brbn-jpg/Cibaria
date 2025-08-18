@@ -3,6 +3,7 @@ import {
   ElementRef,
   HostListener,
   OnInit,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { Recipe } from '../../Interface/recipe';
@@ -19,6 +20,7 @@ import { RecipeService } from '../../services/recipe.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -27,7 +29,13 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './edit-recipe.component.html',
   styleUrl: './edit-recipe.component.css',
 })
-export class EditRecipeComponent implements OnInit {
+export class EditRecipeComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private updateAttempts$ = new Subject<void>();
+  
+  isUpdating = false;
+  private lastUpdateAttempt = 0;
+  private readonly minTimeBetweenUpdates = 3000; // 3 seconds
   isLoggedIn = false;
   recipeId!: number;
   isDragging = false;
@@ -41,7 +49,17 @@ export class EditRecipeComponent implements OnInit {
     private recipeService: RecipeService,
     private route: ActivatedRoute,
     private notificationService: NotificationService
-  ) {}
+  ) {
+    // Setup debounced update attempts
+    this.updateAttempts$
+      .pipe(
+        debounceTime(1000),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeUpdate();
+      });
+  }
 
   ngOnInit(): void {
     this.getToken();
@@ -127,6 +145,11 @@ export class EditRecipeComponent implements OnInit {
         this.notificationService.error('Failed to load recipe details', 5000);
       },
     });
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   addIngredient() {
@@ -299,20 +322,40 @@ export class EditRecipeComponent implements OnInit {
   }
 
   updateRecipe() {
+    if (this.isUpdating) {
+      this.notificationService.warning('Please wait, updating recipe...');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastUpdateAttempt < this.minTimeBetweenUpdates) {
+      this.notificationService.warning('Please wait before updating again');
+      return;
+    }
+    
+    this.updateAttempts$.next();
+  }
+  
+  private executeUpdate() {
+    if (this.isUpdating) {
+      return;
+    }
+    
     this.FailedToAdd = false;
     this.success = false;
 
     if (this.ingredients.length === 0) {
-      this.FailedToAdd = true;
-      alert('Please add at least one ingredient.');
+      this.notificationService.error('Please add at least one ingredient.');
       return;
     }
 
     if (this.steps.length === 0) {
-      this.FailedToAdd = true;
-      alert('Please add at least one step.');
+      this.notificationService.error('Please add at least one step.');
       return;
     }
+    
+    this.isUpdating = true;
+    this.lastUpdateAttempt = Date.now();
 
     const formData = new FormData();
 
@@ -346,11 +389,13 @@ export class EditRecipeComponent implements OnInit {
         this.success = true;
         this.FailedToAdd = false;
         this.notificationService.success('Recipe updated successfully!', 5000);
+        this.isUpdating = false;
       },
       error: () => {
         this.FailedToAdd = true;
         this.success = false;
         this.notificationService.error('Failed to update recipe', 5000);
+        this.isUpdating = false;
       },
     });
   }

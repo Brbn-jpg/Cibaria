@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { FooterSectionComponent } from '../footer-section/footer-section.component';
 import { Router } from '@angular/router';
 import {
@@ -12,6 +12,7 @@ import { AuthService } from '../../services/auth.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NotificationService } from '../../services/notification.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,16 @@ import { ToastNotificationComponent } from '../toast-notification/toast-notifica
     ]),
   ],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private loginAttempts$ = new Subject<void>();
+  private registerAttempts$ = new Subject<void>();
+  
+  isLoginLoading = false;
+  isRegisterLoading = false;
+  private lastLoginAttempt = 0;
+  private lastRegisterAttempt = 0;
+  private readonly minTimeBetweenAttempts = 2000; // 2 seconds
   formUsername = '';
   formRetypePassword = '';
   formPassword = '';
@@ -48,9 +58,50 @@ export class LoginComponent implements OnInit {
     private notificationService: NotificationService
   ) {
     this.translate.setDefaultLang('en');
+    
+    // Setup debounced login attempts
+    this.loginAttempts$
+      .pipe(
+        debounceTime(500),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeLogin();
+      });
+    
+    // Setup debounced register attempts
+    this.registerAttempts$
+      .pipe(
+        debounceTime(500),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.executeRegister();
+      });
   }
 
   onLogin(): void {
+    if (this.isLoginLoading) {
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastLoginAttempt < this.minTimeBetweenAttempts) {
+      this.notificationService.warning('Please wait before trying again');
+      return;
+    }
+    
+    this.loginAttempts$.next();
+  }
+  
+  private executeLogin(): void {
+    if (this.isLoginLoading) {
+      return;
+    }
+    
+    this.isLoginLoading = true;
+    this.lastLoginAttempt = Date.now();
+    
     this.authService.login(this.formEmail, this.formPassword).subscribe({
       next: (response) => {
         if (this.rememberMe) {
@@ -59,17 +110,42 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('token', response.token);
         }
         this.router.navigate(['/profile']);
+        this.isLoginLoading = false;
       },
       error: (err) => {
         this.notificationService.error('Username or password is incorrect');
+        this.isLoginLoading = false;
       },
     });
   }
 
   onRegister(): void {
-    if (this.formPassword !== this.formRetypePassword) {
+    if (this.isRegisterLoading) {
       return;
     }
+    
+    if (this.formPassword !== this.formRetypePassword) {
+      this.notificationService.error('Passwords do not match');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - this.lastRegisterAttempt < this.minTimeBetweenAttempts) {
+      this.notificationService.warning('Please wait before trying again');
+      return;
+    }
+    
+    this.registerAttempts$.next();
+  }
+  
+  private executeRegister(): void {
+    if (this.isRegisterLoading) {
+      return;
+    }
+    
+    this.isRegisterLoading = true;
+    this.lastRegisterAttempt = Date.now();
+    
     this.authService
       .register(this.formUsername, this.formEmail, this.formPassword)
       .subscribe({
@@ -77,11 +153,13 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('token', response.token);
           this.router.navigate(['/profile']);
           console.log(response.token);
+          this.isRegisterLoading = false;
         },
         error: (err) => {
           this.notificationService.error(
             'Registration failed. Please try again.'
           );
+          this.isRegisterLoading = false;
         },
       });
   }
@@ -93,6 +171,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     window.scrollTo({ top: 0 });
+  }
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   login = true;

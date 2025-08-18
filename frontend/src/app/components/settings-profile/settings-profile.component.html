@@ -37,7 +37,13 @@
     />
     <small class="small-textarea">{{ newPasswordInput.length || 0 }}/64</small>
     <div>
-      <button class="save-btn" (click)="save()">{{ 'SETTINGS_PROFILE.SAVE' | translate }}</button>
+      <button class="save-btn" (click)="save()" [disabled]="isUpdatingEmail || isUpdatingPassword">
+        @if (!isUpdatingEmail && !isUpdatingPassword) {
+          {{ 'SETTINGS_PROFILE.SAVE' | translate }}
+        } @else {
+          Saving...
+        }
+      </button>
       <button class="cancel-btn" (click)="cancelSettings()">{{ 'SETTINGS_PROFILE.CANCEL' | translate }}</button>
     </div>
   </div>
