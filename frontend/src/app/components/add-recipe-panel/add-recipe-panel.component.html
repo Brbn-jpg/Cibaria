@@ -1,10 +1,10 @@
 <main class="add-recipe-panel">
   <app-toast-notification></app-toast-notification>
   <section>
-    <h1>{{ 'ADD_RECIPE.TITLE' | translate }}</h1>
+    <h1>{{ "ADD_RECIPE.TITLE" | translate }}</h1>
     <form [formGroup]="recipeForm" (submit)="postRecipe()">
       <div class="input-group">
-        <label for="title">{{ 'ADD_RECIPE.RECIPE_TITLE' | translate }}</label>
+        <label for="title">{{ "ADD_RECIPE.RECIPE_TITLE" | translate }}</label>
         <input
           formControlName="title"
           type="text"
@@ -15,18 +15,29 @@
         />
       </div>
       <div class="input-group">
-        <label for="category" class="category">{{ 'ADD_RECIPE.CATEGORY' | translate }}</label>
-        <input
+        <label for="category" class="category">{{
+          "ADD_RECIPE.CATEGORY" | translate
+        }}</label>
+        <select
           formControlName="category"
-          type="text"
           name="category"
           class="category"
           required
-          placeholder="{{ 'ADD_RECIPE.CATEGORY_PLACEHOLDER' | translate }}"
-        />
+        >
+          <option value="">
+            {{ "RECIPE_FILTERS.CHOOSE_CATEGORY" | translate }}
+          </option>
+          @for (category of categoriesArray; track category.key) {
+          <option [value]="category.key">
+            {{ "RECIPE_FILTERS.CATEGORIES." + category.key | translate }}
+          </option>
+          }
+        </select>
       </div>
       <div class="input-group">
-        <label for="difficulty" class="difficulty">{{ 'ADD_RECIPE.DIFFICULTY' | translate }}</label>
+        <label for="difficulty" class="difficulty">{{
+          "ADD_RECIPE.DIFFICULTY" | translate
+        }}</label>
         <select
           formControlName="difficulty"
           type="number"
@@ -34,14 +45,18 @@
           class="difficulty"
           required
         >
-          <option disabled value="null">{{ 'ADD_RECIPE.CHOOSE_DIFFICULTY' | translate }}</option>
-          <option value="1">{{ 'ADD_RECIPE.EASY' | translate }}</option>
-          <option value="2">{{ 'ADD_RECIPE.MEDIUM' | translate }}</option>
-          <option value="3">{{ 'ADD_RECIPE.HARD' | translate }}</option>
+          <option disabled value="null">
+            {{ "ADD_RECIPE.CHOOSE_DIFFICULTY" | translate }}
+          </option>
+          <option value="1">{{ "ADD_RECIPE.EASY" | translate }}</option>
+          <option value="2">{{ "ADD_RECIPE.MEDIUM" | translate }}</option>
+          <option value="3">{{ "ADD_RECIPE.HARD" | translate }}</option>
         </select>
       </div>
       <div class="input-group">
-        <label for="servings" class="servings">{{ 'ADD_RECIPE.SERVINGS' | translate }}</label>
+        <label for="servings" class="servings">{{
+          "ADD_RECIPE.SERVINGS" | translate
+        }}</label>
         <input
           formControlName="servings"
           type="number"
@@ -53,7 +68,9 @@
         />
       </div>
       <div class="input-group">
-        <label for="prepare-time" class="prepare-time">{{ 'ADD_RECIPE.PREPARE_TIME' | translate }}</label>
+        <label for="prepare-time" class="prepare-time">{{
+          "ADD_RECIPE.PREPARE_TIME" | translate
+        }}</label>
         <input
           type="number"
           class="prepare-time"
@@ -63,31 +80,37 @@
         />
       </div>
       <div class="input-group">
-        <label for="language" class="language">{{ 'ADD_RECIPE.LANGUAGE' | translate }}</label>
+        <label for="language" class="language">{{
+          "ADD_RECIPE.LANGUAGE" | translate
+        }}</label>
         <select
           name="language"
           class="language"
           required
           formControlName="language"
         >
-          <option value="english">{{ 'ADD_RECIPE.ENGLISH' | translate }}</option>
-          <option value="polish">{{ 'ADD_RECIPE.POLISH' | translate }}</option>
+          <option value="english">
+            {{ "ADD_RECIPE.ENGLISH" | translate }}
+          </option>
+          <option value="polish">{{ "ADD_RECIPE.POLISH" | translate }}</option>
         </select>
       </div>
       <div class="input-group">
-        <label for="public" class="public">{{ 'ADD_RECIPE.VISIBILITY' | translate }}</label>
+        <label for="public" class="public">{{
+          "ADD_RECIPE.VISIBILITY" | translate
+        }}</label>
         <select
           name="public"
           class="public"
           required
           formControlName="isPublic"
         >
-          <option value="false">{{ 'ADD_RECIPE.PRIVATE' | translate }}</option>
-          <option value="true">{{ 'ADD_RECIPE.PUBLIC' | translate }}</option>
+          <option value="false">{{ "ADD_RECIPE.PRIVATE" | translate }}</option>
+          <option value="true">{{ "ADD_RECIPE.PUBLIC" | translate }}</option>
         </select>
       </div>
       <hr />
-      <h2>{{ 'ADD_RECIPE.INGREDIENTS' | translate }}</h2>
+      <h2>{{ "ADD_RECIPE.INGREDIENTS" | translate }}</h2>
       <div class="input-group ingredients">
         <input
           formControlName="ingredients"
@@ -115,16 +138,24 @@
           [(ngModel)]="newIngredient.unit"
           required
         >
-          <option disabled selected value="">{{ 'ADD_RECIPE.CHOOSE_UNIT' | translate }}</option>
-          <option value="tsp">{{ 'ADD_RECIPE.UNITS.TSP' | translate }}</option>
-          <option value="tbsp">{{ 'ADD_RECIPE.UNITS.TBSP' | translate }}</option>
-          <option value="pcs">{{ 'ADD_RECIPE.UNITS.PCS' | translate }}</option>
-          <option value="g">{{ 'ADD_RECIPE.UNITS.G' | translate }}</option>
-          <option value="kg">{{ 'ADD_RECIPE.UNITS.KG' | translate }}</option>
-          <option value="ml">{{ 'ADD_RECIPE.UNITS.ML' | translate }}</option>
-          <option value="L">{{ 'ADD_RECIPE.UNITS.L' | translate }}</option>
+          <option disabled selected value="">
+            {{ "ADD_RECIPE.CHOOSE_UNIT" | translate }}
+          </option>
+          <option value="tsp">{{ "ADD_RECIPE.UNITS.TSP" | translate }}</option>
+          <option value="tbsp">
+            {{ "ADD_RECIPE.UNITS.TBSP" | translate }}
+          </option>
+          <option value="pcs">{{ "ADD_RECIPE.UNITS.PCS" | translate }}</option>
+          <option value="g">{{ "ADD_RECIPE.UNITS.G" | translate }}</option>
+          <option value="kg">{{ "ADD_RECIPE.UNITS.KG" | translate }}</option>
+          <option value="ml">{{ "ADD_RECIPE.UNITS.ML" | translate }}</option>
+          <option value="L">{{ "ADD_RECIPE.UNITS.L" | translate }}</option>
         </select>
       </div>
+      <button type="button" (click)="addIngredient()">
+        {{ "ADD_RECIPE.ADD_INGREDIENT" | translate }}
+      </button>
+
       <ul class="ingredients-list">
         @for (ingredient of ingredients; track $index) {
         <li class="ingredient">
@@ -133,14 +164,13 @@
             {{ ingredient.ingredientName }}
           </p>
           <button type="button" (click)="removeIngredient($index)">
-            {{ 'ADD_RECIPE.REMOVE' | translate }}
+            {{ "ADD_RECIPE.REMOVE" | translate }}
           </button>
         </li>
         }
       </ul>
-      <button type="button" (click)="addIngredient()">{{ 'ADD_RECIPE.ADD_INGREDIENT' | translate }}</button>
       <hr />
-      <h2>{{ 'ADD_RECIPE.STEPS' | translate }}</h2>
+      <h2>{{ "ADD_RECIPE.STEPS" | translate }}</h2>
       <div class="input-group">
         <textarea
           formControlName="steps"
@@ -151,10 +181,14 @@
           placeholder="{{ 'ADD_RECIPE.STEP_PLACEHOLDER' | translate }}"
         ></textarea>
       </div>
-      <button type="button" (click)="addStep()">{{ 'ADD_RECIPE.ADD_STEP' | translate }}</button>
+      <button type="button" (click)="addStep()">
+        {{ "ADD_RECIPE.ADD_STEP" | translate }}
+      </button>
       @for (step of steps; track $index) {
       <div class="step">
-        <h2 class="step-number">{{ 'ADD_RECIPE.STEP_NUMBER' | translate: {number: $index + 1} }}</h2>
+        <h2 class="step-number">
+          {{ "ADD_RECIPE.STEP_NUMBER" | translate : { number: $index + 1 } }}
+        </h2>
         <div class="step-wrapper">
           <p class="step-text">{{ step.content }}</p>
           <button
@@ -162,13 +196,13 @@
             (click)="removeStep($index)"
             class="remove-step-btn"
           >
-            {{ 'ADD_RECIPE.REMOVE' | translate }}
+            {{ "ADD_RECIPE.REMOVE" | translate }}
           </button>
         </div>
       </div>
       }
       <hr />
-      <h2>{{ 'ADD_RECIPE.ADD_IMAGE' | translate }}</h2>
+      <h2>{{ "ADD_RECIPE.ADD_IMAGE" | translate }}</h2>
       <div
         class="dropzone"
         [class.has-preview]="imagePreview"
@@ -195,15 +229,15 @@
             ✕
           </button>
         </div>
-        <p *ngIf="!imagePreview">{{ 'ADD_RECIPE.CLICK_OR_DRAG' | translate }}</p>
+        <p *ngIf="!imagePreview">
+          {{ "ADD_RECIPE.CLICK_OR_DRAG" | translate }}
+        </p>
       </div>
       <hr />
       <button type="submit" [disabled]="isSubmitting">
         @if (!isSubmitting) {
-          {{ 'ADD_RECIPE.ADD_RECIPE_BUTTON' | translate }}
-        } @else {
-          Submitting...
-        }
+        {{ "ADD_RECIPE.ADD_RECIPE_BUTTON" | translate }}
+        } @else { Submitting... }
       </button>
     </form>
   </section>

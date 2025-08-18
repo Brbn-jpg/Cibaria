@@ -283,7 +283,25 @@
     "MEDIUM": "Medium",
     "HARD": "Hard",
     "LANGUAGE": "Language",
-    "CHOOSE_LANGUAGE": "Choose language"
+    "CHOOSE_LANGUAGE": "Choose language",
+    "CATEGORIES": {
+      "BREAKFAST": "Breakfast",
+      "LUNCH": "Lunch", 
+      "DINNER": "Dinner",
+      "DESSERT": "Dessert",
+      "SNACK": "Snack",
+      "DRINK": "Drink",
+      "SALAD": "Salad",
+      "SOUP": "Soup",
+      "śniadanie": "Breakfast",
+      "obiad": "Lunch",
+      "kolacja": "Dinner",
+      "deser": "Dessert",
+      "przekąska": "Snack",
+      "napój": "Drink",
+      "sałatka": "Salad",
+      "zupa": "Soup"
+    }
   },
   "PROFILE": {
     "NO_RECIPES_FOUND": "No recipes found matching your filters",

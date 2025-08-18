@@ -37,6 +37,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   newDescription: string = '';
   username: string = '';
   description: string = '';
+  
+  // Store original values for comparison
+  originalUsername: string = '';
+  originalDescription: string = '';
 
   constructor(
     private profileService: ProfileService,
@@ -107,7 +111,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
     const newUsername = usernameTextarea.value.trim();
     
-    if (newUsername === this.username) {
+    if (newUsername === this.originalUsername) {
       this.notificationService.info('Username is already up to date');
       return;
     }
@@ -126,6 +130,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         this.saveUsernameIcon = true;
         this.username = newUsername;
         this.newUsername = newUsername;
+        this.originalUsername = newUsername; // Update original value
         this.loadUserData(); // Reload user data to reflect changes
         this.notificationService.success('Username updated successfully');
         this.notificationService.info('Refresh site to update changes');
@@ -173,7 +178,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       ? descriptionTextarea.value.trim()
       : '';
       
-    if (newDescription === this.description) {
+    if (newDescription === this.originalDescription) {
       this.notificationService.info('Description is already up to date');
       return;
     }
@@ -192,6 +197,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         this.saveDescriptionIcon = true;
         this.description = newDescription;
         this.newDescription = newDescription;
+        this.originalDescription = newDescription; // Update original value
         this.loadUserData(); // Reload user data to reflect changes
         this.notificationService.success('Description updated successfully');
         this.isUpdatingDescription = false;
@@ -217,6 +223,10 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         this.description = profile.description;
         this.newUsername = profile.username;
         this.newDescription = profile.description;
+        
+        // Store original values
+        this.originalUsername = profile.username;
+        this.originalDescription = profile.description;
       },
       error: (error) => {
         console.error('Failed to update description:', error);
@@ -243,20 +253,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
     const usernameTextarea = document.getElementById('username-id') as HTMLInputElement;
     const descriptionTextarea = document.getElementById('description-id') as HTMLTextAreaElement;
     
-    let hasChanges = false;
-    
-    if (usernameTextarea && usernameTextarea.value.trim() !== this.username) {
+    // Just try to save both - individual methods will handle validation
+    if (usernameTextarea && usernameTextarea.value.trim()) {
       this.saveUsername();
-      hasChanges = true;
     }
     
-    if (descriptionTextarea && descriptionTextarea.value.trim() !== this.description) {
+    if (descriptionTextarea) {
       this.saveDescription();
-      hasChanges = true;
-    }
-    
-    if (!hasChanges) {
-      this.notificationService.info('No changes to save');
     }
   }
 

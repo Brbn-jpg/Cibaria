@@ -23,7 +23,7 @@ public class Ingredient {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String ingredientName;
-  private int quantity;
+  private float quantity;
   private String unit;
 
   @ManyToOne

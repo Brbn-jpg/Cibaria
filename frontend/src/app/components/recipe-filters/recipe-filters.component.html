@@ -119,8 +119,8 @@
       (change)="onFilterChange()"
     >
       <option value="">{{ 'RECIPE_FILTERS.CHOOSE_CATEGORY' | translate }}</option>
-      @for (category of categoriesArray; track category) {
-      <option [value]="category">{{ category }}</option>
+      @for (category of categoriesArray; track category.key) {
+      <option [value]="category.value">{{ 'RECIPE_FILTERS.CATEGORIES.' + category.key | translate }}</option>
       }
     </select>
   </div>

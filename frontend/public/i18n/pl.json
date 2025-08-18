@@ -283,7 +283,17 @@
     "MEDIUM": "Średni",
     "HARD": "Trudny",
     "LANGUAGE": "Język",
-    "CHOOSE_LANGUAGE": "Wybierz język"
+    "CHOOSE_LANGUAGE": "Wybierz język",
+    "CATEGORIES": {
+      "BREAKFAST": "Śniadanie",
+      "LUNCH": "Obiad", 
+      "DINNER": "Kolacja",
+      "DESSERT": "Deser",
+      "SNACK": "Przekąska",
+      "DRINK": "Napój",
+      "SALAD": "Sałatka",
+      "SOUP": "Zupa"
+    }
   },
   "PROFILE": {
     "NO_RECIPES_FOUND": "Nie znaleziono przepisów pasujących do filtrów",

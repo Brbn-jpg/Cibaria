@@ -9,7 +9,9 @@
     </div>
     <div class="recipe-info">
       <h2 class="recipe-name">{{ recipe.recipeName }}</h2>
-      <p class="recipe-language">{{ recipe.language }}</p>
+      @if (recipe.language && recipe.language.trim() !== '') {
+      <p class="recipe-language">{{ 'ADD_RECIPE.' + recipe.language.toUpperCase() | translate }}</p>
+      }
     </div>
     <div class="recipe-desc">
       <div class="recipe-rating recipe-desc-inner">
@@ -42,7 +44,7 @@
       </div>
       <div class="recipe-time recipe-desc-inner">
         <img class="icon" src="images/icons/bowl-food.svg" alt="" />
-        <span>{{ recipe.category }}</span>
+        <span>{{ 'RECIPE_FILTERS.CATEGORIES.' + recipe.category | translate }}</span>
       </div>
     </div>
   </figure>

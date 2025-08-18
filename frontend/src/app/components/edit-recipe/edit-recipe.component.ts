@@ -43,6 +43,18 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   currentImageUrl: string | null = null;
   hasExistingImage = false;
 
+  // Categories with translation keys
+  categoriesArray: {key: string, value: string}[] = [
+    {key: 'BREAKFAST', value: 'śniadanie'},
+    {key: 'LUNCH', value: 'obiad'},
+    {key: 'DINNER', value: 'kolacja'},
+    {key: 'DESSERT', value: 'deser'},
+    {key: 'SNACK', value: 'przekąska'},
+    {key: 'DRINK', value: 'napój'},
+    {key: 'SALAD', value: 'sałatka'},
+    {key: 'SOUP', value: 'zupa'},
+  ];
+
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -98,6 +110,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
     difficulty: new FormControl(1, [Validators.required]),
     images: new FormControl<File | null>(null, [Validators.required]),
     isPublic: new FormControl(false, [Validators.required]),
+    language: new FormControl('english', [Validators.required]),
     ingredients: new FormControl(''),
     quantity: new FormControl(0),
     unit: new FormControl(''),
@@ -109,13 +122,28 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.recipeDetails = response;
 
+        // Mapowanie starych polskich nazw kategorii na nowe klucze
+        const categoryMap: { [key: string]: string } = {
+          'śniadanie': 'BREAKFAST',
+          'obiad': 'LUNCH', 
+          'kolacja': 'DINNER',
+          'deser': 'DESSERT',
+          'przekąska': 'SNACK',
+          'napój': 'DRINK',
+          'sałatka': 'SALAD',
+          'zupa': 'SOUP'
+        };
+        
+        const mappedCategory = categoryMap[response.category] || response.category;
+
         this.recipeForm.patchValue({
           title: response.recipeName,
-          category: response.category,
+          category: mappedCategory,
           servings: response.servings,
           prepareTime: response.prepareTime,
           difficulty: response.difficulty,
           isPublic: response.isPublic,
+          language: response.language || 'english',
         });
 
         this.ingredients = this.recipeDetails.ingredients.map((ingredient) => ({
@@ -372,6 +400,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       })),
       steps: this.steps,
       isPublic: this.recipeForm.value.isPublic,
+      language: this.recipeForm.value.language,
     };
 
     formData.append('recipe', JSON.stringify(recipeData));

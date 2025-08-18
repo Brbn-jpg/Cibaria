@@ -20,7 +20,7 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private emailUpdateAttempts$ = new Subject<void>();
   private passwordUpdateAttempts$ = new Subject<void>();
-  
+
   isUpdatingEmail = false;
   isUpdatingPassword = false;
   private lastEmailUpdate = 0;
@@ -39,20 +39,14 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
   ) {
     // Setup debounced email update attempts
     this.emailUpdateAttempts$
-      .pipe(
-        debounceTime(1000),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe(() => {
         this.executeEmailUpdate();
       });
-    
+
     // Setup debounced password update attempts
     this.passwordUpdateAttempts$
-      .pipe(
-        debounceTime(1000),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe(() => {
         this.executePasswordUpdate();
       });
@@ -61,7 +55,7 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadUserData();
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -72,21 +66,21 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
       this.notificationService.warning('Please wait, updating email...');
       return;
     }
-    
+
     const now = Date.now();
     if (now - this.lastEmailUpdate < this.minTimeBetweenUpdates) {
       this.notificationService.warning('Please wait before updating again');
       return;
     }
-    
+
     this.emailUpdateAttempts$.next();
   }
-  
+
   private executeEmailUpdate() {
     if (this.isUpdatingEmail) {
       return;
     }
-    
+
     const passwordInput = document.getElementById(
       'password-id'
     ) as HTMLInputElement;
@@ -116,7 +110,7 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
       this.notificationService.error('Invalid email format');
       return;
     }
-    
+
     this.isUpdatingEmail = true;
     this.lastEmailUpdate = Date.now();
     console.log('Updating email...');
@@ -136,6 +130,9 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
 
         // Show success notification
         this.notificationService.success('Email updated successfully!');
+        this.notificationService.info(
+          'Please log in again with your new email'
+        );
         this.isUpdatingEmail = false;
 
         setTimeout(() => {
@@ -154,21 +151,21 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
       this.notificationService.warning('Please wait, updating password...');
       return;
     }
-    
+
     const now = Date.now();
     if (now - this.lastPasswordUpdate < this.minTimeBetweenUpdates) {
       this.notificationService.warning('Please wait before updating again');
       return;
     }
-    
+
     this.passwordUpdateAttempts$.next();
   }
-  
+
   private executePasswordUpdate() {
     if (this.isUpdatingPassword) {
       return;
     }
-    
+
     const currentPasswordInput = document.getElementById(
       'current-password-id'
     ) as HTMLInputElement;
@@ -194,32 +191,42 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
 
     // Validate password length (zgodnie z backendem)
     if (newPassword.length < 8) {
-      this.notificationService.error('Password must be at least 8 characters long');
+      this.notificationService.error(
+        'Password must be at least 8 characters long'
+      );
       return;
     }
 
     if (newPassword.length > 64) {
-      this.notificationService.error('Password cannot be longer than 64 characters');
+      this.notificationService.error(
+        'Password cannot be longer than 64 characters'
+      );
       return;
     }
 
     // Validate password complexity (digit and uppercase letter)
     if (!/.*\d.*/.test(newPassword)) {
-      this.notificationService.error('Password must contain at least one digit');
+      this.notificationService.error(
+        'Password must contain at least one digit'
+      );
       return;
     }
 
     if (!/.*[A-Z].*/.test(newPassword)) {
-      this.notificationService.error('Password must contain at least one uppercase letter');
+      this.notificationService.error(
+        'Password must contain at least one uppercase letter'
+      );
       return;
     }
 
     // Check if new password is different from current
     if (currentPassword === newPassword) {
-      this.notificationService.error('New password must be different from the current password');
+      this.notificationService.error(
+        'New password must be different from the current password'
+      );
       return;
     }
-    
+
     this.isUpdatingPassword = true;
     this.lastPasswordUpdate = Date.now();
     console.log('Updating password...');
@@ -241,6 +248,9 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
 
           // Show success notification
           this.notificationService.success('Password updated successfully!');
+          this.notificationService.info(
+            'Please log in again with your new password'
+          );
           this.isUpdatingPassword = false;
 
           setTimeout(() => {
@@ -273,7 +283,7 @@ export class SettingsProfileComponent implements OnInit, OnDestroy {
       this.notificationService.warning('Please wait, update in progress...');
       return;
     }
-    
+
     if (this.email != '') {
       this.saveEmail();
     }

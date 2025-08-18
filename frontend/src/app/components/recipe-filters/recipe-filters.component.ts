@@ -51,7 +51,17 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   selectedDifficulty: string = '';
   selectedLanguage = '';
 
-  categoriesArray: string[] = [];
+  // Categories with translation keys
+  categoriesArray: { key: string; value: string }[] = [
+    { key: 'BREAKFAST', value: 'śniadanie' },
+    { key: 'LUNCH', value: 'obiad' },
+    { key: 'DINNER', value: 'kolacja' },
+    { key: 'DESSERT', value: 'deser' },
+    { key: 'SNACK', value: 'przekąska' },
+    { key: 'DRINK', value: 'napój' },
+    { key: 'SALAD', value: 'sałatka' },
+    { key: 'SOUP', value: 'zupa' },
+  ];
   languagesArray: Language[] = [];
 
   isMenuOpen = false;
@@ -66,20 +76,20 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit(): void {
     // Setup debounced filter updates
     this.filterChange$
-      .pipe(
-        debounceTime(300),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => {
         this.executeFilterUpdate();
       });
 
     if (this.useCustomData) {
-      this.categoriesArray = this.customCategories;
+      // For custom usage, load custom categories and languages
+      this.categoriesArray = this.customCategories.map((cat) => ({
+        key: cat.toUpperCase(),
+        value: cat,
+      }));
       this.languagesArray = this.customLanguages;
       this.loadCurrentFiltersFromCustom();
     } else {
-      this.loadCategories();
       this.loadLanguages();
       this.loadCurrentFilters();
     }
@@ -97,23 +107,13 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     if (changes['customCategories'] && this.customCategories) {
-      this.categoriesArray = this.customCategories;
+      // Convert custom categories to new format
+      this.categoriesArray = this.customCategories.map((cat) => ({
+        key: cat.toUpperCase(),
+        value: cat,
+      }));
       this.cdr.detectChanges();
     }
-  }
-
-  private loadCategories(): void {
-    this.filterService
-      .loadCategories()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (categories) => {
-          this.categoriesArray = categories;
-        },
-        error: () => {
-          this.notificationService.error('Failed to load categories', 5000);
-        },
-      });
   }
 
   private loadLanguages(): void {
@@ -169,7 +169,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       ? filters.difficulty.toString()
       : '';
     this.selectedLanguage = filters.recipeLanguage || '';
-    
+
     // Trigger debounced update
     this.updateFilters();
   }

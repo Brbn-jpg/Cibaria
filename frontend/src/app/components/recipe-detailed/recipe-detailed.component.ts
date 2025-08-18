@@ -1,11 +1,5 @@
 import { RecipeService } from '../../services/recipe.service';
-import {
-  asNativeElements,
-  Component,
-  HostListener,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Recipe } from '../../Interface/recipe';
 import { Ingredients } from '../../Interface/ingredients';
@@ -26,7 +20,7 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private favouriteToggleAttempts$ = new Subject<void>();
   private ratingAttempts$ = new Subject<number>();
-  
+
   private lastFavouriteToggle = 0;
   private lastRatingSubmit = 0;
   private readonly minTimeBetweenActions = 1000; // 1 second
@@ -51,20 +45,14 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
   ) {
     // Setup debounced favourite toggle attempts
     this.favouriteToggleAttempts$
-      .pipe(
-        debounceTime(300),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(300), takeUntil(this.destroy$))
       .subscribe(() => {
         this.executeFavouriteToggle();
       });
-    
+
     // Setup debounced rating attempts
     this.ratingAttempts$
-      .pipe(
-        debounceTime(500),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe((rating) => {
         this.executeRating(rating);
       });
@@ -75,7 +63,6 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
     this.scrollToTop();
     this.route.params.subscribe((params) => {
       this.recipeId = +params['id'];
-      console.log('Recipe ID from params:', this.recipeId);
 
       if (this.recipeId) {
         this.loadRecipeDetails();
@@ -84,12 +71,12 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
           this.loadUserRating();
         }
       } else {
-        console.error('No recipe ID found in params');
+        this.notificationService.error('Recipe not found', 5000);
       }
     });
     this.setupIntersectionObserver();
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -98,17 +85,14 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
   private checkOwnership(): void {
     if (!this.isLoggedIn || !this.recipeDetails) {
       this.isOwner = false;
-      console.log(this.isOwner);
       return;
     }
 
     this.recipeService.isOwner(this.recipeDetails.id).subscribe({
       next: (isOwner) => {
         this.isOwner = isOwner;
-        console.log('Is owner:', this.isOwner);
       },
       error: (err) => {
-        console.error('Error checking ownership:', err);
         this.isOwner = false;
       },
     });
@@ -121,12 +105,10 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
 
     this.recipeService.isFavourite(this.recipeId).subscribe({
       next: (response) => {
-        console.log('Backend response for isFavourite:', response);
         this.isFavourite = response;
         this.updateFavouriteButton();
       },
       error: (err) => {
-        console.error('Error checking if recipe is favourite:', err);
         this.isFavourite = false;
         this.updateFavouriteButton();
       },
@@ -136,17 +118,16 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
   private loadRecipeDetails(): void {
     this.recipeService.loadRecipeDetails(this.recipeId).subscribe({
       next: (response) => {
-        console.log('Recipe details loaded:', response);
         this.recipeDetails = response;
         this.ingredients = this.recipeDetails.ingredients.map((ingredient) => ({
           name: ingredient.ingredientName,
-          quantity: ingredient.quantity,
+          quantity: Number(ingredient.quantity),
           unit: ingredient.unit,
         }));
         this.checkOwnership();
       },
-      error: (err) => {
-        console.error('Error loading recipe details:', err);
+      error: () => {
+        this.notificationService.error('Error loading recipe details', 5000);
       },
     });
   }
@@ -218,20 +199,20 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
     if (this.isProcessing) {
       return;
     }
-    
+
     if (!this.isLoggedIn) {
       this.notificationService.warning('Please log in to add favourites');
       return;
     }
-    
+
     const now = Date.now();
     if (now - this.lastFavouriteToggle < this.minTimeBetweenActions) {
       return; // Silently ignore rapid clicks
     }
-    
+
     this.favouriteToggleAttempts$.next();
   }
-  
+
   private executeFavouriteToggle() {
     if (this.isProcessing) {
       return;
@@ -239,7 +220,7 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
 
     this.isProcessing = true;
     this.lastFavouriteToggle = Date.now();
-    
+
     if (!this.isFavourite) {
       this.recipeService.addToFavourites(this.recipeId).subscribe({
         next: (response) => {
@@ -307,26 +288,28 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
     if (this.isRatingProcessing) {
       return;
     }
-    
+
     if (!this.isLoggedIn) {
       this.notificationService.warning('Please log in to rate recipes');
       return;
     }
-    
+
     // Check if user is trying to give the same rating they already gave
     if (this.currentRating === rating) {
-      this.notificationService.info(`Recipe is already rated with ${rating} stars`);
+      this.notificationService.info(
+        `Recipe is already rated with ${rating} stars`
+      );
       return;
     }
-    
+
     const now = Date.now();
     if (now - this.lastRatingSubmit < this.minTimeBetweenActions) {
       return; // Silently ignore rapid clicks
     }
-    
+
     this.ratingAttempts$.next(rating);
   }
-  
+
   private executeRating(rating: number): void {
     if (this.isRatingProcessing) {
       return;
@@ -373,13 +356,13 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
 
   translateUnit(unit: string): string {
     const unitMap: { [key: string]: string } = {
-      'tsp': 'ADD_RECIPE.UNITS.TSP',
-      'tbsp': 'ADD_RECIPE.UNITS.TBSP',
-      'pcs': 'ADD_RECIPE.UNITS.PCS',
-      'g': 'ADD_RECIPE.UNITS.G',
-      'kg': 'ADD_RECIPE.UNITS.KG',
-      'ml': 'ADD_RECIPE.UNITS.ML',
-      'L': 'ADD_RECIPE.UNITS.L'
+      tsp: 'ADD_RECIPE.UNITS.TSP',
+      tbsp: 'ADD_RECIPE.UNITS.TBSP',
+      pcs: 'ADD_RECIPE.UNITS.PCS',
+      g: 'ADD_RECIPE.UNITS.G',
+      kg: 'ADD_RECIPE.UNITS.KG',
+      ml: 'ADD_RECIPE.UNITS.ML',
+      L: 'ADD_RECIPE.UNITS.L',
     };
 
     const translationKey = unitMap[unit];
@@ -388,4 +371,5 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
     }
     return unit; // fallback to original unit if not found
   }
+
 }

@@ -36,7 +36,7 @@ import { Subject, takeUntil, debounceTime } from 'rxjs';
 export class AddRecipePanelComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private submitAttempts$ = new Subject<void>();
-  
+
   isSubmitting = false;
   private lastSubmitAttempt = 0;
   private readonly minTimeBetweenSubmits = 3000; // 3 seconds
@@ -51,6 +51,18 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
   isDragging = false;
   imagePreview: string | null = null;
 
+  // Categories with translation keys
+  categoriesArray: { key: string; value: string }[] = [
+    { key: 'BREAKFAST', value: 'śniadanie' },
+    { key: 'LUNCH', value: 'obiad' },
+    { key: 'DINNER', value: 'kolacja' },
+    { key: 'DESSERT', value: 'deser' },
+    { key: 'SNACK', value: 'przekąska' },
+    { key: 'DRINK', value: 'napój' },
+    { key: 'SALAD', value: 'sałatka' },
+    { key: 'SOUP', value: 'zupa' },
+  ];
+
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
@@ -59,10 +71,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
   ) {
     // Setup debounced submit attempts
     this.submitAttempts$
-      .pipe(
-        debounceTime(1000),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe(() => {
         this.executeSubmit();
       });
@@ -90,7 +99,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getToken();
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -121,6 +130,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
       this.newIngredient.unit !== 'Choose a unit'
     ) {
       this.ingredients.push({ ...this.newIngredient });
+      this.newIngredient = { ingredientName: '', quantity: 0, unit: '' };
     } else {
       this.notificationService.warning(
         'Fill all fields to add ingredient',
@@ -264,21 +274,21 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
       this.notificationService.warning('Please wait, submitting recipe...');
       return;
     }
-    
+
     const now = Date.now();
     if (now - this.lastSubmitAttempt < this.minTimeBetweenSubmits) {
       this.notificationService.warning('Please wait before submitting again');
       return;
     }
-    
+
     this.submitAttempts$.next();
   }
-  
+
   private executeSubmit() {
     if (this.isSubmitting) {
       return;
     }
-    
+
     if (!localStorage.getItem('token')) {
       this.notificationService.error('User is not logged in!', 5000);
       return;
@@ -288,17 +298,20 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
       this.notificationService.error('Please fill in the form!', 5000);
       return;
     }
-    
+
     if (this.ingredients.length === 0) {
-      this.notificationService.error('Please add at least one ingredient!', 5000);
+      this.notificationService.error(
+        'Please add at least one ingredient!',
+        5000
+      );
       return;
     }
-    
+
     if (this.steps.length === 0) {
       this.notificationService.error('Please add at least one step!', 5000);
       return;
     }
-    
+
     this.isSubmitting = true;
     this.lastSubmitAttempt = Date.now();
 
@@ -338,7 +351,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
       },
     });
   }
-  
+
   private resetForm() {
     this.recipeForm.reset();
     this.ingredients = [];

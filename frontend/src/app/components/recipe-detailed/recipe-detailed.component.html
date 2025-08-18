@@ -22,7 +22,9 @@
               </svg>
             </button>
 
-            <p class="favourite-text">{{ 'RECIPE_DETAILED.ADD_TO_FAVOURITE' | translate }}</p>
+            <p class="favourite-text">
+              {{ "RECIPE_DETAILED.ADD_TO_FAVOURITE" | translate }}
+            </p>
           </div>
           @if(isOwner){
           <div class="edit">
@@ -33,7 +35,9 @@
                 class="edit-icon icon"
               />
             </a>
-            <p class="edit-text">{{ 'RECIPE_DETAILED.EDIT_RECIPE' | translate }}</p>
+            <p class="edit-text">
+              {{ "RECIPE_DETAILED.EDIT_RECIPE" | translate }}
+            </p>
           </div>
           <div class="delete">
             <button class="delete-btn" (click)="delete()">
@@ -43,11 +47,15 @@
                 class="delete-icon icon"
               />
             </button>
-            <p class="delete-text">{{ 'RECIPE_DETAILED.DELETE_RECIPE' | translate }}</p>
+            <p class="delete-text">
+              {{ "RECIPE_DETAILED.DELETE_RECIPE" | translate }}
+            </p>
           </div>
           } } @if (isLoggedIn){
           <div class="rating">
-            <p class="rating-text">{{ 'RECIPE_DETAILED.RATE_THE_RECIPE' | translate }}</p>
+            <p class="rating-text">
+              {{ "RECIPE_DETAILED.RATE_THE_RECIPE" | translate }}
+            </p>
             <div class="stars">
               <button
                 class="star-btn"
@@ -178,23 +186,34 @@
     </div>
     @if (showConfirmation){
     <div class="confirm-delete">
-      <h2>{{ 'RECIPE_DETAILED.DELETE_CONFIRMATION' | translate }}</h2>
+      <h2>{{ "RECIPE_DETAILED.DELETE_CONFIRMATION" | translate }}</h2>
       <div class="btns">
         <button class="confirmation-btn yes" (click)="confirmDelete()">
-          {{ 'RECIPE_DETAILED.YES_DELETE' | translate }}
+          {{ "RECIPE_DETAILED.YES_DELETE" | translate }}
         </button>
-        <button class="confirmation-btn" (click)="cancelDelete()">{{ 'RECIPE_DETAILED.NO' | translate }}</button>
+        <button class="confirmation-btn" (click)="cancelDelete()">
+          {{ "RECIPE_DETAILED.NO" | translate }}
+        </button>
       </div>
     </div>
     }
     <div class="ingredients-servings hidden">
       <div class="prep-container">
-        <h2><span>{{ 'RECIPE_DETAILED.PREPARE_TIME' | translate }}</span> {{ recipeDetails?.prepareTime }}</h2>
-        <h2><span>{{ 'RECIPE_DETAILED.SERVINGS' | translate }}</span> {{ recipeDetails?.servings }}</h2>
-        <h2><span>{{ 'RECIPE_DETAILED.CATEGORY' | translate }}</span> {{ recipeDetails?.category }}</h2>
+        <h2>
+          <span>{{ "RECIPE_DETAILED.PREPARE_TIME" | translate }}</span>
+          {{ recipeDetails?.prepareTime }}
+        </h2>
+        <h2>
+          <span>{{ "RECIPE_DETAILED.SERVINGS" | translate }}</span>
+          {{ recipeDetails?.servings }}
+        </h2>
+        <h2>
+          <span>{{ "RECIPE_DETAILED.CATEGORY" | translate }}</span>
+          {{ 'RECIPE_FILTERS.CATEGORIES.' + recipeDetails?.category | translate }}
+        </h2>
       </div>
       <div class="ingredients">
-        <h2>{{ 'RECIPE_DETAILED.INGREDIENTS' | translate }}</h2>
+        <h2>{{ "RECIPE_DETAILED.INGREDIENTS" | translate }}</h2>
         <ul>
           @for (recipe of recipeDetails?.ingredients; track $index){
           <li>
@@ -207,7 +226,8 @@
             /><label [for]="recipe.ingredientName"
               ><span>{{ recipe.ingredientName }}</span>
               <span class="quantity-unit">
-                {{ recipe.quantity }} {{ translateUnit(recipe.unit) }}</span
+                {{ recipe.quantity }}
+                {{ translateUnit(recipe.unit) }}</span
               ></label
             >
           </li>
@@ -218,7 +238,9 @@
     <div class="steps">
       @for (step of recipeDetails?.steps; track $index){
       <div class="step">
-        <h2>{{ 'RECIPE_DETAILED.STEP' | translate: {number: $index + 1} }}</h2>
+        <h2>
+          {{ "RECIPE_DETAILED.STEP" | translate : { number: $index + 1 } }}
+        </h2>
         <p>{{ step.content }}</p>
         <hr />
       </div>
@@ -232,7 +254,7 @@
       }
 
       <div class="end">
-        <h2>{{ 'RECIPE_DETAILED.ENJOY' | translate }}</h2>
+        <h2>{{ "RECIPE_DETAILED.ENJOY" | translate }}</h2>
         <h2>ʕっ•ᴥ•ʔっ</h2>
       </div>
     </div>

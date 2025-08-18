@@ -227,10 +227,7 @@ button:hover {
   display: flex;
   gap: 1.2rem;
   align-items: center;
-}
-
-.ingredient button {
-  margin-top: 0 !important;
+  justify-content: space-between;
 }
 
 select {
@@ -283,6 +280,10 @@ select {
 
 .ingredients-list {
   list-style: none;
+}
+
+.step {
+  max-width: 50vw;
 }
 
 .step-number {
