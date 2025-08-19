@@ -178,18 +178,26 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
 
   check() {
     const inputs = document.querySelectorAll(
-      'input'
+      '.ingredients input[type="checkbox"]'
     ) as NodeListOf<HTMLInputElement>;
     const labels = document.querySelectorAll(
-      'label'
+      '.ingredients label'
     ) as NodeListOf<HTMLLabelElement>;
 
     inputs.forEach((input, index) => {
       const label = labels[index];
+      const optionalBadge = label.querySelector('.optional-badge');
+      
       if (input.checked) {
         label.classList.add('checked');
+        if (optionalBadge) {
+          optionalBadge.classList.add('checked-optional');
+        }
       } else {
         label.classList.remove('checked');
+        if (optionalBadge) {
+          optionalBadge.classList.remove('checked-optional');
+        }
       }
     });
   }

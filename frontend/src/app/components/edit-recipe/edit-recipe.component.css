@@ -56,6 +56,8 @@ input {
   transition: border-color 0.2s ease-in-out;
   width: 100%;
   max-width: 30rem;
+  height: 4.8rem;
+  box-sizing: border-box;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -174,11 +176,15 @@ input[type="number"] {
 
 select {
   max-width: 30rem;
-  font-size: 2.4rem;
-  padding: 0.8rem;
-  background-color: #fff;
-  border: none;
-  color: #000;
+  font-size: 1.6rem;
+  padding: 1.2rem 1.6rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  color: #fff;
+  transition: border-color 0.2s ease-in-out;
+  height: 4.8rem;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -350,4 +356,78 @@ select {
   form select {
     min-width: 100%;
   }
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.6rem !important;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 1.2rem 1.6rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  height: 4.8rem;
+  box-sizing: border-box;
+  min-width: 12rem;
+  white-space: nowrap;
+}
+
+.checkbox-container:hover {
+  border-color: #d4ae6c;
+  background-color: rgba(212, 174, 108, 0.1);
+}
+
+.checkbox-container input[type="checkbox"] {
+  display: none !important;
+}
+
+
+.checkbox-container.checked {
+  border-color: #d4ae6c;
+  background-color: rgba(212, 174, 108, 0.15);
+  color: #d4ae6c;
+  font-weight: 400;
+}
+
+.checkmark {
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 0.2rem solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.3rem;
+  position: relative;
+  transition: all 0.3s ease;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.checkbox-container.checked .checkmark {
+  border-color: #d4ae6c;
+  background-color: #d4ae6c;
+}
+
+.checkbox-container.checked .checkmark::after {
+  content: "✓";
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.optional-label {
+  color: #d4ae6c;
+  font-style: italic;
+  margin-left: 0.5rem;
+  font-size: 1.2rem;
 }

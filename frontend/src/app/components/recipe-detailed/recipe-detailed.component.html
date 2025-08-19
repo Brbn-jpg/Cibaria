@@ -209,7 +209,9 @@
         </h2>
         <h2>
           <span>{{ "RECIPE_DETAILED.CATEGORY" | translate }}</span>
-          {{ 'RECIPE_FILTERS.CATEGORIES.' + recipeDetails?.category | translate }}
+          {{
+            "RECIPE_FILTERS.CATEGORIES." + recipeDetails?.category | translate
+          }}
         </h2>
       </div>
       <div class="ingredients">
@@ -218,13 +220,18 @@
           @for (recipe of recipeDetails?.ingredients; track $index){
           <li>
             <input
-              #checkbox
-              [className]="checkbox.checked ? 'checked' : ''"
               type="checkbox"
-              [name]="recipe.ingredientName"
+              [id]="'ingredient-' + $index"
               (change)="check()"
-            /><label [for]="recipe.ingredientName"
-              ><span>{{ recipe.ingredientName }}</span>
+            /><label [for]="'ingredient-' + $index"
+              ><span class="ingredient-name">
+                {{ recipe.ingredientName }}
+                @if (recipe.isOptional) {
+                <span class="optional-badge"
+                  >({{ "ADD_RECIPE.OPTIONAL" | translate }})</span
+                >
+                }
+              </span>
               <span class="quantity-unit">
                 {{ recipe.quantity }}
                 {{ translateUnit(recipe.unit) }}</span

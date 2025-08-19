@@ -77,6 +77,27 @@ export class FilterService {
     });
   }
 
+  loadIngredients(): Observable<string[]> {
+    return new Observable((observer) => {
+      this.http.get<RecipesResponse>(this.url).subscribe({
+        next: (response) => {
+          if (response && Array.isArray(response.content)) {
+            const allIngredients = response.content
+              .flatMap(recipe => recipe.ingredients?.map(ing => ing.ingredientName) || [])
+              .filter(ing => ing && ing.trim() !== '');
+            
+            const uniqueIngredients = Array.from(new Set(allIngredients)).sort();
+            observer.next(uniqueIngredients);
+          } else {
+            observer.next([]);
+          }
+          observer.complete();
+        },
+        error: (err) => observer.error(err),
+      });
+    });
+  }
+
   get currentFilters(): FilterState {
     return this.filterState$.value;
   }
@@ -130,6 +151,10 @@ export class FilterService {
 
     if (currentFilters.query) {
       params.query = currentFilters.query;
+    }
+
+    if (currentFilters.ingredients && currentFilters.ingredients.length > 0) {
+      params.ingredients = currentFilters.ingredients;
     }
 
     return params;

@@ -39,10 +39,11 @@ public class RecipeController {
           @RequestParam(required = false) String servings,
           @RequestParam(required = false) String prepareTime,
           @RequestParam(defaultValue = "true") Boolean isPublic,
-          @RequestParam(required = false) String language
+          @RequestParam(required = false) String language,
+          @RequestParam(required = false) List<String> ingredients
   )
   {
-    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime, isPublic, language);
+    return recipeService.getRecipeByPage(page,size,category,difficulty,servings,prepareTime, isPublic, language, ingredients);
   }
 
   @GetMapping("/{id}")

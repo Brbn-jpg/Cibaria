@@ -15,6 +15,7 @@ export interface Recipe {
     ingredientName: string;
     quantity: number;
     unit: string;
+    isOptional?: boolean;
   }[];
   steps: Step[];
   images: RecipeImage[];

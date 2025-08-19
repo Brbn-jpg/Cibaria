@@ -7,6 +7,7 @@ export interface FilterState {
   category?: string;
   recipeLanguage?: string;
   query?: string;
+  ingredients?: string[];
   currentPage: number;
   pageSize: number;
 }

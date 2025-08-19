@@ -114,6 +114,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
     ingredients: new FormControl(''),
     quantity: new FormControl(0),
     unit: new FormControl(''),
+    isOptional: new FormControl(false),
     steps: new FormControl(''),
   });
 
@@ -150,6 +151,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
           name: ingredient.ingredientName,
           quantity: ingredient.quantity,
           unit: ingredient.unit,
+          isOptional: ingredient.isOptional || false,
         }));
 
         this.steps = this.recipeDetails.steps.map((step) => ({
@@ -187,6 +189,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
     const ingredientName = this.recipeForm.get('ingredients')?.value || '';
     const quantity = this.recipeForm.get('quantity')?.value || 0;
     const unit = this.recipeForm.get('unit')?.value || '';
+    const isOptional = this.recipeForm.get('isOptional')?.value || false;
 
     const ingredientExists = this.ingredients.some(
       (ingredient) =>
@@ -203,12 +206,14 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
         name: ingredientName,
         quantity: quantity,
         unit: unit,
+        isOptional: isOptional,
       });
 
       this.recipeForm.patchValue({
         ingredients: '',
         quantity: 0,
         unit: '',
+        isOptional: false,
       });
     } else {
       this.fillAll = false;
@@ -232,6 +237,11 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
 
   removeStep(index: number) {
     this.steps.splice(index, 1);
+  }
+
+  toggleOptional(): void {
+    const currentValue = this.recipeForm.get('isOptional')?.value || false;
+    this.recipeForm.patchValue({ isOptional: !currentValue });
   }
 
   triggerFileInput() {
@@ -397,6 +407,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
         ingredientName: ingredient.name,
         quantity: ingredient.quantity,
         unit: ingredient.unit,
+        isOptional: ingredient.isOptional || false,
       })),
       steps: this.steps,
       isPublic: this.recipeForm.value.isPublic,

@@ -8,7 +8,7 @@ public class RecipeFilter {
 
     public List<Recipe> filterByParams(List<String> category, Integer difficulty,
                                        String servings, String prepareTime,
-                                       List<Recipe> recipes, String language) {
+                                       List<Recipe> recipes, String language, List<String> ingredients) {
     
         List<Recipe> filteredRecipes = recipes;
         if (category != null) {
@@ -47,6 +47,16 @@ public class RecipeFilter {
               .filter(recipe -> recipe.getLanguage() != null &&
             recipe.getLanguage().equalsIgnoreCase(language))
               .toList();
+        }
+
+        if(ingredients != null && !ingredients.isEmpty()) {
+            filteredRecipes = filteredRecipes.stream()
+                    .filter(recipe -> recipe.getIngredients() != null &&
+                            ingredients.stream()
+                                    .allMatch(selectedIngredient -> recipe.getIngredients().stream()
+                                            .anyMatch(recipeIngredient -> recipeIngredient.getIngredientName()
+                                                    .equalsIgnoreCase(selectedIngredient))))
+                    .toList();
         }
 
         return filteredRecipes;

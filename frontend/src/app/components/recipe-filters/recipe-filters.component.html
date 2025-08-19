@@ -156,4 +156,19 @@
       }
     </select>
   </div>
+  <div class="ingredients filter-wrapper">
+    <label>{{ 'RECIPE_FILTERS.INGREDIENTS' | translate }}</label>
+    <div class="ingredients-checkboxes">
+      @for (ingredient of ingredientsArray; track ingredient; let i = $index) {
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [checked]="isIngredientSelected(ingredient)"
+            (change)="onIngredientChange(ingredient, $any($event.target).checked)"
+          />
+          <span>{{ ingredient }}</span>
+        </label>
+      }
+    </div>
+  </div>
 </ng-template>

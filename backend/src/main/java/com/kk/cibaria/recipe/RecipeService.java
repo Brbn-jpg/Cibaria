@@ -22,7 +22,7 @@ public interface RecipeService {
   Recipe updateRecipeWithPhotos(int id, Recipe recipe, List<MultipartFile> images, String token);
 
   RecipeRequestDto getRecipeByPage(int page, int size, List<String> category, Integer difficulty, String servings,
-                                   String prepareTime, Boolean isPublic, String language);
+                                   String prepareTime, Boolean isPublic, String language, List<String> ingredients);
 
   void addRecipeToFavourites(String token, int recipeId);
 

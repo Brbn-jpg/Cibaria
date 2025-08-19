@@ -25,6 +25,7 @@ public class Ingredient {
   private String ingredientName;
   private float quantity;
   private String unit;
+  private Boolean isOptional;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id")

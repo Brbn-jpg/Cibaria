@@ -336,6 +336,31 @@ article {
   font-weight: 200;
 }
 
+.ingredient-name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.optional-badge {
+  color: #d4ae6c;
+  font-size: 1.2rem;
+  font-style: italic;
+  background-color: rgba(212, 174, 108, 0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(212, 174, 108, 0.3);
+  transition: all 0.3s ease;
+}
+
+.optional-badge.checked-optional {
+  color: #8b7355;
+  background-color: rgba(139, 115, 85, 0.2);
+  border-color: rgba(139, 115, 85, 0.4);
+  opacity: 0.7;
+}
+
 /* < 1050px */
 @media (max-width: 66em) {
   .grid-2-cols {

@@ -103,6 +103,7 @@ public class RecipeServiceImpl implements RecipeService {
       ingredient.setIngredientName(i.getIngredientName());
       ingredient.setUnit(i.getUnit());
       ingredient.setQuantity(i.getQuantity());
+      ingredient.setIsOptional(i.getIsOptional());
       return ingredient;
     }).toList();
 
@@ -229,7 +230,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public RecipeRequestDto getRecipeByPage(int page, int size, List<String> category,
-                                          Integer difficulty, String servings, String prepareTime, Boolean isPublic, String language) {
+                                          Integer difficulty, String servings, String prepareTime, Boolean isPublic, String language, List<String> ingredients) {
     Pagination pagination = new Pagination();
     RecipeFilter filter = new RecipeFilter();
     List<Recipe> recipes = recipeRepository.findAll();
@@ -240,7 +241,7 @@ public class RecipeServiceImpl implements RecipeService {
                 .collect(Collectors.toList());
     }
 
-    List<Recipe> filteredRecipes = filter.filterByParams(category,difficulty,servings,prepareTime,recipes, language);
+    List<Recipe> filteredRecipes = filter.filterByParams(category,difficulty,servings,prepareTime,recipes, language, ingredients);
     List<Recipe> paginatedRecipes = pagination.paginate(page,size,filteredRecipes);
     RecipeRequestDto recipeRequestDto = new RecipeRequestDto();
     recipeRequestDto.setContent(paginatedRecipes);

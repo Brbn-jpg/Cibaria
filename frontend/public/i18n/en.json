@@ -284,6 +284,7 @@
     "HARD": "Hard",
     "LANGUAGE": "Language",
     "CHOOSE_LANGUAGE": "Choose language",
+    "INGREDIENTS": "Ingredients",
     "CATEGORIES": {
       "BREAKFAST": "Breakfast",
       "LUNCH": "Lunch", 
@@ -356,6 +357,7 @@
     "CHOOSE_UNIT": "Choose unit",
     "REMOVE": "Remove",
     "ADD_INGREDIENT": "Add ingredient",
+    "OPTIONAL": "optional",
     "STEPS": "Steps",
     "STEP_PLACEHOLDER": "Cut the tomatoes into small pieces",
     "ADD_STEP": "Add step",

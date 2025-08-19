@@ -40,12 +40,12 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   private lastSubmitAttempt = 0;
   private readonly minTimeBetweenSubmits = 3000; // 3 seconds
-  ingredients: { ingredientName: string; quantity: number; unit: string }[] =
+  ingredients: { ingredientName: string; quantity: number; unit: string; isOptional: boolean }[] =
     [];
   steps: { content: string }[] = [];
   recipeLanguage = 'english';
   isPublic = false;
-  newIngredient = { ingredientName: '', quantity: 0, unit: '' };
+  newIngredient = { ingredientName: '', quantity: 0, unit: '', isOptional: false };
   newStep = '';
   success = false;
   isDragging = false;
@@ -130,7 +130,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
       this.newIngredient.unit !== 'Choose a unit'
     ) {
       this.ingredients.push({ ...this.newIngredient });
-      this.newIngredient = { ingredientName: '', quantity: 0, unit: '' };
+      this.newIngredient = { ingredientName: '', quantity: 0, unit: '', isOptional: false };
     } else {
       this.notificationService.warning(
         'Fill all fields to add ingredient',
@@ -154,6 +154,10 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
 
   removeStep(index: number) {
     this.steps.splice(index, 1);
+  }
+
+  toggleOptional(): void {
+    this.newIngredient.isOptional = !this.newIngredient.isOptional;
   }
 
   triggerFileInput() {

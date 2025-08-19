@@ -284,6 +284,7 @@
     "HARD": "Trudny",
     "LANGUAGE": "Język",
     "CHOOSE_LANGUAGE": "Wybierz język",
+    "INGREDIENTS": "Składniki",
     "CATEGORIES": {
       "BREAKFAST": "Śniadanie",
       "LUNCH": "Obiad", 
@@ -348,6 +349,7 @@
     "CHOOSE_UNIT": "Wybierz jednostkę",
     "REMOVE": "Usuń",
     "ADD_INGREDIENT": "Dodaj składnik",
+    "OPTIONAL": "opcjonalny",
     "STEPS": "Kroki",
     "STEP_PLACEHOLDER": "Pokrój pomidory na małe kawałki",
     "ADD_STEP": "Dodaj krok",

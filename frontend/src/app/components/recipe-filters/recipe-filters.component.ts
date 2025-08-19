@@ -50,6 +50,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   selectedCategory = '';
   selectedDifficulty: string = '';
   selectedLanguage = '';
+  selectedIngredients: string[] = [];
 
   // Categories with translation keys
   categoriesArray: { key: string; value: string }[] = [
@@ -63,6 +64,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     { key: 'SOUP', value: 'zupa' },
   ];
   languagesArray: Language[] = [];
+  ingredientsArray: string[] = [];
 
   isMenuOpen = false;
 
@@ -91,6 +93,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       this.loadCurrentFiltersFromCustom();
     } else {
       this.loadLanguages();
+      this.loadIngredients();
       this.loadCurrentFilters();
     }
   }
@@ -130,6 +133,20 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       });
   }
 
+  private loadIngredients(): void {
+    this.filterService
+      .loadIngredients()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (ingredients) => {
+          this.ingredientsArray = ingredients;
+        },
+        error: () => {
+          this.notificationService.error('Failed to load ingredients', 5000);
+        },
+      });
+  }
+
   private loadCurrentFilters(): void {
     const currentFilters = this.filterService.currentFilters;
 
@@ -143,6 +160,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       ? currentFilters.difficulty.toString()
       : ''; // Convert to string for select binding
     this.selectedLanguage = currentFilters.recipeLanguage || '';
+    this.selectedIngredients = currentFilters.ingredients || [];
   }
 
   private loadCurrentFiltersFromCustom(): void {
@@ -155,6 +173,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedCategory = '';
     this.selectedDifficulty = '';
     this.selectedLanguage = '';
+    this.selectedIngredients = [];
   }
 
   // Method to update filters from parent component (for custom usage)
@@ -169,6 +188,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       ? filters.difficulty.toString()
       : '';
     this.selectedLanguage = filters.recipeLanguage || '';
+    this.selectedIngredients = filters.ingredients || [];
 
     // Trigger debounced update
     this.updateFilters();
@@ -186,6 +206,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       difficulty:
         this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty,
       recipeLanguage: this.selectedLanguage || undefined,
+      ingredients: this.selectedIngredients.length > 0 ? this.selectedIngredients : undefined,
       currentPage: 1,
     };
   }
@@ -201,6 +222,19 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   onTabChange(tab: 'favourites' | 'userRecipes'): void {
     this.activeTab = tab;
     this.tabChanged.emit(tab);
+  }
+
+  onIngredientChange(ingredient: string, isChecked: boolean): void {
+    if (isChecked) {
+      this.selectedIngredients = [...this.selectedIngredients, ingredient];
+    } else {
+      this.selectedIngredients = this.selectedIngredients.filter(i => i !== ingredient);
+    }
+    this.onFilterChange();
+  }
+
+  isIngredientSelected(ingredient: string): boolean {
+    return this.selectedIngredients.includes(ingredient);
   }
 
   private executeFilterUpdate(): void {
@@ -219,6 +253,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
         difficulty:
           this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty,
         recipeLanguage: this.selectedLanguage || undefined,
+        ingredients: this.selectedIngredients.length > 0 ? this.selectedIngredients : undefined,
         currentPage: 1,
       };
 

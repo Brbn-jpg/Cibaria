@@ -143,6 +143,10 @@
           <option value="ml">{{ "ADD_RECIPE.UNITS.ML" | translate }}</option>
           <option value="L">{{ "ADD_RECIPE.UNITS.L" | translate }}</option>
         </select>
+        <div class="checkbox-container" [class.checked]="recipeForm.get('isOptional')?.value" (click)="toggleOptional()">
+          <span class="checkmark"></span>
+          {{ "ADD_RECIPE.OPTIONAL" | translate }}
+        </div>
       </div>
       <button type="button" (click)="addIngredient()">
         {{ "ADD_RECIPE.ADD_INGREDIENT" | translate }}
@@ -154,6 +158,9 @@
           <p class="ingredient-text">
             {{ ingredient.quantity }} {{ ingredient.unit }}
             {{ ingredient.name }}
+            @if (ingredient.isOptional) {
+              <span class="optional-label">({{ "ADD_RECIPE.OPTIONAL" | translate }})</span>
+            }
           </p>
 
           <button type="button" (click)="removeIngredient($index)">
