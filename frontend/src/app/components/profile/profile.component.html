@@ -82,7 +82,9 @@
     [activeTab]="activeTab"
     [customCategories]="categoriesArray"
     [customLanguages]="languagesArray"
+    [customIngredients]="ingredientsArray"
     [useCustomData]="true"
+    [showIngredients]="activeTab === 'userRecipes' && ingredientsArray.length > 0"
     (filtersChanged)="onFiltersChanged()"
     (tabChanged)="onTabChanged($event)"
   ></app-recipe-filters>

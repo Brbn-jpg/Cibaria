@@ -7,7 +7,7 @@
       [class.selectedTab]="activeTab === 'favourites'"
       class="switch"
     >
-      {{ 'RECIPE_FILTERS.FAVOURITES' | translate }}
+      {{ "RECIPE_FILTERS.FAVOURITES" | translate }}
     </button>
     <button
       type="button"
@@ -15,7 +15,7 @@
       [class.selectedTab]="activeTab === 'userRecipes'"
       class="switch"
     >
-      {{ 'RECIPE_FILTERS.MY_RECIPES' | translate }}
+      {{ "RECIPE_FILTERS.MY_RECIPES" | translate }}
     </button>
   </div>
   } @if (isMobileFiltering) { @if (isMenuOpen) {
@@ -31,7 +31,9 @@
   }
   <div class="settings">
     <div class="filter-wrapper">
-      <label class="settings-label">{{ 'RECIPE_FILTERS.FILTERS' | translate }}</label>
+      <label class="settings-label">{{
+        "RECIPE_FILTERS.FILTERS" | translate
+      }}</label>
       <button type="button" class="settings-btn" (click)="openMenu()">
         <img
           src="images/mobile-menu/menu-open.svg"
@@ -53,7 +55,7 @@
 
 <ng-template #filtersContent>
   <div class="search filter-wrapper">
-    <label for="search">{{ 'RECIPE_FILTERS.SEARCH' | translate }}</label>
+    <label for="search">{{ "RECIPE_FILTERS.SEARCH" | translate }}</label>
     <input
       type="text"
       id="search"
@@ -64,7 +66,9 @@
     />
   </div>
   <div class="prepare-time filter-wrapper">
-    <label for="prepare-time">{{ 'RECIPE_FILTERS.PREPARE_TIME' | translate }}</label>
+    <label for="prepare-time">{{
+      "RECIPE_FILTERS.PREPARE_TIME" | translate
+    }}</label>
     <div class="inputs">
       <input
         type="number"
@@ -86,7 +90,7 @@
     </div>
   </div>
   <div class="servings filter-wrapper">
-    <label for="servings">{{ 'RECIPE_FILTERS.SERVINGS' | translate }}</label>
+    <label for="servings">{{ "RECIPE_FILTERS.SERVINGS" | translate }}</label>
     <div class="inputs">
       <input
         id="servings-from"
@@ -110,7 +114,7 @@
     </div>
   </div>
   <div class="category filter-wrapper">
-    <label for="category">{{ 'RECIPE_FILTERS.CATEGORY' | translate }}</label>
+    <label for="category">{{ "RECIPE_FILTERS.CATEGORY" | translate }}</label>
     <select
       name="category"
       id="category"
@@ -118,14 +122,20 @@
       [(ngModel)]="selectedCategory"
       (change)="onFilterChange()"
     >
-      <option value="">{{ 'RECIPE_FILTERS.CHOOSE_CATEGORY' | translate }}</option>
+      <option value="">
+        {{ "RECIPE_FILTERS.CHOOSE_CATEGORY" | translate }}
+      </option>
       @for (category of categoriesArray; track category.key) {
-      <option [value]="category.value">{{ 'RECIPE_FILTERS.CATEGORIES.' + category.key | translate }}</option>
+      <option [value]="category.value">
+        {{ "RECIPE_FILTERS.CATEGORIES." + category.key | translate }}
+      </option>
       }
     </select>
   </div>
   <div class="difficulty filter-wrapper">
-    <label for="difficulty">{{ 'RECIPE_FILTERS.DIFFICULTY' | translate }}</label>
+    <label for="difficulty">{{
+      "RECIPE_FILTERS.DIFFICULTY" | translate
+    }}</label>
     <select
       name="difficulty"
       id="difficulty"
@@ -133,14 +143,16 @@
       [(ngModel)]="selectedDifficulty"
       (change)="onFilterChange()"
     >
-      <option selected value="">{{ 'RECIPE_FILTERS.CHOOSE_DIFFICULTY' | translate }}</option>
-      <option value="1">{{ 'RECIPE_FILTERS.EASY' | translate }}</option>
-      <option value="2">{{ 'RECIPE_FILTERS.MEDIUM' | translate }}</option>
-      <option value="3">{{ 'RECIPE_FILTERS.HARD' | translate }}</option>
+      <option selected value="">
+        {{ "RECIPE_FILTERS.CHOOSE_DIFFICULTY" | translate }}
+      </option>
+      <option value="1">{{ "RECIPE_FILTERS.EASY" | translate }}</option>
+      <option value="2">{{ "RECIPE_FILTERS.MEDIUM" | translate }}</option>
+      <option value="3">{{ "RECIPE_FILTERS.HARD" | translate }}</option>
     </select>
   </div>
   <div class="language filter-wrapper">
-    <label for="Language">{{ 'RECIPE_FILTERS.LANGUAGE' | translate }}</label>
+    <label for="Language">{{ "RECIPE_FILTERS.LANGUAGE" | translate }}</label>
     <select
       name="language"
       id="language"
@@ -148,7 +160,9 @@
       [(ngModel)]="selectedLanguage"
       (change)="onFilterChange()"
     >
-      <option value="">{{ 'RECIPE_FILTERS.CHOOSE_LANGUAGE' | translate }}</option>
+      <option value="">
+        {{ "RECIPE_FILTERS.CHOOSE_LANGUAGE" | translate }}
+      </option>
       @for (language of languagesArray; track language.languageName) {
       <option [value]="language.languageName">
         {{ language.languageName }}
@@ -156,19 +170,22 @@
       }
     </select>
   </div>
+  @if (showIngredients && ingredientsArray.length > 0) {
+
   <div class="ingredients filter-wrapper">
-    <label>{{ 'RECIPE_FILTERS.INGREDIENTS' | translate }}</label>
+    <label>{{ "RECIPE_FILTERS.INGREDIENTS" | translate }}</label>
     <div class="ingredients-checkboxes">
       @for (ingredient of ingredientsArray; track ingredient; let i = $index) {
-        <label class="checkbox-label">
-          <input 
-            type="checkbox" 
-            [checked]="isIngredientSelected(ingredient)"
-            (change)="onIngredientChange(ingredient, $any($event.target).checked)"
-          />
-          <span>{{ ingredient }}</span>
-        </label>
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          [checked]="isIngredientSelected(ingredient)"
+          (change)="onIngredientChange(ingredient, $any($event.target).checked)"
+        />
+        <span>{{ ingredient }}</span>
+      </label>
       }
     </div>
   </div>
+  }
 </ng-template>

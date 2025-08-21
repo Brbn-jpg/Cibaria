@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
@@ -47,7 +47,6 @@ type ActiveTab = 'favourites' | 'userRecipes';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    RouterLink,
     FormsModule,
     TranslateModule,
     EditProfileComponent,
@@ -81,6 +80,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   // Filter data
   categoriesArray: string[] = [];
   languagesArray: Language[] = [];
+  ingredientsArray: string[] = [];
 
   // UI state
   activeTab: ActiveTab = 'favourites';
@@ -292,6 +292,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private loadFilterOptions(): void {
     this.loadCategories();
     this.loadLanguages();
+    this.loadIngredients();
   }
 
   private loadCategories(): void {
@@ -321,6 +322,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }));
     } else {
       this.languagesArray = [];
+    }
+  }
+
+  private loadIngredients(): void {
+    if (this.activeTab === 'userRecipes' && this.userRecipes.length > 0) {
+      const allIngredients = this.userRecipes
+        .flatMap(
+          (recipe) => recipe.ingredients?.map((ing) => ing.ingredientName) || []
+        )
+        .filter((ing) => ing && ing.trim() !== '');
+
+      this.ingredientsArray = Array.from(new Set(allIngredients)).sort();
+    } else {
+      this.ingredientsArray = [];
     }
   }
 
@@ -399,6 +414,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
       const queryLower = this.filters.query.toLowerCase();
       filtered = filtered.filter((recipe) =>
         recipe.recipeName.toLowerCase().includes(queryLower)
+      );
+    }
+
+    if (this.filters.ingredients && this.filters.ingredients.length > 0) {
+      filtered = filtered.filter((recipe) =>
+        this.filters.ingredients!.every((filterIngredient) =>
+          recipe.ingredients?.some((recipeIngredient) =>
+            recipeIngredient.ingredientName
+              .toLowerCase()
+              .includes(filterIngredient.toLowerCase())
+          )
+        )
       );
     }
 

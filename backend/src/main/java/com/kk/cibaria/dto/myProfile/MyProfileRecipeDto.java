@@ -3,6 +3,7 @@ package com.kk.cibaria.dto.myProfile;
 import java.util.List;
 
 import com.kk.cibaria.image.Image;
+import com.kk.cibaria.ingredient.Ingredient;
 
 import lombok.Data;
 
@@ -17,4 +18,5 @@ public class MyProfileRecipeDto {
     private String category;
     private Long avgRating;
     private String language;
+    private List<Ingredient> ingredients;
 }

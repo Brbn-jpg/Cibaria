@@ -11,4 +11,10 @@ export interface ProfileRecipe {
   avgRating: number;
   language: string;
   ratings: Rating[];
+  ingredients: {
+    ingredientName: string;
+    quantity: number;
+    unit: string;
+    isOptional?: boolean;
+  }[];
 }

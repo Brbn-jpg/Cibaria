@@ -116,6 +116,17 @@
             >{{ "NAV.PROFILE" | translate }}</a
           >
         </li>
+        @if (isAdmin) {
+        <li>
+          <a
+            class="nav-link admin-link"
+            href=""
+            [routerLink]="['/admin']"
+            (click)="closeMenu()"
+            >{{ "NAV.ADMIN_PANEL" | translate }}</a
+          >
+        </li>
+        }
         <li>
           <a class="nav-link" href="" [routerLink]="['/']" (click)="logOut()">{{
             "NAV.LOGOUT" | translate

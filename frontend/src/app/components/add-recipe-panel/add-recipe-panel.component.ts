@@ -18,6 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../services/auth.service';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
@@ -67,7 +68,8 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
 
   constructor(
     private recipeService: RecipeService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {
     // Setup debounced submit attempts
     this.submitAttempts$
@@ -108,9 +110,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
 
   getToken(): void {
-    if (localStorage.getItem('token')) {
-      this.isLoggedIn = true;
-    }
+    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   addIngredient() {
@@ -293,7 +293,7 @@ export class AddRecipePanelComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!localStorage.getItem('token')) {
+    if (!this.authService.isAuthenticated()) {
       this.notificationService.error('User is not logged in!', 5000);
       return;
     }

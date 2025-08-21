@@ -19,20 +19,26 @@ import { ActivatedRoute } from '@angular/router';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
+import { AuthService } from '../../services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-edit-recipe',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, TranslateModule, ToastNotificationComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    ToastNotificationComponent,
+  ],
   templateUrl: './edit-recipe.component.html',
   styleUrl: './edit-recipe.component.css',
 })
 export class EditRecipeComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private updateAttempts$ = new Subject<void>();
-  
+
   isUpdating = false;
   private lastUpdateAttempt = 0;
   private readonly minTimeBetweenUpdates = 3000; // 3 seconds
@@ -44,15 +50,15 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   hasExistingImage = false;
 
   // Categories with translation keys
-  categoriesArray: {key: string, value: string}[] = [
-    {key: 'BREAKFAST', value: 'śniadanie'},
-    {key: 'LUNCH', value: 'obiad'},
-    {key: 'DINNER', value: 'kolacja'},
-    {key: 'DESSERT', value: 'deser'},
-    {key: 'SNACK', value: 'przekąska'},
-    {key: 'DRINK', value: 'napój'},
-    {key: 'SALAD', value: 'sałatka'},
-    {key: 'SOUP', value: 'zupa'},
+  categoriesArray: { key: string; value: string }[] = [
+    { key: 'BREAKFAST', value: 'śniadanie' },
+    { key: 'LUNCH', value: 'obiad' },
+    { key: 'DINNER', value: 'kolacja' },
+    { key: 'DESSERT', value: 'deser' },
+    { key: 'SNACK', value: 'przekąska' },
+    { key: 'DRINK', value: 'napój' },
+    { key: 'SALAD', value: 'sałatka' },
+    { key: 'SOUP', value: 'zupa' },
   ];
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -60,14 +66,12 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {
     // Setup debounced update attempts
     this.updateAttempts$
-      .pipe(
-        debounceTime(1000),
-        takeUntil(this.destroy$)
-      )
+      .pipe(debounceTime(1000), takeUntil(this.destroy$))
       .subscribe(() => {
         this.executeUpdate();
       });
@@ -85,22 +89,12 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   }
 
   getToken(): void {
-    if (localStorage.getItem('token')) {
-      this.isLoggedIn = true;
-    }
+    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   recipeDetails!: Recipe;
   ingredients: Ingredients[] = [];
   steps: { content: string }[] = [];
-  isPublic = false;
-  newIngredient = { ingredientName: '', quantity: 0, unit: '' };
-  newStep = '';
-  fillAll = true;
-  alreadyExists = false;
-  fileSizeError = false;
-  FailedToAdd = false;
-  success = false;
 
   recipeForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -125,17 +119,18 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
 
         // Mapowanie starych polskich nazw kategorii na nowe klucze
         const categoryMap: { [key: string]: string } = {
-          'śniadanie': 'BREAKFAST',
-          'obiad': 'LUNCH', 
-          'kolacja': 'DINNER',
-          'deser': 'DESSERT',
-          'przekąska': 'SNACK',
-          'napój': 'DRINK',
-          'sałatka': 'SALAD',
-          'zupa': 'SOUP'
+          śniadanie: 'BREAKFAST',
+          obiad: 'LUNCH',
+          kolacja: 'DINNER',
+          deser: 'DESSERT',
+          przekąska: 'SNACK',
+          napój: 'DRINK',
+          sałatka: 'SALAD',
+          zupa: 'SOUP',
         };
-        
-        const mappedCategory = categoryMap[response.category] || response.category;
+
+        const mappedCategory =
+          categoryMap[response.category] || response.category;
 
         this.recipeForm.patchValue({
           title: response.recipeName,
@@ -160,12 +155,18 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
             : step.content,
         }));
 
-        this.isPublic = response.isPublic;
-
         if (response.images && response.images.length > 0) {
           this.currentImageUrl = response.images[0].imageUrl;
           this.imagePreview = this.currentImageUrl;
           this.hasExistingImage = true;
+          this.recipeForm.patchValue({
+            images: null,
+          });
+        } else {
+          // No images in response - clear image display
+          this.currentImageUrl = null;
+          this.imagePreview = null;
+          this.hasExistingImage = false;
           this.recipeForm.patchValue({
             images: null,
           });
@@ -176,16 +177,13 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       },
     });
   }
-  
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   addIngredient() {
-    this.alreadyExists = false;
-    this.fillAll = true;
-
     const ingredientName = this.recipeForm.get('ingredients')?.value || '';
     const quantity = this.recipeForm.get('quantity')?.value || 0;
     const unit = this.recipeForm.get('unit')?.value || '';
@@ -197,7 +195,10 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
     );
 
     if (ingredientExists) {
-      this.alreadyExists = true;
+      this.notificationService.warning(
+        'This ingredient already exists in the recipe.',
+        5000
+      );
       return;
     }
 
@@ -216,7 +217,10 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
         isOptional: false,
       });
     } else {
-      this.fillAll = false;
+      this.notificationService.warning(
+        'Please fill in all fields for the ingredient.',
+        5000
+      );
     }
   }
 
@@ -227,7 +231,10 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       this.steps.push({ content: stepContent.trim() });
       this.recipeForm.patchValue({ steps: '' });
     } else {
-      alert('Please enter a step.');
+      this.notificationService.warning(
+        'Please fill in the step description.',
+        5000
+      );
     }
   }
 
@@ -364,23 +371,20 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       this.notificationService.warning('Please wait, updating recipe...');
       return;
     }
-    
+
     const now = Date.now();
     if (now - this.lastUpdateAttempt < this.minTimeBetweenUpdates) {
       this.notificationService.warning('Please wait before updating again');
       return;
     }
-    
+
     this.updateAttempts$.next();
   }
-  
+
   private executeUpdate() {
     if (this.isUpdating) {
       return;
     }
-    
-    this.FailedToAdd = false;
-    this.success = false;
 
     if (this.ingredients.length === 0) {
       this.notificationService.error('Please add at least one ingredient.');
@@ -391,7 +395,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       this.notificationService.error('Please add at least one step.');
       return;
     }
-    
+
     this.isUpdating = true;
     this.lastUpdateAttempt = Date.now();
 
@@ -426,14 +430,12 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
 
     this.recipeService.updateRecipe(formData, this.recipeId).subscribe({
       next: () => {
-        this.success = true;
-        this.FailedToAdd = false;
         this.notificationService.success('Recipe updated successfully!', 5000);
         this.isUpdating = false;
+        // Reload recipe data to reflect changes (especially image deletion)
+        this.loadRecipeDetails();
       },
       error: () => {
-        this.FailedToAdd = true;
-        this.success = false;
         this.notificationService.error('Failed to update recipe', 5000);
         this.isUpdating = false;
       },

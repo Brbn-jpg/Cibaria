@@ -67,4 +67,45 @@ export class AuthService {
       })
     );
   }
+
+  isAdmin(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const roles = payload.roles || [];
+      return roles.includes('ADMIN');
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return false;
+    }
+  }
+
+  hasRole(role: string): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const roles = payload.roles || [];
+      return roles.includes(role);
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return false;
+    }
+  }
+
+  getUserRoles(): string[] {
+    const token = this.getToken();
+    if (!token) return [];
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.roles || [];
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return [];
+    }
+  }
 }

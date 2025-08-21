@@ -30,6 +30,7 @@ export class MobileNavComponent implements OnInit, OnDestroy {
   };
 
   isLoggedIn = false;
+  isAdmin = false;
   Open = false;
   private authSubscription!: Subscription;
 
@@ -38,6 +39,7 @@ export class MobileNavComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.isLoggedIn$.subscribe(
       (isLoggedIn: boolean) => {
         this.isLoggedIn = isLoggedIn;
+        this.isAdmin = this.authService.isAdmin();
       }
     );
   }

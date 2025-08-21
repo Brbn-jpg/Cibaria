@@ -37,4 +37,6 @@ public interface UserService {
    MyProfileDto getUserRecipes (String token);
    MyProfileDto getFavouriteRecipes (String token);
 
+   UserEntity updateUser(int id, String role, String email, String username);
+
 }

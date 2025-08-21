@@ -73,12 +73,8 @@ public class RecipeController {
   public Recipe update(@PathVariable int id,
                       @RequestParam("recipe") String json,
                       @RequestHeader("Authorization") String token,
-                      @RequestParam(value = "images", required = false) List<MultipartFile> images) throws IOException {
-      
-      System.out.println("=== UPDATE KONTROLER ===");
-      System.out.println("Recipe ID: " + id);
-      System.out.println("JSON: " + json);
-      System.out.println("Images count: " + (images != null ? images.size() : 0));
+                      @RequestParam(value = "images", required = false) List<MultipartFile> images,
+                      @RequestParam(value = "keepExistingImage", required = false) String keepExistingImage) throws IOException {
       
       ObjectMapper objectMapper = new ObjectMapper();
       Recipe recipe = objectMapper.readValue(json, Recipe.class);
@@ -86,7 +82,8 @@ public class RecipeController {
       if(images != null && !images.isEmpty()) {
           return recipeService.updateRecipeWithPhotos(id, recipe, images, token);
       } else {
-          return recipeService.updateRecipeWithoutPhotos(id, recipe, token);
+          boolean shouldKeepImages = "true".equals(keepExistingImage);
+          return recipeService.updateRecipeWithoutPhotos(id, recipe, token, shouldKeepImages);
       }
   }
 

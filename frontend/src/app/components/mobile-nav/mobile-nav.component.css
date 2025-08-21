@@ -102,6 +102,12 @@ nav {
   height: 2.4rem;
 }
 
+.admin-link:link,
+.admin-link:visited {
+  color: #d4ae6c !important;
+  font-weight: 600;
+}
+
 .active {
   visibility: visible;
   opacity: 1;

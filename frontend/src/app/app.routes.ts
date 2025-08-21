@@ -10,6 +10,7 @@ import { RecipeDetailedComponent } from './components/recipe-detailed/recipe-det
 import { ProfileComponent } from './components/profile/profile.component';
 import { AddRecipePanelComponent } from './components/add-recipe-panel/add-recipe-panel.component';
 import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 export const routes: Routes = [
   {
@@ -62,6 +63,11 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     data: { title: 'Cibaria | Your profile' },
+  },
+  {
+    path: 'admin',
+    component: AdminPanelComponent,
+    data: { title: 'Cibaria | Admin Panel' },
   },
 
   { path: '**', redirectTo: '', pathMatch: 'full' },

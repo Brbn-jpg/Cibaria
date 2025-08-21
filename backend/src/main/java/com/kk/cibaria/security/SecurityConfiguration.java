@@ -10,6 +10,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -38,8 +39,13 @@ public class SecurityConfiguration {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(req -> {
       req.requestMatchers("/authenticate", "/register").permitAll();
-      req.requestMatchers("/recipes/**", "/image/**").permitAll();
+      req.requestMatchers(HttpMethod.GET, "/recipes/**").permitAll();
+      req.requestMatchers(HttpMethod.POST, "/recipes").authenticated();
+      req.requestMatchers(HttpMethod.PUT, "/recipes/**").authenticated(); 
+      req.requestMatchers(HttpMethod.DELETE, "/recipes/**").authenticated();
+      req.requestMatchers("/image/**").permitAll();
       req.requestMatchers("/api/recipes/**", "/api/image/**").permitAll();
+      req.requestMatchers("/admin/**").hasRole("ADMIN");
       req.requestMatchers("/users/**").authenticated();
       req.anyRequest().authenticated();
     });

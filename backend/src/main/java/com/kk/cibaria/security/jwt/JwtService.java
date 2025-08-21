@@ -38,9 +38,10 @@ public class JwtService {
             userRepository.findByEmail(userDetails.getUsername()).orElseThrow(()->new UsernameNotFoundException("User " +
             "not " +
             "found"));
-    Map<String, String> claims = new HashMap<>();
+    Map<String, Object> claims = new HashMap<>();
     claims.put("provider", "kkBackendTeam");
     claims.put("id", String.valueOf(user.getId()));
+    claims.put("roles", user.getRole().split(","));
 
     return Jwts.builder()
         .claims(claims)
@@ -78,6 +79,16 @@ public class JwtService {
   public boolean isTokenValid(String jwt) {
     Claims claims = getClaims(jwt);
     return claims.getExpiration().after(Date.from(Instant.now()));
+  }
+
+  public boolean hasRole(String jwt, String role) {
+    Claims claims = getClaims(jwt);
+    @SuppressWarnings("unchecked")
+    java.util.List<String> roles = (java.util.List<String>) claims.get("roles");
+    if (roles != null) {
+      return roles.contains(role);
+    }
+    return false;
   }
 
 }

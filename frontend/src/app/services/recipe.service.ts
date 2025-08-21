@@ -3,17 +3,19 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Recipe } from '../Interface/recipe';
 import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeService {
-  constructor(private http: HttpClient) {}
-  private getAuthHeaders(): HttpHeaders | undefined {
-    const token = localStorage.getItem('token');
-    return token
-      ? new HttpHeaders().set('Authorization', `Bearer ${token}`)
-      : undefined;
+  constructor(private http: HttpClient, private authService: AuthService) {}
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    if (token) {
+      return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    }
+    return new HttpHeaders();
   }
 
   url = `${environment.apiUrl}/recipes`;

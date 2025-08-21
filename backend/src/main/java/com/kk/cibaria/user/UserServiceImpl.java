@@ -339,6 +339,7 @@ public class UserServiceImpl implements UserService {
     dto.setDifficulty(recipe.getDifficulty());
     dto.setPrepareTime(recipe.getPrepareTime());
     dto.setLanguage(recipe.getLanguage());
+    dto.setIngredients(recipe.getIngredients());
     
     List<Rating> ratings = recipe.getRatings();
     if (ratings != null && !ratings.isEmpty()) {
@@ -352,5 +353,32 @@ public class UserServiceImpl implements UserService {
     }
     
     return dto;
+  }
+
+  @Override
+  public UserEntity updateUser(int id, String role, String email, String username) {
+    UserEntity user = userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", id)));
+    
+    // Check if email already exists for a different user
+    if (email != null && !email.trim().isEmpty()) {
+      Optional<UserEntity> existingUser = userRepository.findByEmail(email.trim().toLowerCase());
+      if (existingUser.isPresent() && existingUser.get().getId() != id) {
+        throw new UserEmailAlreadyExistException("Email already exists");
+      }
+      user.setEmail(email.trim().toLowerCase());
+    }
+    
+    // Update username if provided
+    if (username != null && !username.trim().isEmpty()) {
+      user.setUsername(username.trim());
+    }
+    
+    // Update role if provided  
+    if (role != null && !role.trim().isEmpty()) {
+      user.setRole(role);
+    }
+    
+    return userRepository.save(user);
   }
 }

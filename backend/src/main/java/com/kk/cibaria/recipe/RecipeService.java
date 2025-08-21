@@ -17,7 +17,7 @@ public interface RecipeService {
 
   Recipe saveRecipeWithPhotos(RecipeAddDto recipe, List<MultipartFile> images, String token);
 
-  Recipe updateRecipeWithoutPhotos(int id, Recipe recipe, String token);
+  Recipe updateRecipeWithoutPhotos(int id, Recipe recipe, String token, boolean keepExistingImages);
 
   Recipe updateRecipeWithPhotos(int id, Recipe recipe, List<MultipartFile> images, String token);
 

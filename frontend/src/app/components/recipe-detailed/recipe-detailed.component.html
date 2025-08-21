@@ -185,15 +185,31 @@
       </div>
     </div>
     @if (showConfirmation){
-    <div class="confirm-delete">
-      <h2>{{ "RECIPE_DETAILED.DELETE_CONFIRMATION" | translate }}</h2>
-      <div class="btns">
-        <button class="confirmation-btn yes" (click)="confirmDelete()">
-          {{ "RECIPE_DETAILED.YES_DELETE" | translate }}
-        </button>
-        <button class="confirmation-btn" (click)="cancelDelete()">
-          {{ "RECIPE_DETAILED.NO" | translate }}
-        </button>
+    <div class="modal-overlay" (click)="cancelDelete()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>{{ "RECIPE_DETAILED.DELETE_CONFIRMATION" | translate }}</h3>
+          <button
+            type="button"
+            class="close-button"
+            (click)="cancelDelete()"
+          >
+            ×
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p>{{ "RECIPE_DETAILED.DELETE_WARNING" | translate }}</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="cancelDelete()">
+            {{ "RECIPE_DETAILED.NO" | translate }}
+          </button>
+          <button type="button" class="btn-delete" (click)="confirmDelete()">
+            {{ "RECIPE_DETAILED.YES_DELETE" | translate }}
+          </button>
+        </div>
       </div>
     </div>
     }

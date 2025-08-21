@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   };
 
   isLoggedIn = false;
+  isAdmin = false;
   language: string = 'en';
 
   constructor(
@@ -38,6 +39,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
     this.authService.isLoggedIn$.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
+      this.isAdmin = this.authService.isAdmin();
     });
   }
 

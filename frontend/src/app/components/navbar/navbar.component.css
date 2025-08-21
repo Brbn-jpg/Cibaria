@@ -68,6 +68,16 @@ button {
   height: 2.4rem;
 }
 
+.admin-link:link,
+.admin-link:visited {
+  color: #d4ae6c !important;
+  font-weight: 600;
+}
+
+.admin-link::after {
+  background-color: #d4ae6c !important;
+}
+
 .active {
   display: 0;
 }

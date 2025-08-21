@@ -134,7 +134,11 @@ public class RecipeServiceImpl implements RecipeService {
     UserEntity currentUser = userRepository.findById(userId).orElseThrow(
       () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
    
-    if (recipeFound.getUser().getId() != currentUser.getId()) {
+    // Check if user is owner or admin
+    boolean isOwner = recipeFound.getUser().getId() == currentUser.getId();
+    boolean isAdmin = jwtService.hasRole(token.substring(7), "ADMIN");
+    
+    if (!isOwner && !isAdmin) {
        throw new UnauthorizedException("You can edit only your own recipes!");
     }
 
@@ -181,7 +185,7 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Transactional
   @Override
-  public Recipe updateRecipeWithoutPhotos(int id, Recipe recipe, String token) {
+  public Recipe updateRecipeWithoutPhotos(int id, Recipe recipe, String token, boolean keepExistingImages) {
     Recipe recipeFound = recipeRepository.findById(id).orElseThrow(
         () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
 
@@ -189,7 +193,11 @@ public class RecipeServiceImpl implements RecipeService {
     UserEntity currentUser = userRepository.findById(userId).orElseThrow(
       () -> new UserNotFoundException(String.format("User with id: %s does not exist in the database", userId)));
 
-    if (recipeFound.getUser().getId() != currentUser.getId()){
+    // Check if user is owner or admin
+    boolean isOwner = recipeFound.getUser().getId() == currentUser.getId();
+    boolean isAdmin = jwtService.hasRole(token.substring(7), "ADMIN");
+    
+    if (!isOwner && !isAdmin){
       throw new UnauthorizedException("You can edit only your own recipes!");
     }
     recipeFound.setRecipeName(recipe.getRecipeName());
@@ -212,6 +220,11 @@ public class RecipeServiceImpl implements RecipeService {
     recipeFound.setCategory(recipe.getCategory());
     recipeFound.setIsPublic(recipe.getIsPublic());
     recipeFound.setLanguage(recipe.getLanguage());
+
+    // Handle image deletion if not keeping existing images
+    if (!keepExistingImages) {
+      recipeFound.getImages().clear();
+    }
 
     return recipeRepository.save(recipeFound);
   }
@@ -306,7 +319,11 @@ public class RecipeServiceImpl implements RecipeService {
     Recipe recipe = recipeRepository.findById(id).orElseThrow(
         () -> new RecipeNotFoundException(String.format("Recipe with id: %s does not exist in the database", id)));
 
-    if (recipe.getUser() == null || recipe.getUser().getId() != user.getId()) {
+    // Check if user is owner or admin
+    boolean isOwner = recipe.getUser() != null && recipe.getUser().getId() == user.getId();
+    boolean isAdmin = jwtService.hasRole(token.substring(7), "ADMIN");
+    
+    if (!isOwner && !isAdmin) {
        throw new UnauthorizedException("You can delete only your own recipes!");
     }
 

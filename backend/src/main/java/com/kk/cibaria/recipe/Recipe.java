@@ -68,7 +68,7 @@ public class Recipe {
   @JsonBackReference("user-recipes")
   private UserEntity user;
 
-  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference("recipe-images")
   private List<Image> images = new ArrayList<>();
 

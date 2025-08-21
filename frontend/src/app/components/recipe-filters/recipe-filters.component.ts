@@ -34,7 +34,9 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
   @Input() activeTab: 'favourites' | 'userRecipes' | null = null; // input for active tab
   @Input() customCategories: string[] = []; //  input for custom categories
   @Input() customLanguages: Language[] = []; //  input for custom languages
+  @Input() customIngredients: string[] = []; //  input for custom ingredients
   @Input() useCustomData = false; //  input to determine data source
+  @Input() showIngredients = true; //  input to show/hide ingredients section
   @Output() filtersChanged = new EventEmitter<void>();
   @Output() tabChanged = new EventEmitter<'favourites' | 'userRecipes'>(); // output for tab changes
 
@@ -90,6 +92,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
         value: cat,
       }));
       this.languagesArray = this.customLanguages;
+      this.ingredientsArray = this.customIngredients;
       this.loadCurrentFiltersFromCustom();
     } else {
       this.loadLanguages();
@@ -105,7 +108,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['customLanguages'] && this.customLanguages) {
-      this, (this.languagesArray = this.customLanguages);
+      this.languagesArray = this.customLanguages;
       this.cdr.detectChanges();
     }
 
@@ -115,6 +118,11 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
         key: cat.toUpperCase(),
         value: cat,
       }));
+      this.cdr.detectChanges();
+    }
+
+    if (changes['customIngredients'] && this.customIngredients) {
+      this.ingredientsArray = this.customIngredients;
       this.cdr.detectChanges();
     }
   }
