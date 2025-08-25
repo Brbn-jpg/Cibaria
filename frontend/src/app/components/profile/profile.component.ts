@@ -140,7 +140,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   onFiltersChanged(): void {
     if (this.filtersComponent) {
+      const oldLanguage = this.filters.recipeLanguage;
       this.filters = this.filtersComponent.getCurrentFilters();
+      
+      // If language changed, reload ingredients
+      if (oldLanguage !== this.filters.recipeLanguage) {
+        this.loadIngredients();
+      }
+      
       this.currentPage = 1;
       this.applyFilters();
     }
@@ -327,7 +334,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   private loadIngredients(): void {
     if (this.activeTab === 'userRecipes' && this.userRecipes.length > 0) {
-      const allIngredients = this.userRecipes
+      let recipesToProcess = this.userRecipes;
+      
+      // Filter recipes by language if selected
+      if (this.filters.recipeLanguage) {
+        const filterLang = this.filters.recipeLanguage.trim().toLowerCase();
+        recipesToProcess = this.userRecipes.filter(
+          (recipe) => recipe.language?.trim().toLowerCase() === filterLang
+        );
+      }
+      
+      const allIngredients = recipesToProcess
         .flatMap(
           (recipe) => recipe.ingredients?.map((ing) => ing.ingredientName) || []
         )
