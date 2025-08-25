@@ -17,6 +17,7 @@ import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.image.ImageType;
 import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.ingredient.IngredientService;
 import com.kk.cibaria.rating.Rating;
 import com.kk.cibaria.rating.RatingRepository;
 import com.kk.cibaria.security.jwt.JwtService;
@@ -43,13 +44,15 @@ public class RecipeServiceImpl implements RecipeService {
   private final UserRepository userRepository;
   private final JwtService jwtService;
   private final ImageService imageService;
+  private final IngredientService ingredientService;
 
-  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, StepRepository stepRepository, RatingRepository ratingRepository) {
+  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, StepRepository stepRepository, RatingRepository ratingRepository, IngredientService ingredientService) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
       this.jwtService = jwtService;
       this.imageService = imageService;
       this.ratingRepository = ratingRepository;
+      this.ingredientService = ingredientService;
   }
 
   @Override
@@ -97,6 +100,8 @@ public class RecipeServiceImpl implements RecipeService {
     newRecipe.setRecipeName(recipe.getRecipeName());
     newRecipe.setDifficulty(recipe.getDifficulty());
     newRecipe.setUser(user);
+    newRecipe.setLanguage(recipe.getLanguage());
+
     List<Ingredient> newIngredients = recipe.getIngredients().stream().map(i -> {
       Ingredient ingredient = new Ingredient();
       ingredient.setRecipe(newRecipe);
@@ -104,6 +109,7 @@ public class RecipeServiceImpl implements RecipeService {
       ingredient.setUnit(i.getUnit());
       ingredient.setQuantity(i.getQuantity());
       ingredient.setIsOptional(i.getIsOptional());
+      ingredient.setLanguage(recipe.getLanguage());
       return ingredient;
     }).toList();
 
@@ -119,7 +125,6 @@ public class RecipeServiceImpl implements RecipeService {
     newRecipe.setServings(recipe.getServings());
     newRecipe.setCategory(recipe.getCategory());
     newRecipe.setIsPublic(recipe.getIsPublic());
-    newRecipe.setLanguage(recipe.getLanguage());
 
     return newRecipe;
   }
@@ -245,7 +250,7 @@ public class RecipeServiceImpl implements RecipeService {
   public RecipeRequestDto getRecipeByPage(int page, int size, List<String> category,
                                           Integer difficulty, String servings, String prepareTime, Boolean isPublic, String language, List<String> ingredients) {
     Pagination pagination = new Pagination();
-    RecipeFilter filter = new RecipeFilter();
+    RecipeFilter filter = new RecipeFilter(ingredientService);
     List<Recipe> recipes = recipeRepository.findAll();
 
     if(isPublic != null && isPublic){

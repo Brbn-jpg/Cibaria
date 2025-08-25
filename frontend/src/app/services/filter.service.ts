@@ -77,16 +77,28 @@ export class FilterService {
     });
   }
 
-  loadIngredients(): Observable<string[]> {
+  loadIngredients(language?: string): Observable<string[]> {
     return new Observable((observer) => {
       this.http.get<RecipesResponse>(this.url).subscribe({
         next: (response) => {
           if (response && Array.isArray(response.content)) {
-            const allIngredients = response.content
-              .flatMap(recipe => recipe.ingredients?.map(ing => ing.ingredientName) || [])
-              .filter(ing => ing && ing.trim() !== '');
-            
-            const uniqueIngredients = Array.from(new Set(allIngredients)).sort();
+            let filteredRecipes = response.content;
+            if (language) {
+              filteredRecipes = response.content.filter(
+                (recipe) => recipe.language === language
+              );
+            }
+
+            const allIngredients = filteredRecipes
+              .flatMap(
+                (recipe) =>
+                  recipe.ingredients?.map((ing) => ing.ingredientName) || []
+              )
+              .filter((ing) => ing && ing.trim() !== '');
+
+            const uniqueIngredients = Array.from(
+              new Set(allIngredients)
+            ).sort();
             observer.next(uniqueIngredients);
           } else {
             observer.next([]);

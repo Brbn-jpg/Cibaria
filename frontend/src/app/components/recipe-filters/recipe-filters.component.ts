@@ -143,7 +143,7 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
 
   private loadIngredients(): void {
     this.filterService
-      .loadIngredients()
+      .loadIngredients(this.selectedLanguage)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (ingredients) => {
@@ -214,7 +214,10 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
       difficulty:
         this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty,
       recipeLanguage: this.selectedLanguage || undefined,
-      ingredients: this.selectedIngredients.length > 0 ? this.selectedIngredients : undefined,
+      ingredients:
+        this.selectedIngredients.length > 0
+          ? this.selectedIngredients
+          : undefined,
       currentPage: 1,
     };
   }
@@ -227,6 +230,14 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     this.filterChange$.next();
   }
 
+  onLanguageChange(): void {
+    if (!this.useCustomData) {
+      this.loadIngredients();
+    }
+    this.selectedIngredients = [];
+    this.filterChange$.next();
+  }
+
   onTabChange(tab: 'favourites' | 'userRecipes'): void {
     this.activeTab = tab;
     this.tabChanged.emit(tab);
@@ -236,7 +247,9 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
     if (isChecked) {
       this.selectedIngredients = [...this.selectedIngredients, ingredient];
     } else {
-      this.selectedIngredients = this.selectedIngredients.filter(i => i !== ingredient);
+      this.selectedIngredients = this.selectedIngredients.filter(
+        (i) => i !== ingredient
+      );
     }
     this.onFilterChange();
   }
@@ -261,7 +274,10 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
         difficulty:
           this.selectedDifficulty === '' ? undefined : +this.selectedDifficulty,
         recipeLanguage: this.selectedLanguage || undefined,
-        ingredients: this.selectedIngredients.length > 0 ? this.selectedIngredients : undefined,
+        ingredients:
+          this.selectedIngredients.length > 0
+            ? this.selectedIngredients
+            : undefined,
         currentPage: 1,
       };
 

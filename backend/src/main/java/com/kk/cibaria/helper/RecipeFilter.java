@@ -1,10 +1,19 @@
 package com.kk.cibaria.helper;
 
+import com.kk.cibaria.ingredient.Ingredient;
+import com.kk.cibaria.ingredient.IngredientService;
 import com.kk.cibaria.recipe.Recipe;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecipeFilter {
+
+    private final IngredientService ingredientService;
+
+    public RecipeFilter(IngredientService ingredientService) {
+        this.ingredientService = ingredientService;
+    }
 
     public List<Recipe> filterByParams(List<String> category, Integer difficulty,
                                        String servings, String prepareTime,
@@ -59,7 +68,14 @@ public class RecipeFilter {
                     .toList();
         }
 
-        return filteredRecipes;
+        return filteredRecipes.stream()
+            .peek(recipe -> {
+                if (language != null && !language.isEmpty()) {
+                    List<Ingredient> languageFiltered = ingredientService.filterByLanguage(recipe.getIngredients(), language);
+                    recipe.setIngredients(languageFiltered);
+                }
+            })
+            .collect(Collectors.toList());
 
     }
 }

@@ -26,6 +26,7 @@ public class Ingredient {
   private float quantity;
   private String unit;
   private Boolean isOptional;
+  private String language;
 
   @ManyToOne
   @JoinColumn(name = "recipe_id")
