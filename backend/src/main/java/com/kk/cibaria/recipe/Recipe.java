@@ -59,10 +59,10 @@ public class Recipe {
   @JsonManagedReference("rating")
   private List<Rating> ratings = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "favouriteRecipes")
+  @ManyToMany(mappedBy = "favouriteRecipes", cascade = CascadeType.ALL)
   @JsonIgnore
-  private List<UserEntity> favouriteByUsers = new ArrayList<>()  ;
-
+  private List<UserEntity> favouriteByUsers = new ArrayList<>();
+ 
   @ManyToOne
   @JoinColumn(name = "user_id")
   @JsonBackReference("user-recipes")

@@ -182,7 +182,7 @@ public class RecipeServiceImpl implements RecipeService {
         });
        
        recipeFound.getImages().clear();
-       recipeFound.setImages(newImages);
+       recipeFound.getImages().addAll(newImages);
        
     }
   return recipeRepository.save(recipeFound);
@@ -332,6 +332,12 @@ public class RecipeServiceImpl implements RecipeService {
        throw new UnauthorizedException("You can delete only your own recipes!");
     }
 
+    recipe.getFavouriteByUsers().forEach(favUser -> {
+        favUser.getFavouriteRecipes().remove(recipe);
+    });
+    recipe.getFavouriteByUsers().clear();
+    
+    recipeRepository.save(recipe);
     recipeRepository.delete(recipe);
   }
 

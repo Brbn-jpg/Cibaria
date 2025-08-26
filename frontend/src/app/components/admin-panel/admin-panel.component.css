@@ -297,6 +297,12 @@ tr:hover {
   padding: 2rem;
 }
 
+.modal-body p {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: #ccc;
+}
+
 .form-group {
   margin-bottom: 1.5rem;
 }

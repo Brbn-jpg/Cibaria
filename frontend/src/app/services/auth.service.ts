@@ -71,7 +71,7 @@ export class AuthService {
   isAdmin(): boolean {
     const token = this.getToken();
     if (!token) return false;
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const roles = payload.roles || [];
@@ -85,7 +85,7 @@ export class AuthService {
   hasRole(role: string): boolean {
     const token = this.getToken();
     if (!token) return false;
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const roles = payload.roles || [];
@@ -99,7 +99,7 @@ export class AuthService {
   getUserRoles(): string[] {
     const token = this.getToken();
     if (!token) return [];
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.roles || [];
