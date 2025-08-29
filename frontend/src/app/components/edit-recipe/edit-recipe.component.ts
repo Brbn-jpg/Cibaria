@@ -15,7 +15,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeService } from '../../services/recipe.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { NotificationService } from '../../services/notification.service';
@@ -66,6 +66,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   constructor(
     private recipeService: RecipeService,
     private route: ActivatedRoute,
+    private router: Router,
     private notificationService: NotificationService,
     private authService: AuthService
   ) {
@@ -172,8 +173,13 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
           });
         }
       },
-      error: () => {
-        this.notificationService.error('Failed to load recipe details', 5000);
+      error: (err) => {
+        // Check if it's a 404 error (recipe not found)
+        if (err.status === 404) {
+          this.router.navigate(['/not-found']);
+        } else {
+          this.notificationService.error('Failed to load recipe details', 5000);
+        }
       },
     });
   }

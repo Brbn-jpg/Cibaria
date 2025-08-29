@@ -1,6 +1,6 @@
 <div class="edit-section">
   <div class="edit-field">
-    <label class="edit-label">{{ 'EDIT_PROFILE.USERNAME' | translate }}</label>
+    <label class="edit-label">{{ "EDIT_PROFILE.USERNAME" | translate }}</label>
     <input
       id="username-id"
       placeholder="{{ 'EDIT_PROFILE.USERNAME_PLACEHOLDER' | translate }}"
@@ -13,7 +13,9 @@
   </div>
 
   <div class="edit-field">
-    <label class="edit-label">{{ 'EDIT_PROFILE.DESCRIPTION' | translate }}</label>
+    <label class="edit-label">{{
+      "EDIT_PROFILE.DESCRIPTION" | translate
+    }}</label>
     <textarea
       id="description-id"
       placeholder="{{ 'EDIT_PROFILE.DESCRIPTION_PLACEHOLDER' | translate }}"
@@ -26,15 +28,19 @@
     <small class="small-textarea"
       >{{ descriptionInput.value?.length || 0 }}/255</small
     >
-    <div>
-      <button class="save-btn" (click)="save()" [disabled]="isUpdatingUsername || isUpdatingDescription">
+    <div class="buttons">
+      <button
+        class="cibaria-btn cibaria-btn-primary"
+        (click)="save()"
+        [disabled]="isUpdatingUsername || isUpdatingDescription"
+      >
         @if (!isUpdatingUsername && !isUpdatingDescription) {
-          {{ 'EDIT_PROFILE.SAVE' | translate }}
-        } @else {
-          Saving...
-        }
+        {{ "EDIT_PROFILE.SAVE" | translate }}
+        } @else { Saving... }
       </button>
-      <button class="cancel-btn" (click)="cancelEdit()">{{ 'EDIT_PROFILE.CANCEL' | translate }}</button>
+      <button class="cibaria-btn cibaria-btn-secondary" (click)="cancelEdit()">
+        {{ "EDIT_PROFILE.CANCEL" | translate }}
+      </button>
     </div>
   </div>
 </div>

@@ -1,6 +1,6 @@
 import { RecipeService } from '../../services/recipe.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { Recipe } from '../../Interface/recipe';
 import { Ingredients } from '../../Interface/ingredients';
 import { AuthService } from '../../services/auth.service';
@@ -38,6 +38,7 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private authService: AuthService,
     private recipeService: RecipeService,
     private notificationService: NotificationService,
@@ -126,8 +127,13 @@ export class RecipeDetailedComponent implements OnInit, OnDestroy {
         }));
         this.checkOwnership();
       },
-      error: () => {
-        this.notificationService.error('Error loading recipe details', 5000);
+      error: (err) => {
+        // Check if it's a 404 error (recipe not found)
+        if (err.status === 404) {
+          this.router.navigate(['/not-found']);
+        } else {
+          this.notificationService.error('Error loading recipe details', 5000);
+        }
       },
     });
   }

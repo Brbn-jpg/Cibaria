@@ -10,8 +10,9 @@ public class IngredientServiceImpl implements IngredientService{
 
     @Override
     public List<Ingredient> filterByLanguage(List<Ingredient> ingredients, String language) {
+        String targetLanguage = language != null ? language : "en";
         return ingredients.stream()
-                .filter(ingredient -> language.equalsIgnoreCase(ingredient.getLanguage()))
+                .filter(ingredient -> targetLanguage.equalsIgnoreCase(ingredient.getLanguage()))
                 .collect(Collectors.toList());
     }
 }

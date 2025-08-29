@@ -6,6 +6,7 @@ import com.kk.cibaria.user.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 public class RegisterController {
@@ -16,7 +17,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public TokenResponseDto RegisterUser(@RequestBody RegisterDto dto) {
+    public TokenResponseDto RegisterUser(@Valid @RequestBody RegisterDto dto) {
         return userService.save(dto);
     }
 }

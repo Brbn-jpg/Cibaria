@@ -1,3 +1,5 @@
+@import '../../shared/styles/button-styles.css';
+
 .admin-panel {
   min-height: 100vh;
   background: #000;
@@ -23,25 +25,10 @@
   gap: 1rem;
 }
 
-.tab-button {
-  padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
-  color: #fff;
-  font-size: 1.4rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.tab-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
 .tab-button.active {
-  background: #d4ae6c;
-  color: #000;
-  border-color: #d4ae6c;
+  background: #d4ae6c !important;
+  color: #000 !important;
+  border-color: #d4ae6c !important;
 }
 
 .admin-content {
@@ -176,64 +163,6 @@ tr:hover {
   gap: 0.8rem;
 }
 
-.btn-edit,
-.btn-delete,
-.btn-toggle,
-.btn-save,
-.btn-cancel {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-edit {
-  background: #d4ae6c;
-  color: #000;
-}
-
-.btn-edit:hover {
-  background: #f7d79c;
-}
-
-.btn-delete {
-  background: #dc143c;
-  color: #fff;
-}
-
-.btn-delete:hover {
-  background: #b22222;
-}
-
-.btn-toggle {
-  background: #6495ed;
-  color: #fff;
-  min-width: 12rem;
-  text-align: center;
-}
-
-.btn-toggle:hover {
-  background: #4169e1;
-}
-
-.btn-save {
-  background: #32cd32;
-  color: #fff;
-}
-
-.btn-save:hover {
-  background: #228b22;
-}
-
-.btn-cancel {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-.btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
 
 /* Modal */
 .modal-overlay {
@@ -338,21 +267,6 @@ tr:hover {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Delete Button Styles */
-.btn-delete {
-  padding: 1rem 2rem;
-  font-size: 1.4rem;
-  border: none;
-  border-radius: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  background-color: #dc2626;
-  color: #fff;
-}
-
-.btn-delete:hover {
-  background-color: #b91c1c;
-}
 
 /* Responsive */
 @media (max-width: 768px) {

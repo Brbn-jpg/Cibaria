@@ -84,7 +84,9 @@
     [customLanguages]="languagesArray"
     [customIngredients]="ingredientsArray"
     [useCustomData]="true"
-    [showIngredients]="activeTab === 'userRecipes' && ingredientsArray.length > 0"
+    [showIngredients]="
+      activeTab === 'userRecipes' && ingredientsArray.length > 0
+    "
     (filtersChanged)="onFiltersChanged()"
     (tabChanged)="onTabChanged($event)"
   ></app-recipe-filters>
@@ -98,9 +100,9 @@
     <app-recipe-card [recipe]="recipe"></app-recipe-card>
     } @if (filteredFavouriteRecipes.length === 0 && favouriteRecipes.length > 0)
     {
-    <p class="no-recipes">{{ 'PROFILE.NO_RECIPES_FOUND' | translate }}</p>
+    <p class="no-recipes">{{ "PROFILE.NO_RECIPES_FOUND" | translate }}</p>
     } @if (favouriteRecipes.length === 0) {
-    <p class="no-recipes">{{ 'PROFILE.NO_FAVOURITE_RECIPES' | translate }}</p>
+    <p class="no-recipes">{{ "PROFILE.NO_FAVOURITE_RECIPES" | translate }}</p>
     }
   </div>
   }
@@ -111,9 +113,9 @@
     @for (recipe of paginatedUserRecipes; track $index) {
     <app-recipe-card [recipe]="recipe"></app-recipe-card>
     } @if (filteredUserRecipes.length === 0 && userRecipes.length > 0) {
-    <p class="no-recipes">{{ 'PROFILE.NO_RECIPES_FOUND' | translate }}</p>
+    <p class="no-recipes">{{ "PROFILE.NO_RECIPES_FOUND" | translate }}</p>
     } @if (userRecipes.length === 0) {
-    <p class="no-recipes">{{ 'PROFILE.NO_USER_RECIPES' | translate }}</p>
+    <p class="no-recipes">{{ "PROFILE.NO_USER_RECIPES" | translate }}</p>
     }
   </div>
   }
@@ -122,19 +124,22 @@
   @if (filteredFavouriteRecipes.length > 0 || filteredUserRecipes.length > 0) {
   <div class="pagination">
     <button
-      class="btn"
+      class="cibaria-btn cibaria-btn-xs cibaria-btn-secondary"
       [disabled]="currentPage === 1"
       (click)="onPageChange(currentPage - 1)"
     >
-      {{ 'PROFILE.PREVIOUS' | translate }}
+      {{ "PROFILE.PREVIOUS" | translate }}
     </button>
-    <span class="pages">{{ 'PROFILE.PAGE_OF' | translate: {currentPage: currentPage, totalPages: totalPages} }}</span>
+    <span class="pages">{{
+      "PROFILE.PAGE_OF"
+        | translate : { currentPage: currentPage, totalPages: totalPages }
+    }}</span>
     <button
-      class="btn"
+      class="cibaria-btn cibaria-btn-xs cibaria-btn-secondary"
       [disabled]="currentPage === totalPages"
       (click)="onPageChange(currentPage + 1)"
     >
-      {{ 'PROFILE.NEXT' | translate }}
+      {{ "PROFILE.NEXT" | translate }}
     </button>
   </div>
   }

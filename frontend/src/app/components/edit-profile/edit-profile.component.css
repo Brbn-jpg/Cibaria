@@ -1,3 +1,5 @@
+@import "../../shared/styles/button-styles.css";
+
 .edit-section {
   display: flex;
   flex-direction: column;
@@ -62,15 +64,10 @@ textarea.edit-input {
   pointer-events: none;
 }
 
-.save-btn,
-.cancel-btn {
-  margin-top: 1.2rem;
-  padding: 0.8rem 2rem;
-  font-size: 1.4rem;
-  border: none;
-  border-radius: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
 }
 
 .tick-icon {
@@ -78,25 +75,4 @@ textarea.edit-input {
   top: 0;
   right: 0;
   width: 2.4rem;
-}
-
-.save-btn {
-  background-color: #f7d79c;
-  color: #000;
-  margin-right: 1rem;
-}
-
-.save-btn:hover {
-  background-color: #e6c382;
-}
-
-.cancel-btn {
-  background-color: transparent;
-  color: #ccc;
-  border: 1px solid #555;
-}
-
-.cancel-btn:hover {
-  background-color: #333;
-  color: #fff;
 }

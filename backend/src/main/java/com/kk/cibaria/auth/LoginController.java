@@ -12,6 +12,7 @@ import com.kk.cibaria.exception.UserNotFoundException;
 import com.kk.cibaria.security.UserDetailService;
 import com.kk.cibaria.security.jwt.JwtService;
 import com.kk.cibaria.dto.auth.LoginFormDto;
+import jakarta.validation.Valid;
 
 @RestController
 public class LoginController {
@@ -28,7 +29,7 @@ public class LoginController {
   }
 
   @PostMapping("/authenticate")
-  public TokenResponseDto authenticate(@RequestBody LoginFormDto loginFormDto) {
+  public TokenResponseDto authenticate(@Valid @RequestBody LoginFormDto loginFormDto) {
     try{
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginFormDto.email(),
               loginFormDto.password()));

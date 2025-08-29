@@ -4,13 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.kk.cibaria.recipe.Recipe;
 import com.kk.cibaria.user.UserEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,5 +27,6 @@ public class Rating {
   @JsonBackReference("rating")
   private Recipe recipe;
 
+  @Column(name = "rating_value")
   private int value;
 }

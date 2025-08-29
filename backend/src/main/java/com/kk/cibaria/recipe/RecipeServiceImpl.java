@@ -13,6 +13,7 @@ import com.kk.cibaria.exception.RecipeErrorException;
 import com.kk.cibaria.exception.UserNotFoundException;
 import com.kk.cibaria.helper.Pagination;
 import com.kk.cibaria.helper.RecipeFilter;
+import com.kk.cibaria.cloudinary.CloudinaryService;
 import com.kk.cibaria.image.Image;
 import com.kk.cibaria.image.ImageService;
 import com.kk.cibaria.image.ImageType;
@@ -44,13 +45,15 @@ public class RecipeServiceImpl implements RecipeService {
   private final UserRepository userRepository;
   private final JwtService jwtService;
   private final ImageService imageService;
+  private final CloudinaryService cloudinaryService;
   private final IngredientService ingredientService;
 
-  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, StepRepository stepRepository, RatingRepository ratingRepository, IngredientService ingredientService) {
+  public RecipeServiceImpl(RecipeRepository recipeRepository, UserRepository userRepository, JwtService jwtService, ImageService imageService, CloudinaryService cloudinaryService, StepRepository stepRepository, RatingRepository ratingRepository, IngredientService ingredientService) {
     this.recipeRepository = recipeRepository;
     this.userRepository = userRepository;
       this.jwtService = jwtService;
       this.imageService = imageService;
+      this.cloudinaryService = cloudinaryService;
       this.ratingRepository = ratingRepository;
       this.ingredientService = ingredientService;
   }
@@ -168,6 +171,18 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     if (images != null && !images.isEmpty()) {
+      // Remove old images from Cloudinary before replacing them
+      if (recipeFound.getImages() != null && !recipeFound.getImages().isEmpty()) {
+        recipeFound.getImages().forEach(oldImage -> {
+          try {
+            cloudinaryService.removePhoto(oldImage.getPublicId());
+          } catch (Exception e) {
+            // Log error but don't stop update process
+            System.err.println("Failed to delete old image from Cloudinary: " + oldImage.getPublicId() + ", Error: " + e.getMessage());
+          }
+        });
+      }
+
       List<Image> newImages = new ArrayList<>();
       images.forEach(image -> {
           try {
@@ -228,6 +243,17 @@ public class RecipeServiceImpl implements RecipeService {
 
     // Handle image deletion if not keeping existing images
     if (!keepExistingImages) {
+      // Remove images from Cloudinary
+      if (recipeFound.getImages() != null && !recipeFound.getImages().isEmpty()) {
+        recipeFound.getImages().forEach(image -> {
+          try {
+            cloudinaryService.removePhoto(image.getPublicId());
+          } catch (Exception e) {
+            // Log error but don't stop update process
+            System.err.println("Failed to delete image from Cloudinary: " + image.getPublicId() + ", Error: " + e.getMessage());
+          }
+        });
+      }
       recipeFound.getImages().clear();
     }
 
@@ -330,6 +356,18 @@ public class RecipeServiceImpl implements RecipeService {
     
     if (!isOwner && !isAdmin) {
        throw new UnauthorizedException("You can delete only your own recipes!");
+    }
+
+    // Remove images from Cloudinary before deleting recipe
+    if (recipe.getImages() != null && !recipe.getImages().isEmpty()) {
+      recipe.getImages().forEach(image -> {
+        try {
+          cloudinaryService.removePhoto(image.getPublicId());
+        } catch (Exception e) {
+          // Log error but don't stop deletion process
+          System.err.println("Failed to delete image from Cloudinary: " + image.getPublicId() + ", Error: " + e.getMessage());
+        }
+      });
     }
 
     recipe.getFavouriteByUsers().forEach(favUser -> {

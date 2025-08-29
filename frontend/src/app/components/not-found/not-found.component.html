@@ -1,0 +1,27 @@
+<div class="not-found-container">
+  <div class="not-found-content">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Strona nie została znaleziona</h2>
+    <p class="error-message">
+      Przepraszamy, ale strona której szukasz nie istnieje lub została
+      przeniesiona.
+    </p>
+
+    <div class="error-suggestions">
+      <p>Co możesz zrobić:</p>
+      <ul>
+        <li>Sprawdź czy adres URL jest poprawny</li>
+        <li>Wróć do <a routerLink="/" class="link">strony głównej</a></li>
+        <li>Przejdź do <a routerLink="/recipes" class="link">przepisów</a></li>
+        <li>
+          <a (click)="goBack()" class="link">Wróć do poprzedniej strony</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn btn-primary" routerLink="/">Strona główna</button>
+      <button class="btn btn-secondary" routerLink="/recipes">Przepisy</button>
+    </div>
+  </div>
+</div>

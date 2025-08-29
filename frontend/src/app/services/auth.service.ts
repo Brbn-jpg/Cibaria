@@ -26,11 +26,16 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string): Observable<any> {
+  login(email: string, password: string, rememberMe: boolean = false): Observable<any> {
     const body = { email: email, password: password };
     return this.http.post(this.apiUrl + '/authenticate', body).pipe(
       tap((response: any) => {
         if (response && response.token) {
+          if (rememberMe) {
+            localStorage.setItem('token', response.token);
+          } else {
+            sessionStorage.setItem('token', response.token);
+          }
           this.isLoggedInSubject.next(true);
         }
       })
@@ -62,6 +67,7 @@ export class AuthService {
     return this.http.post(this.apiUrl + '/register', body).pipe(
       tap((response: any) => {
         if (response && response.token) {
+          sessionStorage.setItem('token', response.token);
           this.isLoggedInSubject.next(true);
         }
       })

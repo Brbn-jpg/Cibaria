@@ -48,7 +48,7 @@ public class UserEntity {
   @JoinTable(name = "favourite_recipes",
   joinColumns = @JoinColumn(name = "user_id"),
   inverseJoinColumns = @JoinColumn(name = "recipe_id"))
-  List<Recipe> favouriteRecipes;
+  private List<Recipe> favouriteRecipes = new ArrayList<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @JsonManagedReference("user-images")

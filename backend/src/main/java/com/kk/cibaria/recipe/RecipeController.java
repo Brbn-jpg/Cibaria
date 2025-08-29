@@ -2,6 +2,7 @@ package com.kk.cibaria.recipe;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kk.cibaria.dto.FavouriteRequest;
@@ -54,16 +55,16 @@ public class RecipeController {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Recipe save(@RequestParam("recipe") String json,
                      @RequestHeader("Authorization") String token,                   
-                     @RequestParam(value = "images",required = false) List<MultipartFile> images) throws IOException {
+                     @RequestParam(value = "images", required = false) Optional<List<MultipartFile>> images) throws IOException {
 
     System.out.println("=== KONTROLER ===");
     System.out.println("JSON: " + json);
-    System.out.println("Images count: " + (images != null ? images.size() : 0));
+    System.out.println("Images count: " + (images.isPresent() && images.get() != null ? images.get().size() : 0));
     
     ObjectMapper objectMapper = new ObjectMapper();
     RecipeAddDto recipe = objectMapper.readValue(json,RecipeAddDto.class);
-    if(images!=null){
-     return recipeService.saveRecipeWithPhotos(recipe,images, token);
+    if(images.isPresent() && images.get() != null && !images.get().isEmpty()){
+     return recipeService.saveRecipeWithPhotos(recipe, images.get(), token);
     }else{
       return recipeService.saveRecipeWithoutPhoto(recipe, token);
     }

@@ -6,7 +6,7 @@
         <div class="fav-edit">
           @if (isLoggedIn){
           <div class="favourite">
-            <button class="favourite-btn" (click)="toggleFavourite()">
+            <button class="cibaria-btn cibaria-btn-secondary cibaria-btn-sm favourite-btn" (click)="toggleFavourite()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="favourite-icon icon"
@@ -28,7 +28,7 @@
           </div>
           @if(isOwner){
           <div class="edit">
-            <a class="edit-btn" [routerLink]="['/update-recipe', recipeId]">
+            <a class="cibaria-btn cibaria-btn-secondary cibaria-btn-sm edit-btn" [routerLink]="['/update-recipe', recipeId]">
               <img
                 src="images/icons/edit-icon.svg"
                 alt="Edit recipe"
@@ -40,7 +40,7 @@
             </p>
           </div>
           <div class="delete">
-            <button class="delete-btn" (click)="delete()">
+            <button class="cibaria-btn cibaria-btn-danger cibaria-btn-sm delete-btn" (click)="delete()">
               <img
                 src="images/icons/delete-icon.svg"
                 alt="Delete recipe"
@@ -191,7 +191,7 @@
           <h3>{{ "RECIPE_DETAILED.DELETE_CONFIRMATION" | translate }}</h3>
           <button
             type="button"
-            class="close-button"
+            class="cibaria-btn cibaria-btn-secondary cibaria-btn-sm close-button"
             (click)="cancelDelete()"
           >
             ×
@@ -203,10 +203,10 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn-cancel" (click)="cancelDelete()">
+          <button type="button" class="cibaria-btn cibaria-btn-secondary" (click)="cancelDelete()">
             {{ "RECIPE_DETAILED.NO" | translate }}
           </button>
-          <button type="button" class="btn-delete" (click)="confirmDelete()">
+          <button type="button" class="cibaria-btn cibaria-btn-danger" (click)="confirmDelete()">
             {{ "RECIPE_DETAILED.YES_DELETE" | translate }}
           </button>
         </div>

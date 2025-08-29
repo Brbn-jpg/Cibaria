@@ -11,6 +11,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AddRecipePanelComponent } from './components/add-recipe-panel/add-recipe-panel.component';
 import { EditRecipeComponent } from './components/edit-recipe/edit-recipe.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -70,5 +71,10 @@ export const routes: Routes = [
     data: { title: 'Cibaria | Admin Panel' },
   },
 
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  { 
+    path: 'not-found', 
+    component: NotFoundComponent,
+    data: { title: 'Cibaria | Strona nie znaleziona' }
+  },
+  { path: '**', component: NotFoundComponent },
 ];

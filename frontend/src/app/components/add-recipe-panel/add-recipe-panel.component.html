@@ -160,7 +160,11 @@
           {{ "ADD_RECIPE.OPTIONAL" | translate }}
         </div>
       </div>
-      <button type="button" (click)="addIngredient()">
+      <button
+        type="button"
+        class="cibaria-btn cibaria-btn-secondary"
+        (click)="addIngredient()"
+      >
         {{ "ADD_RECIPE.ADD_INGREDIENT" | translate }}
       </button>
 
@@ -176,7 +180,11 @@
             >
             }
           </p>
-          <button type="button" (click)="removeIngredient($index)">
+          <button
+            type="button"
+            class="cibaria-btn cibaria-btn-danger cibaria-btn-sm"
+            (click)="removeIngredient($index)"
+          >
             {{ "ADD_RECIPE.REMOVE" | translate }}
           </button>
         </li>
@@ -194,7 +202,11 @@
           placeholder="{{ 'ADD_RECIPE.STEP_PLACEHOLDER' | translate }}"
         ></textarea>
       </div>
-      <button type="button" (click)="addStep()">
+      <button
+        type="button"
+        class="cibaria-btn cibaria-btn-secondary"
+        (click)="addStep()"
+      >
         {{ "ADD_RECIPE.ADD_STEP" | translate }}
       </button>
       @for (step of steps; track $index) {
@@ -207,7 +219,7 @@
           <button
             type="button"
             (click)="removeStep($index)"
-            class="remove-step-btn"
+            class="cibaria-btn cibaria-btn-danger cibaria-btn-sm"
           >
             {{ "ADD_RECIPE.REMOVE" | translate }}
           </button>
@@ -247,7 +259,11 @@
         </p>
       </div>
       <hr />
-      <button type="submit" [disabled]="isSubmitting">
+      <button
+        type="submit"
+        class="cibaria-btn cibaria-btn-primary cibaria-btn-lg"
+        [disabled]="isSubmitting"
+      >
         @if (!isSubmitting) {
         {{ "ADD_RECIPE.ADD_RECIPE_BUTTON" | translate }}
         } @else { Submitting... }

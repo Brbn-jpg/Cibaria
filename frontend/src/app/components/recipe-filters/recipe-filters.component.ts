@@ -56,14 +56,14 @@ export class RecipeFiltersComponent implements OnInit, OnDestroy, OnChanges {
 
   // Categories with translation keys
   categoriesArray: { key: string; value: string }[] = [
-    { key: 'BREAKFAST', value: 'śniadanie' },
-    { key: 'LUNCH', value: 'obiad' },
-    { key: 'DINNER', value: 'kolacja' },
-    { key: 'DESSERT', value: 'deser' },
-    { key: 'SNACK', value: 'przekąska' },
-    { key: 'DRINK', value: 'napój' },
-    { key: 'SALAD', value: 'sałatka' },
-    { key: 'SOUP', value: 'zupa' },
+    { key: 'BREAKFAST', value: 'BREAKFAST' },
+    { key: 'LUNCH', value: 'LUNCH' },
+    { key: 'DINNER', value: 'DINNER' },
+    { key: 'DESSERT', value: 'DESSERT' },
+    { key: 'SNACK', value: 'SNACK' },
+    { key: 'DRINK', value: 'DRINK' },
+    { key: 'SALAD', value: 'SALAD' },
+    { key: 'SOUP', value: 'SOUP' },
   ];
   languagesArray: Language[] = [];
   ingredientsArray: string[] = [];

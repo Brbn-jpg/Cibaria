@@ -32,7 +32,7 @@
             name="rememberMe"
           />
         </div>
-        <button type="button" class="button" (click)="onLogin()" [disabled]="isLoginLoading">
+        <button type="button" class="cibaria-btn cibaria-btn-primary" (click)="onLogin()" [disabled]="isLoginLoading">
           @if (!isLoginLoading) {
             {{ "LOGIN_REGISTER.LOGIN.SUBMIT_BUTTON" | translate }}
           } @else {
@@ -47,14 +47,19 @@
         {{ "LOGIN_REGISTER.REGISTER.CATCH_PHRASE" | translate }}
       </h2>
       <form class="inputs">
-        <input
-          type="text"
-          [placeholder]="
-            'LOGIN_REGISTER.REGISTER.USERNAME_PLACEHOLDER' | translate
-          "
-          [formControl]="username"
-          [(ngModel)]="formUsername"
-        />
+        <div class="input-with-counter">
+          <input
+            type="text"
+            maxlength="16"
+            [placeholder]="
+              'LOGIN_REGISTER.REGISTER.USERNAME_PLACEHOLDER' | translate
+            "
+            [formControl]="username"
+            [(ngModel)]="formUsername"
+            #usernameInput
+          />
+          <small class="char-counter">{{ usernameInput.value?.length || 0 }}/16</small>
+        </div>
         <input
           type="email"
           [placeholder]="
@@ -84,7 +89,7 @@
         @if (!isEqual){
         <span class="wrong-pass">Passwords do not match</span>
         }
-        <button type="button" class="button" (click)="onRegister()" [disabled]="isRegisterLoading">
+        <button type="button" class="cibaria-btn cibaria-btn-primary" (click)="onRegister()" [disabled]="isRegisterLoading">
           @if (!isRegisterLoading) {
             {{ "LOGIN_REGISTER.REGISTER.SUBMIT_BUTTON" | translate }}
           } @else {
@@ -98,7 +103,7 @@
       <h3 class="already">
         {{ "LOGIN_REGISTER.SWITCH.NO_ACCOUNT" | translate }}
       </h3>
-      <button class="btn-already btn-already-login" (click)="changeForm()">
+      <button class="cibaria-btn cibaria-btn-secondary" (click)="changeForm()">
         {{ "LOGIN_REGISTER.SWITCH.REGISTER_BUTTON" | translate }}
       </button>
     </div>
@@ -107,7 +112,7 @@
       <h3 class="already">
         {{ "LOGIN_REGISTER.SWITCH.HAVE_ACCOUNT" | translate }}
       </h3>
-      <button class="btn-already btn-already-register" (click)="changeForm()">
+      <button class="cibaria-btn cibaria-btn-secondary" (click)="changeForm()">
         {{ "LOGIN_REGISTER.SWITCH.LOGIN_BUTTON" | translate }}
       </button>
     </div>

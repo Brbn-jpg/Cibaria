@@ -5,7 +5,7 @@
       type="button"
       (click)="onTabChange('favourites')"
       [class.selectedTab]="activeTab === 'favourites'"
-      class="switch"
+      class="cibaria-btn cibaria-btn-secondary cibaria-btn-lg"
     >
       {{ "RECIPE_FILTERS.FAVOURITES" | translate }}
     </button>
@@ -13,7 +13,7 @@
       type="button"
       (click)="onTabChange('userRecipes')"
       [class.selectedTab]="activeTab === 'userRecipes'"
-      class="switch"
+      class="cibaria-btn cibaria-btn-secondary cibaria-btn-lg"
     >
       {{ "RECIPE_FILTERS.MY_RECIPES" | translate }}
     </button>

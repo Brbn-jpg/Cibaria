@@ -1,3 +1,5 @@
+@import "../../shared/styles/button-styles.css";
+
 main {
   background: rgb(23, 21, 21);
   background: linear-gradient(
@@ -200,22 +202,6 @@ textarea {
   resize: vertical;
 }
 
-button {
-  font-size: 2.4rem;
-  padding: 0.8rem;
-  margin-top: 1.6rem;
-  background-color: #fbe5b2;
-  color: #000;
-  border: none;
-  cursor: pointer;
-  border-radius: 1rem;
-  transition: 0.3s all ease-in-out;
-}
-
-button:hover {
-  background-color: #f7d79c;
-}
-
 .input-group {
   display: flex;
   justify-content: space-between;
@@ -234,6 +220,10 @@ button:hover {
   gap: 1.2rem;
   align-items: center;
   justify-content: space-between;
+}
+
+li {
+  margin-top: 1.2rem;
 }
 
 select {
@@ -384,7 +374,6 @@ select {
 .checkbox-container input[type="checkbox"] {
   display: none !important;
 }
-
 
 .checkbox-container.checked {
   border-color: #d4ae6c;

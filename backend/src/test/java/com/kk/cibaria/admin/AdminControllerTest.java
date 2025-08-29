@@ -24,7 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-// Unit tests for AdminController without security
+// AdminController unit tests
 @ExtendWith(MockitoExtension.class)
 class AdminControllerTest {
 
@@ -45,7 +45,6 @@ class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Setup test data for admin and regular user entities
         adminUser = new UserEntity();
         adminUser.setId(1);
         adminUser.setUsername("admin");
@@ -58,7 +57,6 @@ class AdminControllerTest {
         regularUser.setEmail("user@test.com");
         regularUser.setRole("USER");
 
-        // Setup test recipes with different visibility settings
         publicRecipe = new Recipe();
         publicRecipe.setId(1);
         publicRecipe.setRecipeName("Public Recipe");
@@ -69,7 +67,6 @@ class AdminControllerTest {
         privateRecipe.setRecipeName("Private Recipe");
         privateRecipe.setIsPublic(false);
 
-        // Setup DTO for user update operations
         updateUserDto = new UpdateUserDto();
         updateUserDto.setRole("USER");
         updateUserDto.setEmail("updated@test.com");
@@ -127,7 +124,6 @@ class AdminControllerTest {
 
     @Test
     void updateUserRole_ShouldUpdateUserRole() {
-        // Test admin can update user roles and information
         UpdateUserDto updateDto = new UpdateUserDto();
         updateDto.setRole("USER");
         updateDto.setEmail("updated@test.com");
@@ -143,15 +139,16 @@ class AdminControllerTest {
         
         ResponseEntity<UserEntity> result = adminController.updateUserRole(1, updateDto);
         
-        assertEquals("USER", result.getBody().getRole());
-        assertEquals("updated@test.com", result.getBody().getEmail());
-        assertEquals("updatedUser", result.getBody().getUsername());
+        UserEntity resultUser = result.getBody();
+        assertNotNull(resultUser);
+        assertEquals("USER", resultUser.getRole());
+        assertEquals("updated@test.com", resultUser.getEmail());
+        assertEquals("updatedUser", resultUser.getUsername());
         verify(userService).updateUser(1, "USER", "updated@test.com", "updatedUser");
     }
 
     @Test
     void deleteRecipe_ShouldDeleteRecipe() {
-        // Test admin can delete recipes with token via RecipeService
         doNothing().when(recipeService).delete("Bearer token", 1);
         
         ResponseEntity<Void> result = adminController.deleteRecipe(1, "Bearer token");
@@ -161,138 +158,89 @@ class AdminControllerTest {
         verify(recipeService).delete("Bearer token", 1);
     }
 
+    private Recipe createTestRecipe(int id) {
+        Recipe recipe = new Recipe();
+        recipe.setId(id);
+        recipe.setRecipeName("Updated Recipe");
+        recipe.setDifficulty(3);
+        recipe.setIsPublic(true);
+        recipe.setLanguage("en");
+        return recipe;
+    }
+
+    private String serializeRecipe(Recipe recipe) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(recipe);
+    }
+
+    private void assertRecipeEquals(Recipe expected, Recipe actual) {
+        assertNotNull(actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getRecipeName(), actual.getRecipeName());
+        assertEquals(expected.getDifficulty(), actual.getDifficulty());
+        assertEquals(expected.getIsPublic(), actual.getIsPublic());
+        assertEquals(expected.getLanguage(), actual.getLanguage());
+    }
+
     @Test
-void updateRecipe_ShouldUpdateRecipeWithoutImages() throws Exception {
-    // Given
-    int recipeId = 1;
-    String authToken = "Bearer token";
-    String keepExistingImage = "true";
-    
-    Recipe inputRecipe = new Recipe();
-    inputRecipe.setRecipeName("Updated Recipe");
-    inputRecipe.setDifficulty(3);
-    inputRecipe.setIsPublic(true);
-    inputRecipe.setLanguage("en");
-    
-    Recipe resultRecipe = new Recipe();
-    resultRecipe.setId(recipeId);
-    resultRecipe.setRecipeName("Updated Recipe");
-    resultRecipe.setDifficulty(3);
-    resultRecipe.setIsPublic(true);
-    resultRecipe.setLanguage("en");
-    
-    // Serialize recipe to JSON string
-    ObjectMapper objectMapper = new ObjectMapper();
-    String recipeJson = objectMapper.writeValueAsString(inputRecipe);
-    
-    when(recipeService.updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(true)))
-            .thenReturn(resultRecipe);
-    
-    // When
-    Recipe result = adminController.updateRecipe(recipeId, recipeJson, authToken, null, keepExistingImage);
-    
-    // Then
-    assertNotNull(result);
-    assertEquals(recipeId, result.getId());
-    assertEquals("Updated Recipe", result.getRecipeName());
-    assertEquals(3, result.getDifficulty());
-    assertEquals(true, result.getIsPublic());
-    assertEquals("en", result.getLanguage());
-    
-    verify(recipeService).updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(true));
-    verify(recipeService, never()).updateRecipeWithPhotos(any(Integer.class), any(Recipe.class), any(), any(String.class));
-}
+    void updateRecipe_WithoutImages_KeepExisting() throws Exception {
+        int recipeId = 1;
+        String authToken = "Bearer token";
+        Recipe testRecipe = createTestRecipe(0);
+        Recipe resultRecipe = createTestRecipe(recipeId);
+        String recipeJson = serializeRecipe(testRecipe);
+        
+        when(recipeService.updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(true)))
+                .thenReturn(resultRecipe);
+        
+        Recipe result = adminController.updateRecipe(recipeId, recipeJson, authToken, null, "true");
+        
+        assertRecipeEquals(resultRecipe, result);
+        verify(recipeService).updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(true));
+        verify(recipeService, never()).updateRecipeWithPhotos(anyInt(), any(Recipe.class), any(), anyString());
+    }
 
-@Test
-void updateRecipe_ShouldUpdateRecipeWithImages() throws Exception {
-    // Given
-    int recipeId = 1;
-    String authToken = "Bearer token";
-    
-    Recipe inputRecipe = new Recipe();
-    inputRecipe.setRecipeName("Updated Recipe");
-    inputRecipe.setDifficulty(3);
-    inputRecipe.setIsPublic(true);
-    inputRecipe.setLanguage("en");
-    
-    Recipe resultRecipe = new Recipe();
-    resultRecipe.setId(recipeId);
-    resultRecipe.setRecipeName("Updated Recipe");
-    resultRecipe.setDifficulty(3);
-    resultRecipe.setIsPublic(true);
-    resultRecipe.setLanguage("en");
-    
-    // Serialize recipe to JSON string
-    ObjectMapper objectMapper = new ObjectMapper();
-    String recipeJson = objectMapper.writeValueAsString(inputRecipe);
-    
-    // Mock images
-    MockMultipartFile image1 = new MockMultipartFile("image1", "image1.jpg", "image/jpeg", "image1 content".getBytes());
-    MockMultipartFile image2 = new MockMultipartFile("image2", "image2.jpg", "image/jpeg", "image2 content".getBytes());
-    List<MultipartFile> images = Arrays.asList(image1, image2);
-    
-    when(recipeService.updateRecipeWithPhotos(eq(recipeId), any(Recipe.class), eq(images), eq(authToken)))
-            .thenReturn(resultRecipe);
-    
-    // When
-    Recipe result = adminController.updateRecipe(recipeId, recipeJson, authToken, images, null);
-    
-    // Then
-    assertNotNull(result);
-    assertEquals(recipeId, result.getId());
-    assertEquals("Updated Recipe", result.getRecipeName());
-    assertEquals(3, result.getDifficulty());
-    assertEquals(true, result.getIsPublic());
-    assertEquals("en", result.getLanguage());
-    
-    verify(recipeService).updateRecipeWithPhotos(eq(recipeId), any(Recipe.class), eq(images), eq(authToken));
-    verify(recipeService, never()).updateRecipeWithoutPhotos(any(Integer.class), any(Recipe.class), any(String.class), any(Boolean.class));
-}
+    @Test
+    void updateRecipe_WithImages() throws Exception {
+        int recipeId = 1;
+        String authToken = "Bearer token";
+        Recipe testRecipe = createTestRecipe(0);
+        Recipe resultRecipe = createTestRecipe(recipeId);
+        String recipeJson = serializeRecipe(testRecipe);
+        
+        MockMultipartFile image1 = new MockMultipartFile("image1", "test1.jpg", "image/jpeg", "content1".getBytes());
+        MockMultipartFile image2 = new MockMultipartFile("image2", "test2.jpg", "image/jpeg", "content2".getBytes());
+        List<MultipartFile> images = Arrays.asList(image1, image2);
+        
+        when(recipeService.updateRecipeWithPhotos(eq(recipeId), any(Recipe.class), eq(images), eq(authToken)))
+                .thenReturn(resultRecipe);
+        
+        Recipe result = adminController.updateRecipe(recipeId, recipeJson, authToken, images, null);
+        
+        assertRecipeEquals(resultRecipe, result);
+        verify(recipeService).updateRecipeWithPhotos(eq(recipeId), any(Recipe.class), eq(images), eq(authToken));
+        verify(recipeService, never()).updateRecipeWithoutPhotos(anyInt(), any(Recipe.class), anyString(), anyBoolean());
+    }
 
-@Test
-void updateRecipe_ShouldUpdateRecipeWithoutKeepingImages() throws Exception {
-    // Given
-    int recipeId = 1;
-    String authToken = "Bearer token";
-    String keepExistingImage = "false";
-    
-    Recipe inputRecipe = new Recipe();
-    inputRecipe.setRecipeName("Updated Recipe");
-    inputRecipe.setDifficulty(3);
-    inputRecipe.setIsPublic(true);
-    inputRecipe.setLanguage("en");
-    
-    Recipe resultRecipe = new Recipe();
-    resultRecipe.setId(recipeId);
-    resultRecipe.setRecipeName("Updated Recipe");
-    resultRecipe.setDifficulty(3);
-    resultRecipe.setIsPublic(true);
-    resultRecipe.setLanguage("en");
-    
-    // Serialize recipe to JSON string
-    ObjectMapper objectMapper = new ObjectMapper();
-    String recipeJson = objectMapper.writeValueAsString(inputRecipe);
-    
-    when(recipeService.updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(false)))
-            .thenReturn(resultRecipe);
-    
-    // When
-    Recipe result = adminController.updateRecipe(recipeId, recipeJson, authToken, null, keepExistingImage);
-    
-    // Then
-    assertNotNull(result);
-    assertEquals(recipeId, result.getId());
-    assertEquals("Updated Recipe", result.getRecipeName());
-    assertEquals(3, result.getDifficulty());
-    assertEquals(true, result.getIsPublic());
-    assertEquals("en", result.getLanguage());
-    
-    verify(recipeService).updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(false));
-}
+    @Test
+    void updateRecipe_WithoutImages_DontKeepExisting() throws Exception {
+        int recipeId = 1;
+        String authToken = "Bearer token";
+        Recipe testRecipe = createTestRecipe(0);
+        Recipe resultRecipe = createTestRecipe(recipeId);
+        String recipeJson = serializeRecipe(testRecipe);
+        
+        when(recipeService.updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(false)))
+                .thenReturn(resultRecipe);
+        
+        Recipe result = adminController.updateRecipe(recipeId, recipeJson, authToken, null, "false");
+        
+        assertRecipeEquals(resultRecipe, result);
+        verify(recipeService).updateRecipeWithoutPhotos(eq(recipeId), any(Recipe.class), eq(authToken), eq(false));
+    }
 
     @Test
     void getStats_ShouldReturnDetailedStats() {
-        // Test admin dashboard statistics are calculated correctly with admin/regular user breakdown
         List<UserEntity> users = Arrays.asList(adminUser, regularUser);
         List<Recipe> recipes = Arrays.asList(publicRecipe, privateRecipe);
         
@@ -313,7 +261,6 @@ void updateRecipe_ShouldUpdateRecipeWithoutKeepingImages() throws Exception {
 
     @Test
     void getStats_ShouldHandleEmptyData() {
-        // Test statistics endpoint handles empty database gracefully
         when(userService.getAll()).thenReturn(Arrays.asList());
         when(recipeService.getAll()).thenReturn(Arrays.asList());
         
@@ -329,7 +276,6 @@ void updateRecipe_ShouldUpdateRecipeWithoutKeepingImages() throws Exception {
 
     @Test
     void deleteUser_ShouldReturnOkResponse() {
-        // Test delete user returns proper HTTP response
         doNothing().when(userService).delete(1);
         
         ResponseEntity<Void> result = adminController.deleteUser(1);
@@ -341,7 +287,6 @@ void updateRecipe_ShouldUpdateRecipeWithoutKeepingImages() throws Exception {
 
     @Test
     void updateUserRole_ShouldHandleNullValues() {
-        // Test admin endpoint handles partial user update data
         UpdateUserDto partialDto = new UpdateUserDto();
         partialDto.setRole("USER");
         // email and username are null
@@ -354,7 +299,9 @@ void updateRecipe_ShouldUpdateRecipeWithoutKeepingImages() throws Exception {
         
         ResponseEntity<UserEntity> result = adminController.updateUserRole(1, partialDto);
         
-        assertEquals("USER", result.getBody().getRole());
+        UserEntity resultUser = result.getBody();
+        assertNotNull(resultUser);
+        assertEquals("USER", resultUser.getRole());
         verify(userService).updateUser(1, "USER", null, null);
     }
 }

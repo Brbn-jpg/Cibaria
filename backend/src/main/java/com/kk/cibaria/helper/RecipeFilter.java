@@ -70,7 +70,7 @@ public class RecipeFilter {
 
         return filteredRecipes.stream()
             .peek(recipe -> {
-                if (language != null && !language.isEmpty()) {
+                if (language != null && !language.isEmpty() && recipe.getIngredients() != null) {
                     List<Ingredient> languageFiltered = ingredientService.filterByLanguage(recipe.getIngredients(), language);
                     recipe.setIngredients(languageFiltered);
                 }

@@ -1,3 +1,5 @@
+@import "../../../shared/styles/button-styles.css";
+
 .cta-section {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -91,32 +93,6 @@ option:hover {
   color: #000;
 }
 
-.cta-btn {
-  font-size: 3.2rem;
-  font-weight: 300;
-  color: #000;
-  border: none;
-  font-size: 1.8rem;
-  padding: 2rem 4.8rem;
-  border-radius: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  background: transparent;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 450ms ease-in-out;
-}
-
-.cta-btn:hover {
-  fill: white;
-  transform: scale(1.01);
-  box-shadow: inset 0px 1px 0px 0px rgba(164, 164, 164, 0.5),
-    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
-    0px 0px 0px 4px rgba(184, 182, 182, 0.2), 0px 0px 180px 0px #bebcbc;
-  transform: translateY(-0.5px);
-}
 
 .hidden {
   opacity: 0;

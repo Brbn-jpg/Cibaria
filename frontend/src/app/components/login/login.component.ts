@@ -102,13 +102,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoginLoading = true;
     this.lastLoginAttempt = Date.now();
     
-    this.authService.login(this.formEmail, this.formPassword).subscribe({
+    this.authService.login(this.formEmail, this.formPassword, this.rememberMe).subscribe({
       next: (response) => {
-        if (this.rememberMe) {
-          localStorage.setItem('token', response.token);
-        } else {
-          sessionStorage.setItem('token', response.token);
-        }
         this.router.navigate(['/profile']);
         this.isLoginLoading = false;
       },
@@ -150,9 +145,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .register(this.formUsername, this.formEmail, this.formPassword)
       .subscribe({
         next: (response) => {
-          sessionStorage.setItem('token', response.token);
           this.router.navigate(['/profile']);
-          console.log(response.token);
           this.isRegisterLoading = false;
         },
         error: (err) => {
