@@ -198,9 +198,12 @@
           name="step"
           class=""
           [(ngModel)]="newStep"
+          #stepInput
           required
           placeholder="{{ 'ADD_RECIPE.STEP_PLACEHOLDER' | translate }}"
+          maxlength="256"
         ></textarea>
+        <small class="small-textarea">{{ stepInput.value?.length || 0 }}/256</small>
       </div>
       <button
         type="button"

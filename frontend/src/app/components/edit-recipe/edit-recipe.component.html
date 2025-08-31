@@ -176,9 +176,12 @@
           formControlName="steps"
           name="step"
           class="step"
+          #stepInput
           required
           placeholder="{{ 'ADD_RECIPE.STEP_PLACEHOLDER' | translate }}"
+          maxlength="256"
         ></textarea>
+        <small class="small-textarea">{{ stepInput.value?.length || 0 }}/256</small>
       </div>
       <button type="button" class="cibaria-btn cibaria-btn-secondary" (click)="addStep()">
         {{ "ADD_RECIPE.ADD_STEP" | translate }}

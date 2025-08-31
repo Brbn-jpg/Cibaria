@@ -48,6 +48,20 @@ label {
   font-weight: 200;
 }
 
+.input-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.small-textarea {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 1.2rem;
+  color: #d4ae6c;
+  pointer-events: none;
+}
+
 input {
   padding: 1.2rem 1.6rem;
   font-size: 1.6rem;

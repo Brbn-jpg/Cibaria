@@ -3,6 +3,7 @@ package com.kk.cibaria.step;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.kk.cibaria.recipe.Recipe;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,8 @@ public class Step {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max = 256, message = "Step content cannot exceed 256 characters")
+    @Column(length = 256)
     private String content;
 
     @ManyToOne

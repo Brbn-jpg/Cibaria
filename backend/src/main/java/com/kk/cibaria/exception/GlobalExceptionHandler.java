@@ -70,4 +70,36 @@ public class GlobalExceptionHandler {
     errorObject.setMessage(ex.getMessage());
     return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.UNAUTHORIZED);
   }
+
+  @ExceptionHandler(InvalidPasswordException.class)
+  public ResponseEntity<ErrorObject> handleInvalidPasswordException(InvalidPasswordException ex){
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+    errorObject.setMessage(ex.getMessage());
+    return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(WeakPasswordException.class)
+  public ResponseEntity<ErrorObject> handleWeakPasswordException(WeakPasswordException ex){
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+    errorObject.setMessage(ex.getMessage());
+    return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(InvalidEmailFormatException.class)
+  public ResponseEntity<ErrorObject> handleInvalidEmailFormatException(InvalidEmailFormatException ex){
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+    errorObject.setMessage(ex.getMessage());
+    return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorObject> handleIllegalArgumentException(IllegalArgumentException ex){
+    ErrorObject errorObject = new ErrorObject();
+    errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+    errorObject.setMessage(ex.getMessage());
+    return new ResponseEntity<ErrorObject>(errorObject, HttpStatus.BAD_REQUEST);
+  }
 }
