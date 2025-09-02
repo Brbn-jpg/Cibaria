@@ -28,10 +28,10 @@ class RecipeRepositoryIntegrationTest {
     private Recipe testRecipe2;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testUser = new UserEntity();
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
+        testUser.setEmail("test@test.com");
         testUser.setPassword("password");
         testUser = userRepository.save(testUser);
 

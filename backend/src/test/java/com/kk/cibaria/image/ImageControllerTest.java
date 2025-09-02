@@ -26,7 +26,7 @@ class ImageControllerTest {
     private Image testImage;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testFile = new MockMultipartFile(
                 "file",
                 "test-image.jpg",

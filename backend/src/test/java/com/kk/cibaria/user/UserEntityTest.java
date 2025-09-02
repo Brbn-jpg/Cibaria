@@ -16,12 +16,13 @@ class UserEntityTest {
     private UserEntity user;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         user = new UserEntity();
     }
 
     @Test
-    void testUserEntityCreation() {
+    void testNewUser() {
+        // new user should have default values
         assertNotNull(user);
         assertEquals(0, user.getId());
         assertNull(user.getUsername());
@@ -42,14 +43,14 @@ class UserEntityTest {
         user.setId(1);
         user.setUsername("testuser");
         user.setPassword("password123");
-        user.setEmail("test@example.com");
+        user.setEmail("test@test.com");
         user.setRole("ADMIN");
         user.setDescription("Test description");
 
         assertEquals(1, user.getId());
         assertEquals("testuser", user.getUsername());
         assertEquals("password123", user.getPassword());
-        assertEquals("test@example.com", user.getEmail());
+        assertEquals("test@test.com", user.getEmail());
         assertEquals("ADMIN", user.getRole());
         assertEquals("Test description", user.getDescription());
     }
@@ -137,12 +138,12 @@ class UserEntityTest {
         UserEntity user1 = new UserEntity();
         user1.setId(1);
         user1.setUsername("testuser");
-        user1.setEmail("test@example.com");
+        user1.setEmail("test@test.com");
 
         UserEntity user2 = new UserEntity();
         user2.setId(1);
         user2.setUsername("testuser");
-        user2.setEmail("test@example.com");
+        user2.setEmail("test@test.com");
 
         UserEntity user3 = new UserEntity();
         user3.setId(2);
@@ -158,14 +159,14 @@ class UserEntityTest {
     void testToString() {
         user.setId(1);
         user.setUsername("testuser");
-        user.setEmail("test@example.com");
+        user.setEmail("test@test.com");
         user.setRole("USER");
 
         String toString = user.toString();
         
         assertNotNull(toString);
         assertTrue(toString.contains("testuser"));
-        assertTrue(toString.contains("test@example.com"));
+        assertTrue(toString.contains("test@test.com"));
         assertTrue(toString.contains("USER"));
     }
 

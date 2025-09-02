@@ -1,4 +1,4 @@
-package com.kk.cibaria;
+package com.kk.cibaria.security.jwt;
 
 import javax.crypto.SecretKey;
 

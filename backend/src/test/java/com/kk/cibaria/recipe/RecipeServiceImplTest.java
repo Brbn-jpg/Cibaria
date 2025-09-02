@@ -63,7 +63,7 @@ class RecipeServiceImplTest {
     private String testToken;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testUser = new UserEntity();
         testUser.setId(1);
         testUser.setUsername("testuser");

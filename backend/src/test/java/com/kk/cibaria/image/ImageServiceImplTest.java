@@ -33,7 +33,7 @@ class ImageServiceImplTest {
     private Image savedImage;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testFile = new MockMultipartFile(
                 "file",
                 "test-image.jpg",

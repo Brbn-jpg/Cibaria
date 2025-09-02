@@ -42,8 +42,8 @@ class LoginControllerTest {
     private LoginFormDto loginFormDto;
 
     @BeforeEach
-    void setUp() {
-        loginFormDto = new LoginFormDto("test@example.com", "password123");
+    void setup() {
+        loginFormDto = new LoginFormDto("test@test.com", "password123");
     }
 
     @Test
@@ -52,7 +52,7 @@ class LoginControllerTest {
         
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(null);
-        when(userDetailService.loadUserByUsername("test@example.com"))
+        when(userDetailService.loadUserByUsername("test@test.com"))
                 .thenReturn(userDetails);
         when(jwtService.generateToken(userDetails))
                 .thenReturn(expectedToken);
@@ -64,7 +64,7 @@ class LoginControllerTest {
         assertEquals("Bearer", response.getType());
         
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(userDetailService).loadUserByUsername("test@example.com");
+        verify(userDetailService).loadUserByUsername("test@test.com");
         verify(jwtService).generateToken(userDetails);
     }
 
@@ -109,7 +109,7 @@ class LoginControllerTest {
 
         verify(authenticationManager).authenticate(argThat(token -> 
                 token instanceof UsernamePasswordAuthenticationToken &&
-                token.getPrincipal().equals("test@example.com") &&
+                token.getPrincipal().equals("test@test.com") &&
                 token.getCredentials().equals("password123")
         ));
     }

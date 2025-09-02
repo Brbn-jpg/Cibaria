@@ -32,11 +32,11 @@ class UserControllerTest {
     private String testToken;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testUser = new UserEntity();
         testUser.setId(1);
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
+        testUser.setEmail("test@test.com");
         testUser.setPassword("password123");
         testUser.setRole("USER");
         testUser.setDescription("Test description");

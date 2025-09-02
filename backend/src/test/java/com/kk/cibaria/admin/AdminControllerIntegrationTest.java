@@ -52,7 +52,7 @@ class AdminControllerIntegrationTest {
     private String userToken;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         // Create test admin user with proper role
         adminUser = new UserEntity();
         adminUser.setUsername("testAdmin");

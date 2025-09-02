@@ -38,7 +38,7 @@ class IngredientIntegrationTest {
     private UserEntity testUser;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         // Create test user
         testUser = new UserEntity();
         testUser.setUsername("ingredientTestUser");

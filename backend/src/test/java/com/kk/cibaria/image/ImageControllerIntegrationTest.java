@@ -59,7 +59,7 @@ class ImageControllerIntegrationTest {
     private Image testImage;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         // Reset mock before each test
         reset(cloudinaryService);
         

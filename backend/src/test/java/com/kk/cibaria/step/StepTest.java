@@ -11,18 +11,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class StepTest {
 
     private Step step;
-    private Recipe testRecipe;
+    private Recipe recipe;
 
     @BeforeEach
-    void setUp() {
-        testRecipe = new Recipe();
-        testRecipe.setId(1);
-        testRecipe.setRecipeName("Test Recipe");
-        testRecipe.setIngredients(new ArrayList<>());
-        testRecipe.setSteps(new ArrayList<>());
-        testRecipe.setRatings(new ArrayList<>());
-        testRecipe.setImages(new ArrayList<>());
-        testRecipe.setFavouriteByUsers(new ArrayList<>());
+    void setup() {
+        // create test recipe
+        recipe = new Recipe();
+        recipe.setId(1);
+        recipe.setRecipeName("Test Recipe");
+        recipe.setIngredients(new ArrayList<>());
+        recipe.setSteps(new ArrayList<>());
+        recipe.setRatings(new ArrayList<>());
+        recipe.setImages(new ArrayList<>());
+        recipe.setFavouriteByUsers(new ArrayList<>());
 
         step = new Step();
     }
@@ -37,10 +38,10 @@ class StepTest {
 
     @Test
     void testStepConstructorWithParameters() {
-        Step step = new Step("Mix the ingredients", testRecipe);
+        Step step = new Step("Mix the ingredients", recipe);
 
         assertEquals("Mix the ingredients", step.getContent());
-        assertEquals(testRecipe, step.getRecipe());
+        assertEquals(recipe, step.getRecipe());
         assertNull(step.getId()); // ID should be null before persisting
     }
 
@@ -48,29 +49,29 @@ class StepTest {
     void testStepSettersAndGetters() {
         step.setId(1L);
         step.setContent("Bake for 30 minutes");
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         assertEquals(1L, step.getId());
         assertEquals("Bake for 30 minutes", step.getContent());
-        assertEquals(testRecipe, step.getRecipe());
+        assertEquals(recipe, step.getRecipe());
     }
 
     @Test
     void testStepWithNullContent() {
         step.setContent(null);
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         assertNull(step.getContent());
-        assertEquals(testRecipe, step.getRecipe());
+        assertEquals(recipe, step.getRecipe());
     }
 
     @Test
     void testStepWithEmptyContent() {
         step.setContent("");
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         assertEquals("", step.getContent());
-        assertEquals(testRecipe, step.getRecipe());
+        assertEquals(recipe, step.getRecipe());
     }
 
     @Test
@@ -80,10 +81,10 @@ class StepTest {
                 "and provides comprehensive guidance for the cooking process.";
         
         step.setContent(longContent);
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         assertEquals(longContent, step.getContent());
-        assertEquals(testRecipe, step.getRecipe());
+        assertEquals(recipe, step.getRecipe());
     }
 
     @Test
@@ -100,17 +101,17 @@ class StepTest {
         Step step1 = new Step();
         step1.setId(1L);
         step1.setContent("Mix ingredients");
-        step1.setRecipe(testRecipe);
+        step1.setRecipe(recipe);
 
         Step step2 = new Step();
         step2.setId(1L);
         step2.setContent("Mix ingredients");
-        step2.setRecipe(testRecipe);
+        step2.setRecipe(recipe);
 
         Step step3 = new Step();
         step3.setId(2L);
         step3.setContent("Bake mixture");
-        step3.setRecipe(testRecipe);
+        step3.setRecipe(recipe);
 
         assertEquals(step1, step2);
         assertNotEquals(step1, step3);
@@ -121,7 +122,7 @@ class StepTest {
     void testToString() {
         step.setId(1L);
         step.setContent("Preheat oven to 180°C");
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         String toString = step.toString();
         
@@ -132,10 +133,10 @@ class StepTest {
     @Test
     void testStepRecipeRelationship() {
         step.setContent("Add salt to taste");
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         // Test bidirectional relationship
-        assertEquals(testRecipe, step.getRecipe());
+        assertEquals(recipe, step.getRecipe());
         assertEquals("Test Recipe", step.getRecipe().getRecipeName());
         assertEquals(1, step.getRecipe().getId());
     }
@@ -145,7 +146,7 @@ class StepTest {
         String contentWithSpecialChars = "Add 2½ cups flour & mix @ 180°C for 30 min.";
         
         step.setContent(contentWithSpecialChars);
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         assertEquals(contentWithSpecialChars, step.getContent());
     }
@@ -155,7 +156,7 @@ class StepTest {
         String contentWithNewlines = "Step 1:\nPreheat oven\n\nStep 2:\nMix ingredients";
         
         step.setContent(contentWithNewlines);
-        step.setRecipe(testRecipe);
+        step.setRecipe(recipe);
 
         assertEquals(contentWithNewlines, step.getContent());
         assertTrue(step.getContent().contains("\n"));

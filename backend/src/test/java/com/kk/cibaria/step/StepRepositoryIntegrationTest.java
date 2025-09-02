@@ -29,10 +29,10 @@ class StepRepositoryIntegrationTest {
     private UserEntity testUser;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testUser = new UserEntity();
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
+        testUser.setEmail("test@test.com");
         testUser.setPassword("password123");
         testUser.setRole("USER");
         testUser = entityManager.persist(testUser);

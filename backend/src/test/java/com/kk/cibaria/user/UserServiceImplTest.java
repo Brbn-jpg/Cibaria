@@ -62,45 +62,46 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    private UserEntity testUser;
-    private String testToken;
+    private UserEntity user;
+    private String token;
 
     @BeforeEach
-    void setUp() {
-        testUser = new UserEntity();
-        testUser.setId(1);
-        testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-        testUser.setPassword("encodedPassword");
-        testUser.setRole("USER");
-        testUser.setDescription("Test description");
-        testUser.setRating(new ArrayList<>());
-        testUser.setUserRecipes(new ArrayList<>());
-        testUser.setFavouriteRecipes(new ArrayList<>());
-        testUser.setImages(new ArrayList<>());
+    void setup() {
+        // create test user
+        user = new UserEntity();
+        user.setId(1);
+        user.setUsername("testuser");
+        user.setEmail("test@test.com");
+        user.setPassword("encodedPassword");
+        user.setRole("USER");
+        user.setDescription("Test description");
+        user.setRating(new ArrayList<>());
+        user.setUserRecipes(new ArrayList<>());
+        user.setFavouriteRecipes(new ArrayList<>());
+        user.setImages(new ArrayList<>());
 
-        testToken = "Bearer testtoken123";
+        token = "Bearer testtoken123";
     }
 
     @Test
     void testGetAll() {
-        List<UserEntity> users = List.of(testUser);
+        List<UserEntity> users = List.of(user);
         when(userRepository.findAll()).thenReturn(users);
 
         List<UserEntity> result = userService.getAll();
 
         assertEquals(1, result.size());
-        assertEquals(testUser, result.get(0));
+        assertEquals(user, result.get(0));
         verify(userRepository).findAll();
     }
 
     @Test
     void testGetById_Success() {
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         UserEntity result = userService.getById(1);
 
-        assertEquals(testUser, result);
+        assertEquals(user, result);
         verify(userRepository).findById(1);
     }
 
@@ -122,8 +123,8 @@ class UserServiceImplTest {
         UserDetails userDetails = mock(UserDetails.class);
         when(userRepository.findByEmail("new@example.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
-        when(userRepository.save(any(UserEntity.class))).thenReturn(testUser);
-        when(userDetailService.loadUserByUsername("test@example.com")).thenReturn(userDetails);
+        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
+        when(userDetailService.loadUserByUsername("test@test.com")).thenReturn(userDetails);
         when(jwtService.generateToken(userDetails)).thenReturn("generatedToken");
 
         TokenResponseDto result = userService.save(registerDto);
@@ -140,7 +141,7 @@ class UserServiceImplTest {
         RegisterDto registerDto = new RegisterDto();
         registerDto.setEmail("existing@example.com");
 
-        when(userRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(testUser));
+        when(userRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(user));
 
         assertThrows(UserEmailAlreadyExistException.class, () -> userService.save(registerDto));
         verify(userRepository).findByEmail("existing@example.com");
@@ -156,14 +157,14 @@ class UserServiceImplTest {
         updatedUser.setEmail("updated@example.com");
         updatedUser.setRating(new ArrayList<>());
 
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
-        when(userRepository.save(any(UserEntity.class))).thenReturn(testUser);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(UserEntity.class))).thenReturn(user);
 
         UserEntity result = userService.update(1, updatedUser);
 
-        assertEquals(testUser, result);
+        assertEquals(user, result);
         verify(userRepository).findById(1);
-        verify(userRepository).save(testUser);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -173,14 +174,14 @@ class UserServiceImplTest {
         profileDto.setDescription("Updated description");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
 
-        UserEntity result = userService.updateProfile(1, profileDto, testToken);
+        UserEntity result = userService.updateProfile(1, profileDto, token);
 
         assertEquals("updateduser", result.getUsername());
         assertEquals("Updated description", result.getDescription());
-        verify(userRepository).save(testUser);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -191,7 +192,7 @@ class UserServiceImplTest {
         when(userRepository.findById(2)).thenReturn(Optional.of(new UserEntity()));
 
         assertThrows(UnauthorizedException.class, 
-            () -> userService.updateProfile(1, profileDto, testToken));
+            () -> userService.updateProfile(1, profileDto, token));
     }
 
     @Test
@@ -201,15 +202,15 @@ class UserServiceImplTest {
         updateEmailDto.setPassword("password123");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("password123", "encodedPassword")).thenReturn(true);
         when(userRepository.findByEmail("newemail@example.com")).thenReturn(Optional.empty());
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(userRepository.save(user)).thenReturn(user);
 
-        UserEntity result = userService.updateEmail(1, updateEmailDto, testToken);
+        UserEntity result = userService.updateEmail(1, updateEmailDto, token);
 
         assertEquals("newemail@example.com", result.getEmail());
-        verify(userRepository).save(testUser);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -219,10 +220,10 @@ class UserServiceImplTest {
         updateEmailDto.setPassword("password123");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         assertThrows(InvalidEmailFormatException.class, 
-            () -> userService.updateEmail(1, updateEmailDto, testToken));
+            () -> userService.updateEmail(1, updateEmailDto, token));
     }
 
     @Test
@@ -232,11 +233,11 @@ class UserServiceImplTest {
         updateEmailDto.setPassword("wrongpassword");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("wrongpassword", "encodedPassword")).thenReturn(false);
 
         assertThrows(InvalidPasswordException.class, 
-            () -> userService.updateEmail(1, updateEmailDto, testToken));
+            () -> userService.updateEmail(1, updateEmailDto, token));
     }
 
     @Test
@@ -246,16 +247,16 @@ class UserServiceImplTest {
         updatePasswordDto.setNewPassword("NewPassword123");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("currentPassword", "encodedPassword")).thenReturn(true);
         when(passwordEncoder.matches("NewPassword123", "encodedPassword")).thenReturn(false);
         when(passwordEncoder.encode("NewPassword123")).thenReturn("newEncodedPassword");
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(userRepository.save(user)).thenReturn(user);
 
-        UserEntity result = userService.updatePassword(1, updatePasswordDto, testToken);
+        UserEntity result = userService.updatePassword(1, updatePasswordDto, token);
 
         assertEquals("newEncodedPassword", result.getPassword());
-        verify(userRepository).save(testUser);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -265,11 +266,11 @@ class UserServiceImplTest {
         updatePasswordDto.setNewPassword("weak");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(passwordEncoder.matches("currentPassword", "encodedPassword")).thenReturn(true);
 
         assertThrows(WeakPasswordException.class, 
-            () -> userService.updatePassword(1, updatePasswordDto, testToken));
+            () -> userService.updatePassword(1, updatePasswordDto, token));
     }
 
     @Test
@@ -279,12 +280,12 @@ class UserServiceImplTest {
         mockImage.setImageUrl("http://test.com/image.jpg");
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(imageService.createPhoto(file, ImageType.PROFILE_PICTURE)).thenReturn(mockImage);
         when(imageRepository.save(mockImage)).thenReturn(mockImage);
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(userRepository.save(user)).thenReturn(user);
 
-        String result = userService.updateProfilePicture(1, file, testToken);
+        String result = userService.updateProfilePicture(1, file, token);
 
         assertEquals("http://test.com/image.jpg", result);
         verify(imageService).createPhoto(file, ImageType.PROFILE_PICTURE);
@@ -292,10 +293,10 @@ class UserServiceImplTest {
 
     @Test
     void testDelete_Success() {
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         assertDoesNotThrow(() -> userService.delete(1));
-        verify(userRepository).delete(testUser);
+        verify(userRepository).delete(user);
     }
 
     @Test
@@ -308,13 +309,13 @@ class UserServiceImplTest {
         backgroundImage.setImageType(ImageType.BACKGROUND_PICTURE);
         backgroundImage.setImageUrl("http://background.jpg");
         
-        testUser.getImages().add(profileImage);
-        testUser.getImages().add(backgroundImage);
+        user.getImages().add(profileImage);
+        user.getImages().add(backgroundImage);
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
-        MyProfileDto result = userService.getMyProfile(testToken);
+        MyProfileDto result = userService.getMyProfile(token);
 
         assertEquals(1, result.getId());
         assertEquals("testuser", result.getUsername());
@@ -337,12 +338,12 @@ class UserServiceImplTest {
         recipe.setIngredients(new ArrayList<>());
         recipe.setRatings(new ArrayList<>());
         
-        testUser.getFavouriteRecipes().add(recipe);
+        user.getFavouriteRecipes().add(recipe);
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
-        MyProfileDto result = userService.getFavouriteRecipes(testToken);
+        MyProfileDto result = userService.getFavouriteRecipes(token);
 
         assertNotNull(result.getFavourites());
         assertEquals(1, result.getFavourites().size());
@@ -367,12 +368,12 @@ class UserServiceImplTest {
         List<Rating> ratings = List.of(rating);
         recipe.setRatings(ratings);
         
-        testUser.getUserRecipes().add(recipe);
+        user.getUserRecipes().add(recipe);
 
         when(jwtService.extractId("testtoken123")).thenReturn(1);
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
-        MyProfileDto result = userService.getUserRecipes(testToken);
+        MyProfileDto result = userService.getUserRecipes(token);
 
         assertNotNull(result.getUserRecipes());
         assertEquals(1, result.getUserRecipes().size());
@@ -383,16 +384,16 @@ class UserServiceImplTest {
 
     @Test
     void testUpdateUser_Success() {
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(userRepository.findByEmail("new@example.com")).thenReturn(Optional.empty());
-        when(userRepository.save(testUser)).thenReturn(testUser);
+        when(userRepository.save(user)).thenReturn(user);
 
         UserEntity result = userService.updateUser(1, "ADMIN", "new@example.com", "newusername");
 
         assertEquals("ADMIN", result.getRole());
         assertEquals("new@example.com", result.getEmail());
         assertEquals("newusername", result.getUsername());
-        verify(userRepository).save(testUser);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -400,7 +401,7 @@ class UserServiceImplTest {
         UserEntity anotherUser = new UserEntity();
         anotherUser.setId(2);
         
-        when(userRepository.findById(1)).thenReturn(Optional.of(testUser));
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(userRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(anotherUser));
 
         assertThrows(UserEmailAlreadyExistException.class, 
@@ -417,17 +418,17 @@ class UserServiceImplTest {
         otherImage.setImageType(ImageType.BACKGROUND_PICTURE);
         otherImage.setImageUrl("http://background.jpg");
         
-        testUser.getImages().add(profileImage);
-        testUser.getImages().add(otherImage);
+        user.getImages().add(profileImage);
+        user.getImages().add(otherImage);
 
-        String result = userService.getProfilePicture(testUser);
+        String result = userService.getProfilePicture(user);
 
         assertEquals("http://profile.jpg", result);
     }
 
     @Test
     void testGetProfilePicture_NoImage() {
-        String result = userService.getProfilePicture(testUser);
+        String result = userService.getProfilePicture(user);
 
         assertNull(result);
     }
@@ -438,9 +439,9 @@ class UserServiceImplTest {
         backgroundImage.setImageType(ImageType.BACKGROUND_PICTURE);
         backgroundImage.setImageUrl("http://background.jpg");
         
-        testUser.getImages().add(backgroundImage);
+        user.getImages().add(backgroundImage);
 
-        String result = userService.getBackgroundPicture(testUser);
+        String result = userService.getBackgroundPicture(user);
 
         assertEquals("http://background.jpg", result);
     }

@@ -43,12 +43,12 @@ class AuthControllerIntegrationTest {
     private UserEntity testUser;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         userRepository.deleteAll();
         
         testUser = new UserEntity();
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
+        testUser.setEmail("test@test.com");
         testUser.setPassword(passwordEncoder.encode("password123"));
         testUser.setRole("USER");
         testUser = userRepository.save(testUser);
@@ -56,7 +56,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void authenticate_ValidCredentials_ReturnsToken() throws Exception {
-        LoginFormDto loginDto = new LoginFormDto("test@example.com", "password123");
+        LoginFormDto loginDto = new LoginFormDto("test@test.com", "password123");
 
         MvcResult result = mockMvc.perform(post("/authenticate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +87,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void authenticate_InvalidPassword_ReturnsNotFound() throws Exception {
-        LoginFormDto loginDto = new LoginFormDto("test@example.com", "wrongpassword");
+        LoginFormDto loginDto = new LoginFormDto("test@test.com", "wrongpassword");
 
         mockMvc.perform(post("/authenticate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -107,7 +107,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void authenticate_EmptyPassword_ReturnsBadRequest() throws Exception {
-        LoginFormDto loginDto = new LoginFormDto("test@example.com", "   ");
+        LoginFormDto loginDto = new LoginFormDto("test@test.com", "   ");
 
         mockMvc.perform(post("/authenticate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -145,7 +145,7 @@ class AuthControllerIntegrationTest {
     void register_ExistingEmail_ReturnsConflict() throws Exception {
         RegisterDto registerDto = new RegisterDto();
         registerDto.setUsername("anotheruser");
-        registerDto.setEmail("test@example.com"); // This email already exists
+        registerDto.setEmail("test@test.com"); // This email already exists
         registerDto.setPassword("password123");
 
         mockMvc.perform(post("/register")
@@ -208,7 +208,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void authenticate_MalformedJson_ReturnsBadRequest() throws Exception {
-        String malformedJson = "{\"email\":\"test@example.com\",\"password\":}";
+        String malformedJson = "{\"email\":\"test@test.com\",\"password\":}";
 
         mockMvc.perform(post("/authenticate")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -218,7 +218,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void register_MalformedJson_ReturnsBadRequest() throws Exception {
-        String malformedJson = "{\"username\":\"test\",\"email\":\"test@example.com\",\"password\":}";
+        String malformedJson = "{\"username\":\"test\",\"email\":\"test@test.com\",\"password\":}";
 
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -43,7 +43,7 @@ class RecipeControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testRecipe = new Recipe();
         testRecipe.setId(1);
         testRecipe.setRecipeName("Test Recipe");

@@ -30,10 +30,10 @@ class UserRepositoryIntegrationTest {
     private UserEntity testUser;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         testUser = new UserEntity();
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
+        testUser.setEmail("test@test.com");
         testUser.setPassword("encodedPassword");
         testUser.setRole("USER");
         testUser.setDescription("Test description");
@@ -51,7 +51,7 @@ class UserRepositoryIntegrationTest {
 
         assertTrue(foundUser.isPresent());
         assertEquals("testuser", foundUser.get().getUsername());
-        assertEquals("test@example.com", foundUser.get().getEmail());
+        assertEquals("test@test.com", foundUser.get().getEmail());
         assertEquals("USER", foundUser.get().getRole());
         assertEquals("Test description", foundUser.get().getDescription());
     }
@@ -63,7 +63,7 @@ class UserRepositoryIntegrationTest {
         Optional<UserEntity> foundUser = userRepository.findByUsername("testuser");
 
         assertTrue(foundUser.isPresent());
-        assertEquals("test@example.com", foundUser.get().getEmail());
+        assertEquals("test@test.com", foundUser.get().getEmail());
         assertEquals("USER", foundUser.get().getRole());
     }
 
@@ -78,7 +78,7 @@ class UserRepositoryIntegrationTest {
     void testFindByEmail() {
         entityManager.persistAndFlush(testUser);
 
-        Optional<UserEntity> foundUser = userRepository.findByEmail("test@example.com");
+        Optional<UserEntity> foundUser = userRepository.findByEmail("test@test.com");
 
         assertTrue(foundUser.isPresent());
         assertEquals("testuser", foundUser.get().getUsername());
@@ -240,7 +240,7 @@ class UserRepositoryIntegrationTest {
         assertEquals("updateduser", foundUser.get().getUsername());
         assertEquals("Updated description", foundUser.get().getDescription());
         assertEquals("ADMIN", foundUser.get().getRole());
-        assertEquals("test@example.com", foundUser.get().getEmail()); // Should remain unchanged
+        assertEquals("test@test.com", foundUser.get().getEmail()); // Should remain unchanged
     }
 
     @Test
@@ -248,7 +248,7 @@ class UserRepositoryIntegrationTest {
         testUser.setEmail("Test@Example.Com");
         entityManager.persistAndFlush(testUser);
 
-        Optional<UserEntity> foundUser1 = userRepository.findByEmail("test@example.com");
+        Optional<UserEntity> foundUser1 = userRepository.findByEmail("test@test.com");
         Optional<UserEntity> foundUser2 = userRepository.findByEmail("TEST@EXAMPLE.COM");
         Optional<UserEntity> foundUser3 = userRepository.findByEmail("Test@Example.Com");
 

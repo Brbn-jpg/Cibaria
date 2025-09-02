@@ -18,13 +18,14 @@ class IngredientServiceImplTest {
     @InjectMocks
     private IngredientServiceImpl ingredientService;
 
-    private List<Ingredient> testIngredients;
-    private Recipe testRecipe;
+    private List<Ingredient> ingredients;
+    private Recipe recipe;
 
     @BeforeEach
-    void setUp() {
-        testRecipe = new Recipe();
-        testRecipe.setId(1);
+    void setup() {
+        // create test recipe
+        recipe = new Recipe();
+        recipe.setId(1);
 
         Ingredient ingredient1 = new Ingredient();
         ingredient1.setId(1);
@@ -33,7 +34,7 @@ class IngredientServiceImplTest {
         ingredient1.setUnit("g");
         ingredient1.setIsOptional(false);
         ingredient1.setLanguage("pl");
-        ingredient1.setRecipe(testRecipe);
+        ingredient1.setRecipe(recipe);
 
         Ingredient ingredient2 = new Ingredient();
         ingredient2.setId(2);
@@ -42,7 +43,7 @@ class IngredientServiceImplTest {
         ingredient2.setUnit("g");
         ingredient2.setIsOptional(false);
         ingredient2.setLanguage("en");
-        ingredient2.setRecipe(testRecipe);
+        ingredient2.setRecipe(recipe);
 
         Ingredient ingredient3 = new Ingredient();
         ingredient3.setId(3);
@@ -51,7 +52,7 @@ class IngredientServiceImplTest {
         ingredient3.setUnit("g");
         ingredient3.setIsOptional(true);
         ingredient3.setLanguage("pl");
-        ingredient3.setRecipe(testRecipe);
+        ingredient3.setRecipe(recipe);
 
         Ingredient ingredient4 = new Ingredient();
         ingredient4.setId(4);
@@ -60,14 +61,14 @@ class IngredientServiceImplTest {
         ingredient4.setUnit("g");
         ingredient4.setIsOptional(true);
         ingredient4.setLanguage("en");
-        ingredient4.setRecipe(testRecipe);
+        ingredient4.setRecipe(recipe);
 
-        testIngredients = Arrays.asList(ingredient1, ingredient2, ingredient3, ingredient4);
+        ingredients = Arrays.asList(ingredient1, ingredient2, ingredient3, ingredient4);
     }
 
     @Test
     void filterByLanguage_ShouldReturnPolishIngredients_WhenLanguageIsPolish() {
-        List<Ingredient> result = ingredientService.filterByLanguage(testIngredients, "pl");
+        List<Ingredient> result = ingredientService.filterByLanguage(ingredients, "pl");
 
         assertEquals(2, result.size());
         assertTrue(result.stream().allMatch(ingredient -> "pl".equals(ingredient.getLanguage())));
@@ -77,7 +78,7 @@ class IngredientServiceImplTest {
 
     @Test
     void filterByLanguage_ShouldReturnEnglishIngredients_WhenLanguageIsEnglish() {
-        List<Ingredient> result = ingredientService.filterByLanguage(testIngredients, "en");
+        List<Ingredient> result = ingredientService.filterByLanguage(ingredients, "en");
 
         assertEquals(2, result.size());
         assertTrue(result.stream().allMatch(ingredient -> "en".equals(ingredient.getLanguage())));
@@ -87,7 +88,7 @@ class IngredientServiceImplTest {
 
     @Test
     void filterByLanguage_ShouldReturnEmptyList_WhenNoIngredientsMatchLanguage() {
-        List<Ingredient> result = ingredientService.filterByLanguage(testIngredients, "fr");
+        List<Ingredient> result = ingredientService.filterByLanguage(ingredients, "fr");
 
         assertTrue(result.isEmpty());
     }
@@ -102,9 +103,9 @@ class IngredientServiceImplTest {
 
     @Test
     void filterByLanguage_ShouldBeCaseInsensitive() {
-        List<Ingredient> result1 = ingredientService.filterByLanguage(testIngredients, "PL");
-        List<Ingredient> result2 = ingredientService.filterByLanguage(testIngredients, "Pl");
-        List<Ingredient> result3 = ingredientService.filterByLanguage(testIngredients, "pL");
+        List<Ingredient> result1 = ingredientService.filterByLanguage(ingredients, "PL");
+        List<Ingredient> result2 = ingredientService.filterByLanguage(ingredients, "Pl");
+        List<Ingredient> result3 = ingredientService.filterByLanguage(ingredients, "pL");
 
         assertEquals(2, result1.size());
         assertEquals(2, result2.size());
@@ -117,7 +118,7 @@ class IngredientServiceImplTest {
 
     @Test
     void filterByLanguage_ShouldDefaultToEnglish_WhenLanguageIsNull() {
-        List<Ingredient> result = ingredientService.filterByLanguage(testIngredients, null);
+        List<Ingredient> result = ingredientService.filterByLanguage(ingredients, null);
 
         assertEquals(2, result.size());
         assertTrue(result.stream().allMatch(ingredient -> "en".equals(ingredient.getLanguage())));
@@ -133,7 +134,7 @@ class IngredientServiceImplTest {
         ingredientWithNullLanguage.setLanguage(null);
 
         List<Ingredient> ingredientsWithNull = Arrays.asList(
-                testIngredients.get(0), // polish ingredient
+                ingredients.get(0), // polish ingredient
                 ingredientWithNullLanguage
         );
 
@@ -145,7 +146,7 @@ class IngredientServiceImplTest {
 
     @Test
     void filterByLanguage_ShouldPreserveIngredientProperties() {
-        List<Ingredient> result = ingredientService.filterByLanguage(testIngredients, "pl");
+        List<Ingredient> result = ingredientService.filterByLanguage(ingredients, "pl");
 
         Ingredient firstResult = result.get(0);
         assertEquals(1, firstResult.getId());
@@ -160,10 +161,10 @@ class IngredientServiceImplTest {
 
     @Test
     void filterByLanguage_ShouldReturnNewList() {
-        List<Ingredient> result = ingredientService.filterByLanguage(testIngredients, "pl");
+        List<Ingredient> result = ingredientService.filterByLanguage(ingredients, "pl");
 
-        assertNotSame(testIngredients, result);
+        assertNotSame(ingredients, result);
         assertEquals(2, result.size());
-        assertEquals(4, testIngredients.size()); // original list unchanged
+        assertEquals(4, ingredients.size()); // original list unchanged
     }
 }

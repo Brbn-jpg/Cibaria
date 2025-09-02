@@ -27,10 +27,10 @@ class RegisterControllerTest {
     private TokenResponseDto expectedResponse;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         registerDto = new RegisterDto();
         registerDto.setUsername("testuser");
-        registerDto.setEmail("test@example.com");
+        registerDto.setEmail("test@test.com");
         registerDto.setPassword("password123");
 
         expectedResponse = new TokenResponseDto();
@@ -61,7 +61,7 @@ class RegisterControllerTest {
 
         verify(userService).save(argThat(dto -> 
                 dto.getUsername().equals("testuser") &&
-                dto.getEmail().equals("test@example.com") &&
+                dto.getEmail().equals("test@test.com") &&
                 dto.getPassword().equals("password123")
         ));
     }

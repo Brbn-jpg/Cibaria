@@ -44,7 +44,7 @@ class AdminControllerTest {
     private UpdateUserDto updateUserDto;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         adminUser = new UserEntity();
         adminUser.setId(1);
         adminUser.setUsername("admin");

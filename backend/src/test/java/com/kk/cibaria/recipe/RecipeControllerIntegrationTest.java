@@ -96,18 +96,18 @@ class RecipeControllerIntegrationTest {
     private Recipe testRecipe;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setup() throws Exception {
         userRepository.deleteAll();
         recipeRepository.deleteAll();
         
         testUser = new UserEntity();
         testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
+        testUser.setEmail("test@test.com");
         testUser.setPassword(passwordEncoder.encode("password123"));
         testUser.setRole("USER");
         testUser = userRepository.save(testUser);
 
-        LoginFormDto loginDto = new LoginFormDto("test@example.com", "password123");
+        LoginFormDto loginDto = new LoginFormDto("test@test.com", "password123");
 
         MvcResult loginResult = mockMvc.perform(post("/authenticate")
                 .contentType(MediaType.APPLICATION_JSON)

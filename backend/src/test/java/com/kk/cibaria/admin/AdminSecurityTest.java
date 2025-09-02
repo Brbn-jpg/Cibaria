@@ -46,7 +46,7 @@ class AdminSecurityTest {
     private UserEntity userEntity;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         // Setup admin user details with ADMIN role
         adminUserDetails = User.builder()
                 .username("admin@test.com")

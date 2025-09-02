@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class RecipeTest {
 
     @Test
-    void testRecipeCreation() {
+    void testNewRecipe() {
+        // new recipe should have default values
         Recipe recipe = new Recipe();
         assertNotNull(recipe);
         assertNull(recipe.getRecipeName());
